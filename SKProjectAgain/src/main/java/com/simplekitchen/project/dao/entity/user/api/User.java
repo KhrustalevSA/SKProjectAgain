@@ -2,6 +2,7 @@ package com.simplekitchen.project.dao.entity.user.api;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface User {
     /**
      * Метод для получения даты рождения пользователя
      * */
-    Date getBirthDate();
+    Calendar getBirthDate();
 
     /**
      * Метод для получения пола пользователя

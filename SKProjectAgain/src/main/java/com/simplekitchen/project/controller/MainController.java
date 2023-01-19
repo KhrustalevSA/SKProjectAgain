@@ -12,16 +12,14 @@ import com.simplekitchen.project.dao.service.api.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class MainController {
 
     private static final Service<RecipeImpl> recipeService = new RecipeServiceImpl();
     private static final Service<IngredientImpl> ingredientService = new IngredientServiceImpl();
-    private static final Service<UserImpl> userService = new UserServiceImpl();
+    private static Service<UserImpl> userService;
 
 
     @PostMapping("/getUserBusinessEntity")
@@ -39,8 +37,8 @@ public class MainController {
         RecipeImpl recipe = RecipeImpl.builder().uuid(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
                 .imagesList(null).cookingTime(50L).author("Author").publishDate(new Date(1998, 05, 23)).stepsDescription(null).difficulty("easy")
                 .userList(userList).build();
-        UserImpl user = UserImpl.builder()
-                .name("Ivan").surname("Ivanov").patronymic("Ivanovich").sex("M").birthDate(new Date(1998, 05, 23))
+        UserImpl user = UserImpl.builder().id(1L)
+                .name("Ivan").surname("Ivanov").patronymic("Ivanovich").sex("M").birthDate(new GregorianCalendar(2001, Calendar.FEBRUARY, 1))
                 .build();
 
         userList.add(user);

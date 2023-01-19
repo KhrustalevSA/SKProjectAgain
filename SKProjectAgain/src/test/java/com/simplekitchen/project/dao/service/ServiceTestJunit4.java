@@ -4,9 +4,12 @@ import com.simplekitchen.project.dao.entity.recipe.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dao.entity.user.CityImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
+import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.Service;
+import com.simplekitchen.project.dao.service.api.UserService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +20,11 @@ public class ServiceTestJunit4 {
     private static final String db_driver = "org.h2.Driver";
 //    private static final Service<RecipeImpl> recipeService = new RecipeServiceImpl();
 //    private static Service<IngredientImpl> ingredientService = new IngredientServiceImpl();
-    private static final Service<UserImpl> userService = new UserServiceImpl();
+    private static UserRepository repository;
+    private static UserService userService;
 
     @Test
+    @Autowired
     public void add() {
         List<UserImpl> userList = new ArrayList<>();
         List<RecipeImpl> recipeList = new ArrayList<>();
@@ -34,6 +39,7 @@ public class ServiceTestJunit4 {
         RecipeImpl recipe = RecipeImpl.builder().uuid(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
                 .imagesList(null).cookingTime(50L).author("Author").publishDate(new Date(1998, 05, 23)).stepsDescription(null).difficulty("easy")
                 .userList(userList).build();
+
         UserImpl user = UserImpl.builder().id(1L)
                 .name("Ivan").surname("Ivanov").patronymic("Ivanovich").sex("M")
                 .build();
@@ -42,9 +48,9 @@ public class ServiceTestJunit4 {
         ingredientList.add(ingredientTomatoes);
         recipeList.add(recipe);
 
-        userService.add(user);
+        userService.save(user);
         userList.add(user);
 
-        Assert.assertEquals(userList.get(0),userService.find(1L));
+        Assert.assertEquals(userList.get(0),userService.get(1L));
     }
 }

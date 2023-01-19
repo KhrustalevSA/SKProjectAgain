@@ -1,7 +1,6 @@
 package com.simplekitchen.project.dao.entity.common;
 
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
-import com.simplekitchen.project.dao.repository.ImageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,4 +15,6 @@ public class ImageService extends AbstractService<ImageImpl, ImageRepository> {
     public Optional<ImageImpl> save(ImageImpl image) {
         return Optional.of(repository.save(image));
     }
+
+    public Optional<ImageImpl> find(Long id) {return repository.findById(id);}
 }
