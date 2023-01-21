@@ -183,6 +183,19 @@ public class UserImpl implements User, Serializable {
         this.city = city;
     }
 
+    @Override
+    public String toString() {
+        return "UserImpl{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", birthDate=" + birthDate +
+                ", sex='" + sex + '\'' +
+                ", favoriteRecipeList=" + favoriteRecipeList +
+                ", city=" + city +
+                '}';
+    }
 
     public static UserImpl.UserImplBuilder builder() {
         return new UserImpl.UserImplBuilder();

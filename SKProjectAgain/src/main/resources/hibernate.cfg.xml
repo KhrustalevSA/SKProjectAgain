@@ -24,8 +24,8 @@
         <mapping class="com.simplekitchen.project.dao.entity.image.api.Image" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.api.Recipe" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.api.StepDescription" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.api.Ingredient" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.IngredientImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.Ingredient.api.Ingredient" />
+        <mapping class="com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.RecipeImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.user.api.User" />

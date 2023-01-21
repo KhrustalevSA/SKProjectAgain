@@ -1,13 +1,10 @@
 package com.simplekitchen.project.controller;
 
-import com.simplekitchen.project.dao.entity.recipe.IngredientImpl;
+import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dao.entity.user.CityImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import com.simplekitchen.project.dao.entity.user.api.User;
-import com.simplekitchen.project.dao.service.IngredientServiceImpl;
-import com.simplekitchen.project.dao.service.RecipeServiceImpl;
-import com.simplekitchen.project.dao.service.UserServiceImpl;
 import com.simplekitchen.project.dao.service.api.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +14,8 @@ import java.util.*;
 @RestController
 public class MainController {
 
-    private static final Service<RecipeImpl> recipeService = new RecipeServiceImpl();
-    private static final Service<IngredientImpl> ingredientService = new IngredientServiceImpl();
+    private static Service<RecipeImpl> recipeService;
+    private static Service<IngredientImpl> ingredientService;
     private static Service<UserImpl> userService;
 
 
@@ -34,8 +31,8 @@ public class MainController {
                 .expirationDateInFridge(9000D).build();
         IngredientImpl ingredientTomatoes = IngredientImpl.builder().uuid(2L).name("Tomatoes").recipeList(recipeList).averageWeight(0.2D).expirationDate(500D)
                 .expirationDateInFridge(150D).build();
-        RecipeImpl recipe = RecipeImpl.builder().uuid(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
-                .imagesList(null).cookingTime(50L).author("Author").publishDate(new Date(1998, 05, 23)).stepsDescription(null).difficulty("easy")
+        RecipeImpl recipe = RecipeImpl.builder().id(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
+                .imagesList(null).cookingTime(50L).author("Author").publishDate(new GregorianCalendar(1998, 05, 23)).stepsDescription(null).difficulty("easy")
                 .userList(userList).build();
         UserImpl user = UserImpl.builder().id(1L)
                 .name("Ivan").surname("Ivanov").patronymic("Ivanovich").sex("M").birthDate(new GregorianCalendar(2001, Calendar.FEBRUARY, 1))

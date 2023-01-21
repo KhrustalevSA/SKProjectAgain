@@ -1,7 +1,6 @@
 package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.entity.user.UserImpl;
-import com.simplekitchen.project.dao.entity.user.api.User;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
 import org.assertj.core.util.Lists;
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean deleteAll(List<UserImpl> users) {
         userRepository.deleteAll(users);
-        return Lists.newArrayList(userRepository.findAllById(users.stream().map(User::getId).collect(Collectors.toList()))).isEmpty();
+        return Lists.newArrayList(userRepository.findAllById(users.stream().map(UserImpl::getId).collect(Collectors.toList()))).isEmpty();
     }
 
     @Override

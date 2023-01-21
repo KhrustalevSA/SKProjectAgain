@@ -12,8 +12,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 @Slf4j
-@AllArgsConstructor
-@Getter
+@Deprecated
 public abstract class ServiceBase<T> implements Service<T> {
 
     private final SessionFactory sessionFactory;
@@ -91,4 +90,18 @@ public abstract class ServiceBase<T> implements Service<T> {
         transaction.commit();
         session.close();
     }
+
+    public ServiceBase(SessionFactory sessionFactory, Class<T> clazz) {
+        this.sessionFactory = sessionFactory;
+        this.clazz = clazz;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public Class<T> getClazz() {
+        return clazz;
+    }
+
 }

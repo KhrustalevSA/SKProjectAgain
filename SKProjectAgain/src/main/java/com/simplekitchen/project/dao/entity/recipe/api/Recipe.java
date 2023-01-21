@@ -1,18 +1,18 @@
 package com.simplekitchen.project.dao.entity.recipe.api;
 
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
-import com.simplekitchen.project.dao.entity.recipe.IngredientImpl;
+import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public interface Recipe {
     /**
      * @return уникальный идентификатор рецепта
      */
-    Long getUuid();
+    Long getId();
 
     /**
      * @return название рецепта
@@ -52,7 +52,7 @@ public interface Recipe {
     /**
      * @return дату публикации рецепта
      */
-    Date getPublishDate();
+    Calendar getPublishDate();
 
     /**
      * @return список описаний правильности действий на шагах готовки

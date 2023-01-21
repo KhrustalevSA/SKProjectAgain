@@ -1,18 +1,16 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.recipe.IngredientImpl;
+import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dao.entity.user.CityImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import com.simplekitchen.project.dao.repository.UserRepository;
-import com.simplekitchen.project.dao.service.api.Service;
 import com.simplekitchen.project.dao.service.api.UserService;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ServiceTestJunit4 {
@@ -24,8 +22,7 @@ public class ServiceTestJunit4 {
     private static UserService userService;
 
     @Test
-    @Autowired
-    public void add() {
+    public void save() {
         List<UserImpl> userList = new ArrayList<>();
         List<RecipeImpl> recipeList = new ArrayList<>();
         List<IngredientImpl> ingredientList = new ArrayList<>();
@@ -36,8 +33,8 @@ public class ServiceTestJunit4 {
                 .expirationDateInFridge(9000D).build();
         IngredientImpl ingredientTomatoes = IngredientImpl.builder().uuid(2L).name("Tomatoes").recipeList(recipeList).averageWeight(0.2D).expirationDate(500D)
                 .expirationDateInFridge(150D).build();
-        RecipeImpl recipe = RecipeImpl.builder().uuid(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
-                .imagesList(null).cookingTime(50L).author("Author").publishDate(new Date(1998, 05, 23)).stepsDescription(null).difficulty("easy")
+        RecipeImpl recipe = RecipeImpl.builder().id(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
+                .imagesList(null).cookingTime(50L).author("Author").publishDate(new GregorianCalendar(1998, 05, 23)).stepsDescription(null).difficulty("easy")
                 .userList(userList).build();
 
         UserImpl user = UserImpl.builder().id(1L)

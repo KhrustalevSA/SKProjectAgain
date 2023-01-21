@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private  final UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService service) {
@@ -24,19 +24,6 @@ public class UserController {
     public ResponseEntity<UserImpl> save(@RequestBody UserImpl user) {
         return userService.save(user).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-    }
-
-    @PostMapping("showUserEntity")
-    public UserImpl showUserEntity(){
-        return UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build();
-    }
-
-    @PostMapping("showUserListEntity")
-    public List<UserImpl> showUserListEntity(){
-        List<UserImpl> userList = new ArrayList<>();
-        userList.add(UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build());
-        userList.add(UserImpl.builder().id(2L).name("Petr").surname("").patronymic("").build());
-        return userList;
     }
 
     @PostMapping("/save/all")
@@ -58,6 +45,19 @@ public class UserController {
     @GetMapping("/get/all/ids")
     public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
         return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
+    }
+
+    @PostMapping("showUserEntity")
+    public UserImpl showUserEntity(){
+        return UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build();
+    }
+
+    @PostMapping("showUserListEntity")
+    public List<UserImpl> showUserListEntity(){
+        List<UserImpl> userList = new ArrayList<>();
+        userList.add(UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build());
+        userList.add(UserImpl.builder().id(2L).name("Petr").surname("").patronymic("").build());
+        return userList;
     }
 
 }

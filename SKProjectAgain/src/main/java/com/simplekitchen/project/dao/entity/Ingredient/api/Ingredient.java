@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dao.entity.recipe.api;
+package com.simplekitchen.project.dao.entity.Ingredient.api;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 
@@ -10,7 +10,7 @@ public interface Ingredient {
      * @return уникальный идентификатор рецепта
      */
 
-    Long getUuid();
+    Long getId();
 
     /**
      * @return название ингредиента
