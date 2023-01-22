@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dao.entity.common;
+package com.simplekitchen.project.dao.entity.common.entity;
 
 import lombok.*;
 import org.hibernate.Hibernate;

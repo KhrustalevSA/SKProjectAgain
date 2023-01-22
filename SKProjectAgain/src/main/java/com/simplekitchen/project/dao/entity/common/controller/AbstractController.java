@@ -1,5 +1,8 @@
-package com.simplekitchen.project.dao.entity.common;
+package com.simplekitchen.project.dao.entity.common.controller;
 
+import com.simplekitchen.project.dao.entity.common.controller.api.CommonController;
+import com.simplekitchen.project.dao.entity.common.entity.AbstractEntity;
+import com.simplekitchen.project.dao.entity.common.service.api.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

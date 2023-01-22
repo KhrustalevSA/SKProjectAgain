@@ -2,6 +2,9 @@ package com.simplekitchen.project.dao.entity.user.api;
 
 public interface City {
 
+    /**
+     * @return id города
+     * */
     Long getUuid();
 
     /**

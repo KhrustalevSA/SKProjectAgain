@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.service.api.Service;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

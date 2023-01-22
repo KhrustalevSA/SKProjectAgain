@@ -9,7 +9,6 @@ public interface Ingredient {
     /**
      * @return уникальный идентификатор рецепта
      */
-
     Long getId();
 
     /**

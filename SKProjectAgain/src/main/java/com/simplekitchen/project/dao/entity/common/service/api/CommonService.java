@@ -1,4 +1,6 @@
-package com.simplekitchen.project.dao.entity.common;
+package com.simplekitchen.project.dao.entity.common.service.api;
+
+import com.simplekitchen.project.dao.entity.common.entity.AbstractEntity;
 
 import java.util.Optional;
 

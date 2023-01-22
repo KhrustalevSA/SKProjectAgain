@@ -1,5 +1,6 @@
-package com.simplekitchen.project.dao.entity.common;
+package com.simplekitchen.project.dao.entity.common.service;
 
+import com.simplekitchen.project.dao.entity.common.repository.ImageRepository;
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
 import org.springframework.stereotype.Service;
 

@@ -16,8 +16,8 @@ public class UserImpl implements User, Serializable {
      * */
     @Id
     @Column(name = "id")
-    @GeneratedValue
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE) // Почему?
+    //@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     /**

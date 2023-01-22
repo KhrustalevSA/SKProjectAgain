@@ -17,6 +17,7 @@ public class IngredientImpl implements Ingredient, Serializable {
      */
     @Id
     @Column(name = "id")
+    @GeneratedValue
     private Long id;
 
     /**
@@ -36,7 +37,6 @@ public class IngredientImpl implements Ingredient, Serializable {
      */
     @Column
     private Double averageWeight;
-
 
     /**
      * срок годности ингредиента
@@ -105,19 +105,6 @@ public class IngredientImpl implements Ingredient, Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof IngredientImpl)) return false;
-        IngredientImpl that = (IngredientImpl) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getRecipeList(), that.getRecipeList()) && Objects.equals(getAverageWeight(), that.getAverageWeight()) && Objects.equals(getExpirationDate(), that.getExpirationDate()) && Objects.equals(getExpirationDateInFridge(), that.getExpirationDateInFridge());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getRecipeList(), getAverageWeight(), getExpirationDate(), getExpirationDateInFridge());
-    }
-
-    @Override
     public String toString() {
         return "IngredientImpl{" +
                 "id=" + id +
@@ -151,6 +138,19 @@ public class IngredientImpl implements Ingredient, Serializable {
         this.averageWeight = averageWeight;
         this.expirationDate = expirationDate;
         this.expirationDateInFridge = expirationDateInFridge;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IngredientImpl)) return false;
+        IngredientImpl that = (IngredientImpl) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getRecipeList(), that.getRecipeList()) && Objects.equals(getAverageWeight(), that.getAverageWeight()) && Objects.equals(getExpirationDate(), that.getExpirationDate()) && Objects.equals(getExpirationDateInFridge(), that.getExpirationDateInFridge());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getRecipeList(), getAverageWeight(), getExpirationDate(), getExpirationDateInFridge());
     }
 
     public static IngredientImpl.IngredientImplBuilder builder() {

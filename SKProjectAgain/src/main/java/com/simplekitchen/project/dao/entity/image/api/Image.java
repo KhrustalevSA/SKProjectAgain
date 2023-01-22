@@ -1,5 +1,9 @@
 package com.simplekitchen.project.dao.entity.image.api;
 
+import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
+
+import java.util.List;
+
 public interface Image {
 
     /**
@@ -11,4 +15,9 @@ public interface Image {
      * @return url изображения
      */
     String getUrl();
+
+    /**
+     * @return Список рецптов
+     */
+    List<RecipeImpl> getRecipe();
 }

@@ -1,11 +1,9 @@
-package com.simplekitchen.project.dao.entity.common;
+package com.simplekitchen.project.dao.entity.common.controller;
 
+import com.simplekitchen.project.dao.entity.common.service.ImageService;
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/image")
