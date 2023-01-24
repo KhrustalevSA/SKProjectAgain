@@ -2,7 +2,7 @@ package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dao.entity.user.CityImpl;
+import com.simplekitchen.project.dao.entity.city.CityImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -26,7 +26,7 @@ public class ServiceTestJunit4 {
         List<UserImpl> userList = new ArrayList<>();
         List<RecipeImpl> recipeList = new ArrayList<>();
         List<IngredientImpl> ingredientList = new ArrayList<>();
-        CityImpl city = CityImpl.builder().uuid(1L)
+        CityImpl city = CityImpl.builder()
                 .cityName("Vologda").regionName("Vologodskaya obl").streetName("Gor val")
                 .houseNumber(26L).entranceNumber(1L).flatNumber(112L).build();
         IngredientImpl ingredientPasta = IngredientImpl.builder().uuid(1L).name("Pasta").recipeList(recipeList).averageWeight(300D).expirationDate(900D)

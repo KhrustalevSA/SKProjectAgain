@@ -27,9 +27,9 @@
         <mapping class="com.simplekitchen.project.dao.entity.recipe.RecipeImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.user.api.User" />
-        <mapping class="com.simplekitchen.project.dao.entity.user.api.City" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.api.City" />
         <mapping class="com.simplekitchen.project.dao.entity.user.UserImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.user.CityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.CityImpl" />
 
 
     </session-factory>

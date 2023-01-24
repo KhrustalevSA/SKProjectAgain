@@ -1,12 +1,13 @@
 package com.simplekitchen.project.dao.service.api;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RecipeService {
-    Optional<RecipeImpl> save(RecipeImpl recipe);
+    Optional<Recipe> save(Recipe recipe);
 
     List<RecipeImpl> saveAll(List<RecipeImpl> recipeList);
 

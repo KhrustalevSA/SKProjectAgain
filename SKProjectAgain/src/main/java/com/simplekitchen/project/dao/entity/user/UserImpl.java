@@ -1,8 +1,8 @@
 package com.simplekitchen.project.dao.entity.user;
 
+import com.simplekitchen.project.dao.entity.city.CityImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dao.entity.user.api.User;
-import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -16,7 +16,6 @@ public class UserImpl implements User, Serializable {
      * */
     @Id
     @Column(name = "id")
-    //@GeneratedValue
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -63,9 +62,8 @@ public class UserImpl implements User, Serializable {
     /**
      * Метод для получения места жительства пользователя
      * */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
-    @ToString.Exclude
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CityImpl city;
 
     @Override

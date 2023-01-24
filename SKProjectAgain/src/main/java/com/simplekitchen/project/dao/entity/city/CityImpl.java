@@ -1,10 +1,9 @@
-package com.simplekitchen.project.dao.entity.user;
+package com.simplekitchen.project.dao.entity.city;
 
-import com.simplekitchen.project.dao.entity.user.api.City;
-import lombok.*;
+import com.simplekitchen.project.dao.entity.user.UserImpl;
+import com.simplekitchen.project.dao.entity.city.api.City;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +16,7 @@ public class CityImpl implements City {
     @Id
     @Column
     @GeneratedValue
-    private Long uuid;
+    private Long id;
 
     /**
      * название города
@@ -59,8 +58,8 @@ public class CityImpl implements City {
     /**
      *
      * */
-    @OneToMany(mappedBy = "city")
-    private List<UserImpl> userList;
+    @OneToOne(mappedBy = "city")
+    private UserImpl user;
 
     public CityImpl() {
     }
@@ -69,34 +68,33 @@ public class CityImpl implements City {
         this.cityName = cityName;
     }
 
-    public CityImpl(String cityName, String regionName, String streetName, Long houseNumber, Long entranceNumber, Long flatNumber, List<UserImpl> userList) {
+    public CityImpl(String cityName, String regionName, String streetName, Long houseNumber, Long entranceNumber, Long flatNumber, UserImpl user) {
         this.cityName = cityName;
         this.regionName = regionName;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
         this.entranceNumber = entranceNumber;
         this.flatNumber = flatNumber;
-        this.userList = userList;
+        this.user = user;
     }
 
-    public CityImpl(Long uuid, String cityName, String regionName, String streetName, Long houseNumber, Long entranceNumber, Long flatNumber, List<UserImpl> userList) {
-        this.uuid = uuid;
+    public CityImpl(Long id, String cityName, String regionName, String streetName, Long houseNumber, Long entranceNumber, Long flatNumber, UserImpl user) {
+        this.id = id;
         this.cityName = cityName;
         this.regionName = regionName;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
         this.entranceNumber = entranceNumber;
         this.flatNumber = flatNumber;
-        this.userList = userList;
+        this.user = user;
     }
 
-    @Override
-    public Long getUuid() {
-        return uuid;
+    public Long getId() {
+        return id;
     }
 
-    public void setUuid(Long uuid) {
-        this.uuid = uuid;
+    public void setId(Long uuid) {
+        this.id = uuid;
     }
 
     @Override
@@ -153,12 +151,12 @@ public class CityImpl implements City {
         this.flatNumber = flatNumber;
     }
 
-    public List<UserImpl> getUserList() {
-        return userList;
+    public UserImpl getUser() {
+        return user;
     }
 
-    public void setUserList(List<UserImpl> userList) {
-        this.userList = userList;
+    public void setUser(UserImpl user) {
+        this.user = user;
     }
 
     @Override
@@ -166,25 +164,25 @@ public class CityImpl implements City {
         if (this == o) return true;
         if (!(o instanceof CityImpl)) return false;
         CityImpl city = (CityImpl) o;
-        return Objects.equals(getUuid(), city.getUuid()) && Objects.equals(getCityName(), city.getCityName()) && Objects.equals(getRegionName(), city.getRegionName()) && Objects.equals(getStreetName(), city.getStreetName()) && Objects.equals(getHouseNumber(), city.getHouseNumber()) && Objects.equals(getEntranceNumber(), city.getEntranceNumber()) && Objects.equals(getFlatNumber(), city.getFlatNumber()) && Objects.equals(getUserList(), city.getUserList());
+        return Objects.equals(getId(), city.getId()) && Objects.equals(getCityName(), city.getCityName()) && Objects.equals(getRegionName(), city.getRegionName()) && Objects.equals(getStreetName(), city.getStreetName()) && Objects.equals(getHouseNumber(), city.getHouseNumber()) && Objects.equals(getEntranceNumber(), city.getEntranceNumber()) && Objects.equals(getFlatNumber(), city.getFlatNumber()) && Objects.equals(getUser(), city.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUuid(), getCityName(), getRegionName(), getStreetName(), getHouseNumber(), getEntranceNumber(), getFlatNumber(), getUserList());
+        return Objects.hash(getId(), getCityName(), getRegionName(), getStreetName(), getHouseNumber(), getEntranceNumber(), getFlatNumber(), getUser());
     }
 
     @Override
     public String toString() {
         return "CityImpl{" +
-                "uuid=" + uuid +
+                "uuid=" + id +
                 ", cityName='" + cityName + '\'' +
                 ", regionName='" + regionName + '\'' +
                 ", streetName='" + streetName + '\'' +
                 ", houseNumber=" + houseNumber +
                 ", entranceNumber=" + entranceNumber +
                 ", flatNumber=" + flatNumber +
-                ", userList=" + userList +
+                ", user=" + user +
                 '}';
     }
 
@@ -193,20 +191,20 @@ public class CityImpl implements City {
     }
 
     public static class CityImplBuilder {
-        private Long uuid;
+        private Long id;
         private String cityName;
         private String regionName;
         private String streetName;
         private Long houseNumber;
         private Long entranceNumber;
         private Long flatNumber;
-        private List<UserImpl> userList;
+        private UserImpl user;
 
         CityImplBuilder() {
         }
 
-        public CityImpl.CityImplBuilder uuid(final Long uuid) {
-            this.uuid = uuid;
+        public CityImpl.CityImplBuilder id(final Long id) {
+            this.id = id;
             return this;
         }
 
@@ -240,17 +238,18 @@ public class CityImpl implements City {
             return this;
         }
 
-        public CityImpl.CityImplBuilder userList(final List<UserImpl> userList) {
-            this.userList = userList;
+        public CityImpl.CityImplBuilder user(final UserImpl user) {
+            this.user = user;
             return this;
         }
 
         public CityImpl build() {
-            return new CityImpl(this.uuid, this.cityName, this.regionName, this.streetName, this.houseNumber, this.entranceNumber, this.flatNumber, this.userList);
+            return new CityImpl(this.id, this.cityName, this.regionName, this.streetName, this.houseNumber, this.entranceNumber, this.flatNumber, this.user);
         }
 
         public String toString() {
-            return "CityImpl.CityImplBuilder(uuid=" + this.uuid + ", cityName=" + this.cityName + ", regionName=" + this.regionName + ", streetName=" + this.streetName + ", houseNumber=" + this.houseNumber + ", entranceNumber=" + this.entranceNumber + ", flatNumber=" + this.flatNumber + ", userList=" + this.userList + ")";
+            return "CityImpl.CityImplBuilder(uuid=" + this.user + ", cityName=" + this.cityName + ", regionName=" + this.regionName + ", streetName=" + this.streetName +
+                   ", houseNumber=" + this.houseNumber + ", entranceNumber=" + this.entranceNumber + ", flatNumber=" + this.flatNumber + ", user=" + this.user + ")";
         }
     }
 }

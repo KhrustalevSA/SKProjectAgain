@@ -5,12 +5,6 @@ import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,30 +17,18 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final SessionFactory sessionFactory;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-        this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
     @Override
     public Optional<UserImpl> save(UserImpl user) {
-
-        try{
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
-            session.close();
-            return Optional.of(userRepository.save(user));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return Optional.empty();
-        }
-
+        log.debug("Save" + user);
+        Optional<UserImpl> savedUser = Optional.of(userRepository.save(user));
+        log.debug("Saved user" + user);
+        return savedUser;
     }
 
     @Override
@@ -56,24 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserImpl> get(Long id) {
-
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        if (session.get(UserImpl.class,id) != null
-                && userRepository.findById(id).isPresent()) {
-            if (session.get(UserImpl.class,id) == userRepository.findById(id).get()) {
-                transaction.commit();
-                session.close();
-                return userRepository.findById(id);
-            } else {
-                log.debug("content is not equals");
-                return Optional.empty();
-            }
-        }
-
-        transaction.commit();
-        session.close();
-        return Optional.empty();
+        return userRepository.findById(id);
     }
 
     @Override

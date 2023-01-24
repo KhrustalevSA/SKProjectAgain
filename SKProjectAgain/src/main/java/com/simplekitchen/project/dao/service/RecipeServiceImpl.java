@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.repository.RecipeRepository;
 import com.simplekitchen.project.dao.service.api.RecipeService;
 import org.assertj.core.util.Lists;
@@ -22,7 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<RecipeImpl> save(RecipeImpl recipe) {
+    public Optional<Recipe> save(Recipe recipe) {
         return Optional.of(recipeRepository.save(recipe));
     }
 
@@ -32,7 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<RecipeImpl> get(Long id) {
+    public Optional<Recipe> get(Long id) {
         return recipeRepository.findById(id);
     }
 

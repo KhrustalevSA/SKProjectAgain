@@ -1,15 +1,20 @@
 package com.simplekitchen.project.dao.entity.user.api;
 
+import com.simplekitchen.project.dao.entity.city.api.City;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+/**
+ * Информация о пользователя
+ */
 public interface User {
+
     /**
-     * Метод для получения имени пользователя
-     * */
+     * метод для получения идентификатора пользователя
+     * @return идентификатор пользователя
+     */
     Long getId();
 
     /**

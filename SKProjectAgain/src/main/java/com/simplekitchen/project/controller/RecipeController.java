@@ -1,6 +1,7 @@
 package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.service.api.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import java.util.List;
 @RestController
 public class RecipeController {
 
-    /*
     private final RecipeService recipeService;
 
     @Autowired
@@ -22,7 +22,7 @@ public class RecipeController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<RecipeImpl> save(@RequestBody RecipeImpl recipe) {
+    public ResponseEntity<Recipe> save(@RequestBody Recipe recipe) {
         return recipeService.save(recipe).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
@@ -59,6 +59,6 @@ public class RecipeController {
         recipeList.add(RecipeImpl.builder().id(1L).name("Recipe1").build());
         recipeList.add(RecipeImpl.builder().id(2L).name("Recipe2").build());
         return recipeList;
-    } */
+    }
 
 }

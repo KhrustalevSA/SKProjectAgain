@@ -1,11 +1,11 @@
-package com.simplekitchen.project.dao.entity.user.api;
+package com.simplekitchen.project.dao.entity.city.api;
 
 public interface City {
 
     /**
      * @return id города
      * */
-    Long getUuid();
+    Long getId();
 
     /**
      * @return имя города
