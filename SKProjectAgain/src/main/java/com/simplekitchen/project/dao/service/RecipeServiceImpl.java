@@ -28,7 +28,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<RecipeImpl> saveAll(List<RecipeImpl> recipeList) {
+    public List<Recipe> saveAll(List<Recipe> recipeList) {
         return Lists.newArrayList(recipeRepository.saveAll(recipeList));
     }
 
@@ -38,12 +38,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<RecipeImpl> getAll() {
+    public List<Recipe> getAll() {
         return Lists.newArrayList(recipeRepository.findAll());
     }
 
     @Override
-    public List<RecipeImpl> getAllById(List<Long> ids) {
+    public List<Recipe> getAllById(List<Long> ids) {
         return Lists.newArrayList(recipeRepository.findAllById(ids));
     }
 
@@ -54,15 +54,15 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Boolean delete(RecipeImpl recipe) {
+    public Boolean delete(Recipe recipe) {
         recipeRepository.delete(recipe);
         return !recipeRepository.findById(recipe.getId()).isPresent();
     }
 
     @Override
-    public Boolean deleteAll(List<RecipeImpl> recipes) {
+    public Boolean deleteAll(List<Recipe> recipes) {
         recipeRepository.deleteAll(recipes);
-        return Lists.newArrayList(recipeRepository.findAllById(recipes.stream().map(RecipeImpl::getId).collect(Collectors.toList()))).isEmpty();
+        return Lists.newArrayList(recipeRepository.findAllById(recipes.stream().map(Recipe::getId).collect(Collectors.toList()))).isEmpty();
     }
 
     @Override

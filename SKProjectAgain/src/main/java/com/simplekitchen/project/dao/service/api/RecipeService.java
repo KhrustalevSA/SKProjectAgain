@@ -9,19 +9,19 @@ import java.util.Optional;
 public interface RecipeService {
     Optional<Recipe> save(Recipe recipe);
 
-    List<RecipeImpl> saveAll(List<RecipeImpl> recipeList);
+    List<Recipe> saveAll(List<Recipe> recipeList);
 
-    Optional<RecipeImpl> get(Long id);
+    Optional<Recipe> get(Long id);
 
-    List<RecipeImpl> getAll();
+    List<Recipe> getAll();
 
-    List<RecipeImpl> getAllById(List<Long> ids);
+    List<Recipe> getAllById(List<Long> ids);
 
     Boolean deleteById(Long id);
 
-    Boolean delete(RecipeImpl recipe);
+    Boolean delete(Recipe recipe);
 
-    Boolean deleteAll(List<RecipeImpl> recipeList);
+    Boolean deleteAll(List<Recipe> recipeList);
 
     Boolean deleteAll();
 }
