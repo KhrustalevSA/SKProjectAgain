@@ -1,7 +1,7 @@
 package com.simplekitchen.project.dao.entity.recipe.api;
 
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
-import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 

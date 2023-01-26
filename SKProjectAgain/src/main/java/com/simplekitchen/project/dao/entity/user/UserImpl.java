@@ -16,7 +16,7 @@ import java.util.*;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserImpl implements User, Serializable {
     /**
      * Метод для получения имени пользователя

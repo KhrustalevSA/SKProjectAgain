@@ -47,17 +47,26 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
     }
 
-    @PostMapping("showUserEntity")
+    @PostMapping("/showUserEntity")
     public UserImpl showUserEntity(){
         return UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build();
     }
 
-    @PostMapping("showUserListEntity")
+    @PostMapping("/showUserListEntity")
     public List<UserImpl> showUserListEntity(){
         List<UserImpl> userList = new ArrayList<>();
         userList.add(UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build());
         userList.add(UserImpl.builder().id(2L).name("Petr").surname("").patronymic("").build());
         return userList;
+    }
+
+    @PostMapping("/showGetAllById")
+    public List<Long> showGetAllById(){
+        List<Long> list = new ArrayList<>();
+        list.add(1L);
+        list.add(2L);
+        list.add(3L);
+        return list;
     }
 
 }

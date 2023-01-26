@@ -12,5 +12,5 @@ import java.util.List;
 public interface StepDescription {
     Long getUuid();
     String getDescription();
-    List<RecipeImpl> getRecipesList();
+    RecipeImpl getRecipe();
 }

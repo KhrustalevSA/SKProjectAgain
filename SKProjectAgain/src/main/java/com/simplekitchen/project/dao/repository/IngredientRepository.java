@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.repository;
 
-import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

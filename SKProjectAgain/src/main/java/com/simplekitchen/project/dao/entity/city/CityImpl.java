@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.entity.city;
 
 import com.simplekitchen.project.dao.entity.city.api.City;
+import com.simplekitchen.project.dao.entity.city.api.CityName;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -15,7 +16,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class CityImpl implements City {
 
     /**
@@ -25,12 +26,6 @@ public class CityImpl implements City {
     @Column
     @GeneratedValue
     private Long id;
-
-    /**
-     * название города
-     * */
-    @Column
-    private String cityName;
 
     /**
      * название области
@@ -68,6 +63,13 @@ public class CityImpl implements City {
      * */
     @OneToOne(mappedBy = "city")
     private UserImpl user;
+
+    /**
+     * название города
+     * */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_name", referencedColumnName = "id")
+    private CityNameImpl cityName;
 
     @Override
     public boolean equals(Object o) {

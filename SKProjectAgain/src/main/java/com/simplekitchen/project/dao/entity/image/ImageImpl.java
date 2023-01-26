@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ImageImpl extends AbstractEntity implements Image {
 
     @Column

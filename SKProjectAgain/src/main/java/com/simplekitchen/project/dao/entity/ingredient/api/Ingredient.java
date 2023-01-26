@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dao.entity.Ingredient.api;
+package com.simplekitchen.project.dao.entity.ingredient.api;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 

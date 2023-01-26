@@ -1,7 +1,7 @@
-package com.simplekitchen.project.dao.entity.Ingredient;
+package com.simplekitchen.project.dao.entity.ingredient;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dao.entity.Ingredient.api.Ingredient;
+import com.simplekitchen.project.dao.entity.ingredient.api.Ingredient;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class IngredientImpl implements Ingredient, Serializable {
 
     /**

@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.repository.IngredientRepository;
 import com.simplekitchen.project.dao.service.api.IngredientService;
 import org.assertj.core.util.Lists;

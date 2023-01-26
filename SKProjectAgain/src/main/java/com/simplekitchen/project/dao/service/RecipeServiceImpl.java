@@ -1,6 +1,5 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.repository.RecipeRepository;
 import com.simplekitchen.project.dao.service.api.RecipeService;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;

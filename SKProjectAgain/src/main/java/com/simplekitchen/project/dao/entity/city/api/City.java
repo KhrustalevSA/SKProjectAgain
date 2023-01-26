@@ -1,5 +1,7 @@
 package com.simplekitchen.project.dao.entity.city.api;
 
+import com.simplekitchen.project.dao.entity.city.CityNameImpl;
+
 public interface City {
 
     /**
@@ -10,7 +12,7 @@ public interface City {
     /**
      * @return имя города
      * */
-    String getCityName();
+    CityNameImpl getCityName();
 
     /**
      * @return имя области

@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
 
 import java.util.List;
 import java.util.Optional;

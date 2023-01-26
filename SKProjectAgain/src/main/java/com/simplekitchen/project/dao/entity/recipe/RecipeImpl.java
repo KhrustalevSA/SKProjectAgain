@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.entity.recipe;
 
-import com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dao.entity.image.ImageImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
@@ -21,7 +21,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RecipeImpl implements Recipe, Serializable {
     /**
      * уникальный идентификатор рецепта
@@ -88,12 +88,7 @@ public class RecipeImpl implements Recipe, Serializable {
     /**
      * список описаний правильности действий на шагах готовки
      */
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-            name = "recipes_steps",
-            joinColumns = @JoinColumn(name = "recipes_id"),
-            inverseJoinColumns = @JoinColumn(name = "step_id"))
+    @OneToMany
     @ToString.Exclude
     private List<StepDescriptionImpl> stepsDescription;
 

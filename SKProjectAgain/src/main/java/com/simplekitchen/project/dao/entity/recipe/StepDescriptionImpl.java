@@ -14,7 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class StepDescriptionImpl implements StepDescription {
     @Id
     @Column
@@ -23,19 +23,20 @@ public class StepDescriptionImpl implements StepDescription {
     @Column
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "stepsDescription")
-    private List<RecipeImpl> recipesList;
+    @ManyToOne
+    @JoinColumn(name = "steps_description")
+    private RecipeImpl recipe;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StepDescriptionImpl)) return false;
         StepDescriptionImpl that = (StepDescriptionImpl) o;
-        return Objects.equals(getUuid(), that.getUuid()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getRecipesList(), that.getRecipesList());
+        return Objects.equals(getUuid(), that.getUuid()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getRecipe(), that.getRecipe());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUuid(), getDescription(), getRecipesList());
+        return Objects.hash(getUuid(), getDescription(), getRecipe());
     }
 }

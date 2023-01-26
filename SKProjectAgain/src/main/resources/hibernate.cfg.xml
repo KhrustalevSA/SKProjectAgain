@@ -17,21 +17,25 @@
         <property name="hibernate.dbcp.maxIdle">10</property>               <!--  -->
         <property name="hibernate.dbcp.minIdle">5</property>                <!--  --> <!--    -->
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
-        <property name="hibernate.hbm2ddl.auto">create</property>
 
 
+        <mapping class="com.simplekitchen.project.dao.entity.city.CityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.api.City" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.CityNameImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.api.CityName" />
+        <!--mapping class="com.simplekitchen.project.dao.entity.common.entity.AbstractEntity" /-->
         <mapping class="com.simplekitchen.project.dao.entity.image.ImageImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.image.api.Image" />
+        <mapping class="com.simplekitchen.project.dao.entity.ingredient.IngredientImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.ingredient.api.Ingredient" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.api.Recipe" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.api.StepDescription" />
-        <mapping class="com.simplekitchen.project.dao.entity.Ingredient.api.Ingredient" />
-        <mapping class="com.simplekitchen.project.dao.entity.Ingredient.IngredientImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.RecipeImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.user.api.User" />
         <mapping class="com.simplekitchen.project.dao.entity.city.api.City" />
         <mapping class="com.simplekitchen.project.dao.entity.user.UserImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.city.CityImpl" />
+
 
 
 
