@@ -1,11 +1,10 @@
-package com.simplekitchen.project.dto.entity.user.api;
+package com.simplekitchen.project.dto.entity.city.api;
 
-/**
- * Интерфейс объекта места жительства пользователя
- * @Author Khrustalev-sa
- * @since 28.09.2022
- * */
 public interface City {
+    /**
+     * @return id города
+     * */
+    Long getId();
 
     /**
      * @return имя города
@@ -36,5 +35,4 @@ public interface City {
      * @return номер квартиры
      * */
     Long getFlatNumber();
-
 }

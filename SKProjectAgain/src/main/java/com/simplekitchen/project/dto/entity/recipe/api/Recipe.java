@@ -1,9 +1,12 @@
 package com.simplekitchen.project.dto.entity.recipe.api;
 
 
-import com.simplekitchen.project.dto.entity.image.api.Image;
+import com.simplekitchen.project.dto.entity.image.ImageImpl;
+import com.simplekitchen.project.dto.entity.ingredient.IngredientImpl;
+import com.simplekitchen.project.dto.entity.recipe.StepDescriptionImpl;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -12,12 +15,10 @@ import java.util.List;
  * @since 09.10.2022
  */
 public interface Recipe {
-
-
     /**
      * @return уникальный идентификатор рецепта
      */
-    String getUuid();
+    Long getId();
 
     /**
      * @return название рецепта
@@ -27,7 +28,7 @@ public interface Recipe {
     /**
      * @return список нужных ингредиентов для приготовления
      */
-    List<Ingredient> getIngredients();
+    List<IngredientImpl> getIngredientList();
 
     /**
      * @return описание рецепта
@@ -37,7 +38,7 @@ public interface Recipe {
     /**
      * @return список изображений на странице рецепта
      */
-    List<Image> getImagesList();
+    List<ImageImpl> getImageList();
 
     /**
      * @return время готовки рецепта
@@ -49,21 +50,17 @@ public interface Recipe {
      */
     String getAuthor();
 
-    // /**
-    // * @return объект автора рецепта
-    // */
-    // Author getAuthor();
-
     /**
      * @return дату публикации рецепта
      */
-    Date getPublishDate();
+    Calendar getPublishDate();
 
     /**
      * @return список описаний правильности действий на шагах готовки
      */
-    List<String> getStepDescription();
+    List<StepDescriptionImpl> getStepDescriptionList();
 
     String getDifficulty();
 
+    List<UserImpl> getUserList();
 }

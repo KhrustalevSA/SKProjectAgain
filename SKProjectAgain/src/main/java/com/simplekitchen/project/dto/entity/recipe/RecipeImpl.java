@@ -1,16 +1,20 @@
 package com.simplekitchen.project.dto.entity.recipe;
 
+import com.simplekitchen.project.dto.entity.image.ImageImpl;
+import com.simplekitchen.project.dto.entity.ingredient.IngredientImpl;
+import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.simplekitchen.project.dto.entity.image.api.Image;
-import com.simplekitchen.project.dto.entity.recipe.api.Ingredient;
-import lombok.*;
-
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Класс реализующий интерфейс Recipe
- * @see com.simplekitchen.project.dto.entity.recipe.api.Recipe
+ * @see Recipe
  * @author KhrustalevSA
  * @since 03.10.2022
  */
@@ -18,52 +22,27 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeImpl implements com.simplekitchen.project.dto.entity.recipe.api.Recipe {
+public class RecipeImpl implements Recipe {
 
-    /**
-     * поле уникального идентификатора рецепта
-     */
-    private String uuid;
+    private Long id;
 
-    /**
-     * поле названия рецепта
-     */
     private String name;
 
-    /**
-     * поле списка используемых в рецепте ингредиентов
-     */
-    private List<Ingredient> ingredients;
+    private List<IngredientImpl> ingredientList;
 
-    /**
-     * поле описания рецепта
-     */
     private String description;
 
-    /**
-     * поле списка изображений на странице рецептов
-     */
-    private List<Image> imagesList;
+    private List<ImageImpl> imageList;
 
-    /**
-     * список описаний правильности действий на шагах готовки
-     */
-    private List<String> stepDescription;
-
-    /**
-     * время готовки рецепта
-     */
     private Long cookingTime;
 
-    /**
-     * имя автора рецепта
-     */
     private String author;
 
-    /**
-     *  дату публикации рецепта
-     */
-    private Date publishDate;
+    private Calendar publishDate;
+
+    private List<StepDescriptionImpl> stepDescriptionList;
 
     private String difficulty;
+
+    private List<UserImpl> userList;
 }

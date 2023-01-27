@@ -1,5 +1,6 @@
 package com.simplekitchen.project.dao.entity.user.api;
 
+import com.simplekitchen.project.dao.entity.city.CityImpl;
 import com.simplekitchen.project.dao.entity.city.api.City;
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
 
@@ -50,5 +51,5 @@ public interface User {
     /**
      * Метод для получения места жительства пользователя
      * */
-    City getCity();
+    CityImpl getCity();
 }

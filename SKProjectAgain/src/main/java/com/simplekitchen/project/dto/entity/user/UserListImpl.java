@@ -14,11 +14,7 @@ import java.util.List;
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserListImpl implements UserList {
-
-    private Long uuid;
 
     /**
      * список пользователей

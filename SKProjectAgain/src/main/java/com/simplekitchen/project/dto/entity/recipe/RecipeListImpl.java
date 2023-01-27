@@ -14,8 +14,6 @@ import java.util.List;
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RecipeListImpl implements RecipeList {
     /**
      * список рецептов

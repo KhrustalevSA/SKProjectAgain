@@ -1,5 +1,9 @@
 package com.simplekitchen.project.dto.entity.image.api;
 
+import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+
+import java.util.List;
+
 /**
  * Интерфейс dto изображений
  * @author KhrustalevSA
@@ -20,4 +24,8 @@ public interface Image {
      * @return url изображения
      */
     String getUrl();
-}
+
+    /**
+     * @return Список рецптов
+     */
+    List<RecipeImpl> getRecipe();}

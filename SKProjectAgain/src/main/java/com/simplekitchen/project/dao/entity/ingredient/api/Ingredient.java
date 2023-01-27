@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.entity.ingredient.api;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 
 import java.util.List;
 
@@ -16,10 +17,7 @@ public interface Ingredient {
      */
     String getName();
 
-    /**
-     * @return список рецептов где используется
-     */
-    List<RecipeImpl> getRecipeList();
+    RecipeImpl getRecipe();
 
     /**
      * @return средний вес ингредиента

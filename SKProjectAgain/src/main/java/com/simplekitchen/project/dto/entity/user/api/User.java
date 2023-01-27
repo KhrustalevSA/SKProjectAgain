@@ -1,9 +1,10 @@
 package com.simplekitchen.project.dto.entity.user.api;
 
 
-import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.entity.city.api.City;
+import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -14,9 +15,10 @@ import java.util.List;
 public interface User {
 
     /**
-     * Метод для получения имени пользователя
-     * */
-    Long getUuid();
+     * метод для получения идентификатора пользователя
+     * @return идентификатор пользователя
+     */
+    Long getId();
 
     /**
      * Метод для получения имени пользователя
@@ -36,7 +38,7 @@ public interface User {
     /**
      * Метод для получения даты рождения пользователя
      * */
-    Date getBirthDate();
+    Calendar getBirthDate();
 
     /**
      * Метод для получения пола пользователя
@@ -46,7 +48,7 @@ public interface User {
     /**
      * Метод для получения списка любимых рецептов пользователя
      * */
-    List<Recipe> getFavoriteRecipeList();
+    List<RecipeImpl> getFavoriteRecipeList();
 
     /**
      * Метод для получения места жительства пользователя

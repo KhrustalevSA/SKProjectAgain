@@ -33,11 +33,9 @@ public class IngredientImpl implements Ingredient, Serializable {
     @Column
     private String name;
 
-    /**
-     * список рецептов где используется
-     */
-    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "ingredientsList")
-    private List<RecipeImpl> recipeList;
+    @ManyToOne
+    @JoinColumn(name = "ingredients")
+    private RecipeImpl recipe;
 
     /**
      * средний вес ингредиента
@@ -62,11 +60,11 @@ public class IngredientImpl implements Ingredient, Serializable {
         if (this == o) return true;
         if (!(o instanceof IngredientImpl)) return false;
         IngredientImpl that = (IngredientImpl) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getRecipeList(), that.getRecipeList()) && Objects.equals(getAverageWeight(), that.getAverageWeight()) && Objects.equals(getExpirationDate(), that.getExpirationDate()) && Objects.equals(getExpirationDateInFridge(), that.getExpirationDateInFridge());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getRecipe(), that.getRecipe()) && Objects.equals(getAverageWeight(), that.getAverageWeight()) && Objects.equals(getExpirationDate(), that.getExpirationDate()) && Objects.equals(getExpirationDateInFridge(), that.getExpirationDateInFridge());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getRecipeList(), getAverageWeight(), getExpirationDate(), getExpirationDateInFridge());
+        return Objects.hash(getId(), getName(), getRecipe(), getAverageWeight(), getExpirationDate(), getExpirationDateInFridge());
     }
 }

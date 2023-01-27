@@ -1,33 +1,26 @@
-package com.simplekitchen.project.dto.entity.recipe.api;
+package com.simplekitchen.project.dto.entity.ingredient.api;
+
+import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 
 import java.util.List;
 
-/**
- * Интерфейс для сущности ингредиента
- * @author KhrustalevSA
- * @since 09.10.2022
- */
 public interface Ingredient {
-
     /**
      * @return уникальный идентификатор рецепта
      */
-    Long getUuid();
+    Long getId();
 
     /**
      * @return название ингредиента
      */
     String getName();
 
-    /**
-     * @return список рецептов где используется
-     */
-    List<Recipe> getRecipeList();
-
+    RecipeImpl getRecipe();
     /**
      * @return средний вес ингредиента
      */
     Double getAverageWeight();
+
 
     /**
      * @return срок годности ингредиента

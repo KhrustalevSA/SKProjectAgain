@@ -40,12 +40,7 @@ public class RecipeImpl implements Recipe, Serializable {
     /**
      * список нужных ингредиентов для приготовления
      */
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-            name = "recipes_ingredients",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    @OneToMany
     @ToString.Exclude
     private List<IngredientImpl> ingredientsList;
 

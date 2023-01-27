@@ -3,7 +3,8 @@ package com.simplekitchen.project.dto.entity.recipe;
 import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponse;
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
 
 /**
  * Класс реализующий интерфейс RecipeRequest
@@ -13,8 +14,6 @@ import lombok.*;
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RecipeResponseImpl implements RecipeResponse {
 
     /**
