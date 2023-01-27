@@ -5,9 +5,13 @@ import com.simplekitchen.project.dao.entity.city.CityNameImpl;
 import com.simplekitchen.project.dto.entity.city.api.City;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface DaoToDtoUserMapper {
+
+    DaoToDtoUserMapper INSTANCE = Mappers.getMapper(DaoToDtoUserMapper.class);
+
     UserImpl DaoToDtoUser(com.simplekitchen.project.dao.entity.user.UserImpl daoUser);
     com.simplekitchen.project.dao.entity.user.UserImpl DtoToDaoUser(UserImpl dtoUser);
 

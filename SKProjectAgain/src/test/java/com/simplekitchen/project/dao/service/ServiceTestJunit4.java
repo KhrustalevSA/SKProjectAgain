@@ -19,7 +19,7 @@ public class ServiceTestJunit4 {
 //    private static final Service<RecipeImpl> recipeService = new RecipeServiceImpl();
 //    private static Service<IngredientImpl> ingredientService = new IngredientServiceImpl();
 //    private static UserRepository repository;
-//    private static UserService userService;
+//    private static UserServiceImpl userService;
 
     @Test
     public void save() {

@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dto.entity.recipe;
+package com.simplekitchen.project.business.mapper.recipe;
 
 import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;

@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dto.entity.user;
+package com.simplekitchen.project.business.mapper.user;
 
 import com.simplekitchen.project.dto.entity.user.api.UserInfoRequest;
 import lombok.AllArgsConstructor;
