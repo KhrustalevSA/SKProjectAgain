@@ -26,26 +26,26 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-//    @PostMapping("/save/all")
-//    public ResponseEntity<List<UserImpl>> saveAll(@RequestBody List<UserImpl> users) {
-//        return new ResponseEntity<>(userService.saveAll(users), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/get")
-//    public ResponseEntity<UserImpl> get(@RequestParam Long id) {
-//        return userService.get(id).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-//    }
-//
-//    @GetMapping("/get/all")
-//    public ResponseEntity<List<UserImpl>> getAll() {
-//        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/get/all/ids")
-//    public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
-//        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
-//    }
+    @PostMapping("/save/all")
+    public ResponseEntity<List<UserImpl>> saveAll(@RequestBody List<UserImpl> users) {
+        return new ResponseEntity<>(userService.saveAll(users), HttpStatus.OK);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<UserImpl> get(@RequestParam Long id) {
+       return userService.get(id).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<List<UserImpl>> getAll() {
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/all/ids")
+    public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
+        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
+    }
 
     @PostMapping("/showUserEntity")
     public UserImpl showUserEntity(){
