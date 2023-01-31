@@ -10,6 +10,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * класс сущности пользователя
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 @Entity
 @Builder
 @Getter
@@ -18,8 +23,9 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserImpl implements User, Serializable {
+
     /**
-     * Метод для получения имени пользователя
+     * поле уникального идентификатора пользователя
      * */
     @Id
     @Column(name = "id")
@@ -27,37 +33,37 @@ public class UserImpl implements User, Serializable {
     private Long id;
 
     /**
-     * Метод для получения имени пользователя
+     * имя пользователя
      * */
     @Column
     private String name;
 
     /**
-     * Метод для получения фамилии пользователя
+     * фамилия пользователя
      * */
     @Column
     private String surname;
 
     /**
-     * Метод для получения отчества пользователя
+     * отчество пользователя
      * */
     @Column
     private String patronymic;
 
     /**
-     * Метод для получения даты рождения пользователя
+     * дата рождения пользователя
      * */
     @Column
     private Calendar birthDate;
 
     /**
-     * Метод для получения пола пользователя
+     * пол пользователя
      * */
     @Column
     private String sex;
 
     /**
-     * Метод для получения списка любимых рецептов пользователя
+     * список рецептов добавленных в "избранное"
      * */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -67,7 +73,7 @@ public class UserImpl implements User, Serializable {
     private List<RecipeImpl> favoriteRecipeList;
 
     /**
-     * Метод для получения места жительства пользователя
+     * город, место жительства пользователя
      * */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id", referencedColumnName = "id")

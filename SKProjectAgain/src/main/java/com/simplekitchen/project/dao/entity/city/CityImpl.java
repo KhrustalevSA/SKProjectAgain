@@ -9,6 +9,11 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * класс ДАО сущности города
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 @Entity
 @Table(name = "city")
 @Builder
@@ -59,7 +64,7 @@ public class CityImpl implements City {
 
 
     /**
-     *
+     * пользователь для которого создается экземпляр данного класса
      * */
     @OneToOne(mappedBy = "city")
     private UserImpl user;

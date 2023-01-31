@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+/**
+ * РЕСТ контроллер для работы с основной частью приложения
+ */
 @RestController
 public class MainController {
 

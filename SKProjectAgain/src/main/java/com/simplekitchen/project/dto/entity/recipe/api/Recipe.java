@@ -60,7 +60,9 @@ public interface Recipe {
      */
     List<StepDescriptionImpl> getStepDescriptionList();
 
+    /**
+     * @return сложность рецепта
+     */
     String getDifficulty();
 
-    List<UserImpl> getUserList();
 }

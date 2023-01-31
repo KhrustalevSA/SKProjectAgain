@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Класс реализующий интерфейс Recipe
+ * ДТО класс рецепта
  * @see Recipe
  * @author KhrustalevSA
  * @since 03.10.2022
@@ -24,25 +24,54 @@ import java.util.List;
 @AllArgsConstructor
 public class RecipeImpl implements Recipe {
 
+    /**
+     * уникальный идентификатор рецепта
+     */
     private Long id;
 
+    /**
+     * название рецепта
+     */
     private String name;
 
+    /**
+     * список ингредиентов для приготовления
+     */
     private List<IngredientImpl> ingredientList;
 
+    /**
+     * описание рецепта
+     */
     private String description;
 
+    /**
+     * список изображений
+     */
     private List<ImageImpl> imageList;
 
+    /**
+     * время приготовления
+     */
     private Long cookingTime;
 
+    /**
+     * автор рецепта
+     */
     private String author;
 
+    /**
+     * дата публикации
+     */
     private Calendar publishDate;
 
+    /**
+     * список шагов приготовления
+     */
     private List<StepDescriptionImpl> stepDescriptionList;
 
+    /**
+     * сложность рецепта
+     */
     private String difficulty;
 
-    private List<UserImpl> userList;
 }

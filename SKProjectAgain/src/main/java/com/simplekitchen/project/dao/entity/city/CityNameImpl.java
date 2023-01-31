@@ -8,6 +8,12 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * ДАО сущность имен городов
+ * отдельная таблица для хранения названий городов
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 @Getter
 @Setter
 @ToString
@@ -17,13 +23,22 @@ import java.util.Objects;
 @Entity
 public class CityNameImpl implements CityName {
 
+    /**
+     * уникальный идентификатор имени города
+     */
     @Id
     @GeneratedValue
     private Long id;
 
+    /**
+     * поле имени города
+     */
     @Column
     private String cityName;
 
+    /**
+     * связь с сущностью города для пользователя
+     */
     @OneToOne(mappedBy = "cityName")
     private CityImpl city;
 

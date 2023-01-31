@@ -5,6 +5,11 @@ import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 
 import java.util.List;
 
+/**
+ * интерфейс сущности ингредиента
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 public interface Ingredient {
 
     /**
@@ -17,6 +22,9 @@ public interface Ingredient {
      */
     String getName();
 
+    /**
+     * @return сущность рецепта к которому привязан ингредиент
+     */
     RecipeImpl getRecipe();
 
     /**

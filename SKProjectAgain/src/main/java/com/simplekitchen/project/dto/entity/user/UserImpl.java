@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Класс реализовывающий интерфейс User
  * @see User
- * @Author KhrustalevSA
+ * @author  KhrustalevSA
  * @since 28.09.2022
  * */
 @Data
@@ -23,19 +23,43 @@ import java.util.List;
 @AllArgsConstructor
 public class UserImpl implements User {
 
+    /**
+     * уникальный идентификатор пользователя
+     */
     private Long id;
 
+    /**
+     * имя пользователя
+     */
     private String name;
 
+    /**
+     * фамилия  пользователя
+     */
     private String surname;
 
+    /**
+     * отчество пользователя
+     */
     private String patronymic;
 
+    /**
+     * дата рождения пользователя
+     */
     private Calendar birthDate;
 
+    /**
+     * пол пользователя
+     */
     private String sex;
 
+    /**
+     * список рецептов добавленных в "избранное"
+     */
     private List<RecipeImpl> favoriteRecipeList;
 
+    /**
+     * город, место жительства пользователя
+     */
     private City city;
 }

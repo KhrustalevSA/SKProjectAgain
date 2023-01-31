@@ -1,5 +1,10 @@
 package com.simplekitchen.project.dto.entity.city.api;
 
+/**
+ * интерфейс описывающий ДТО класс города
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 public interface City {
     /**
      * @return id города

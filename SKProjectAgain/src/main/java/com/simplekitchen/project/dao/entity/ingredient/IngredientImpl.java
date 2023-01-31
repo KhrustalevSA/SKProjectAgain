@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * класс сущности ингредиента
+ * @author KhrustelevSA
+ * @since 31.01.2023
+ */
 @Entity
 @Table(name = "Ingredients")
 @Builder
@@ -33,6 +38,9 @@ public class IngredientImpl implements Ingredient, Serializable {
     @Column
     private String name;
 
+    /**
+     * поле сущности рецепта к которому привязан ингредиент
+     */
     @ManyToOne
     @JoinColumn(name = "ingredients")
     private RecipeImpl recipe;

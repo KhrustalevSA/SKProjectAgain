@@ -10,7 +10,9 @@
 //
 //import java.util.ArrayList;
 //import java.util.List;
-//
+///**
+// * РЕСТ контроллер для работы с рецептами
+// */
 //@RestController
 //public class RecipeController {
 //

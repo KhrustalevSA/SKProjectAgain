@@ -1,7 +1,8 @@
-package com.simplekitchen.project.dto.entity.user.api;
+package com.simplekitchen.project.business.entity.user.api;
 
 
 import com.simplekitchen.project.dto.common.StatusImpl;
+import com.simplekitchen.project.dto.entity.user.api.UserList;
 
 public interface UserInfoResponse {
     /**

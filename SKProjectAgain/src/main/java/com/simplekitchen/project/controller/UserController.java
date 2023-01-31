@@ -2,6 +2,7 @@ package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.business.entity.user.api.UserInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +11,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * РЕСТ контроллер для работы с пользователями
+ */
 @RestController
 public class UserController {
 //mapstract переделать ДжаваДоки Ломбок наружу ДТО Бины
+    // response request переделать, отказ от листов,
     private final UserService userService;
 
+    /**
+     * конструктор с автоопределением бина
+     * @param service
+     */
     @Autowired
     public UserController(UserService service) {
         this.userService = service;
     }
 
+    /**
+     * метод сохранения пользователя
+     * @param user
+     * @return ResponseEntity<UserImpl>
+     */
     @PostMapping("/save")
     public ResponseEntity<UserImpl> save(@RequestBody UserImpl user) {
         return userService.save(user).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
@@ -27,13 +41,13 @@ public class UserController {
     }
 
     @PostMapping("/save/all")
-    public ResponseEntity<List<UserImpl>> saveAll(@RequestBody List<UserImpl> users) {
+    public ResponseEntity<List<UserImpl>> saveAll(@RequestBody UserInfoRequestSave ) {
         return new ResponseEntity<>(userService.saveAll(users), HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<UserImpl> get(@RequestParam Long id) {
-       return userService.get(id).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
+    public ResponseEntity<UserImpl> get(@RequestParam UserInfoRequest userInfo) {
+       return userService.get().map(u -> new ResponseEntity<>(u, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

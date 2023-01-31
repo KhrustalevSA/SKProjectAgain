@@ -1,6 +1,6 @@
-package com.simplekitchen.project.business.mapper.user;
+package com.simplekitchen.project.business.entity;
 
-import com.simplekitchen.project.dto.entity.user.api.UserInfoRequest;
+import com.simplekitchen.project.business.entity.user.api.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoRequestImpl implements UserInfoRequest {
+public class UserRequestImpl implements UserInfoRequest {
 
     /**
      * @return уникальный идентификатор пользователя

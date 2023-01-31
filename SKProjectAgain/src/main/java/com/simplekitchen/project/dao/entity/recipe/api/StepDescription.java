@@ -10,7 +10,23 @@ import java.util.List;
  * @since 22.01.2023
  */
 public interface StepDescription {
-    Long getUuid();
+    /**
+     * @return уникальный идентификатор шага
+     */
+    Long getId();
+
+    /**
+     * @return номер шага
+     */
+    Long getStepNumber();
+
+    /**
+     * @return описание шага
+     */
     String getDescription();
+
+    /**
+     * @return рецепт для которого написан шага
+     */
     RecipeImpl getRecipe();
 }

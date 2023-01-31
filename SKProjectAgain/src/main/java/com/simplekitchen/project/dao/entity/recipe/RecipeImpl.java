@@ -14,6 +14,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * класс сущности рецепта
+ * @author KhrustalevSA
+ * @since 22.01.2023
+ */
 @Entity
 @Table(name = "Recipes")
 @Builder
@@ -23,6 +28,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeImpl implements Recipe, Serializable {
+
     /**
      * уникальный идентификатор рецепта
      */
@@ -51,14 +57,9 @@ public class RecipeImpl implements Recipe, Serializable {
     private String description;
 
     /**
-     * список изображений на странице рецепта
+     * список изображений
      */
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-            name = "recipes_images",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    @OneToMany
     @ToString.Exclude
     private List<ImageImpl> imagesList;
 
@@ -81,15 +82,21 @@ public class RecipeImpl implements Recipe, Serializable {
     private Calendar publishDate;
 
     /**
-     * список описаний правильности действий на шагах готовки
+     * список шагов рецепта
      */
     @OneToMany
     @ToString.Exclude
     private List<StepDescriptionImpl> stepsDescription;
 
+    /**
+     * сложность рецепта
+     */
     @Column
     private String difficulty;
 
+    /**
+     * список пользователей добавивших рецепт в избранное
+     */
     @ManyToMany(mappedBy = "favoriteRecipeList")
     @ToString.Exclude
     private List<UserImpl> userList;

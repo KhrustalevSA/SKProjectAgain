@@ -8,6 +8,11 @@ import com.simplekitchen.project.dao.entity.user.UserImpl;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * интерфейс сущности рецепта
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 public interface Recipe {
     /**
      * @return уникальный идентификатор рецепта
@@ -44,11 +49,6 @@ public interface Recipe {
      */
     String getAuthor();
 
-    // /**
-    // * @return объект автора рецепта
-    // */
-    // Author getAuthor();
-
     /**
      * @return дату публикации рецепта
      */
@@ -59,7 +59,13 @@ public interface Recipe {
      */
     List<StepDescriptionImpl> getStepsDescription();
 
+    /**
+     * @return сложность рецепта
+     */
     String getDifficulty();
 
+    /**
+     * @return список пользователей добавивших рецепт в "избранное"
+     */
     List<UserImpl> getUserList();
 }

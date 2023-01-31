@@ -2,6 +2,11 @@ package com.simplekitchen.project.dao.entity.city.api;
 
 import com.simplekitchen.project.dao.entity.city.CityNameImpl;
 
+/**
+ * интерфейс ДАО сущности города
+ * @author KhrustalevSA
+ * @since 31.01.2023
+ */
 public interface City {
 
     /**
@@ -10,12 +15,12 @@ public interface City {
     Long getId();
 
     /**
-     * @return имя города
+     * @return название города
      * */
     CityNameImpl getCityName();
 
     /**
-     * @return имя области
+     * @return название области
      * */
     String getRegionName();
 

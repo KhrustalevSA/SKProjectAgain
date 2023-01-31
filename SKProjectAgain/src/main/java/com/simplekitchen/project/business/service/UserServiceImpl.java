@@ -1,18 +1,23 @@
 package com.simplekitchen.project.business.service;
 
-import com.simplekitchen.project.business.mapper.user.api.DaoToDtoUserMapper;
-import com.simplekitchen.project.business.mapper.user.api.DaoToDtoUserMapperImpl;
+import com.simplekitchen.project.business.exception.UserNotFoundException;
+import com.simplekitchen.project.business.entity.user.api.UserInfo;
+import com.simplekitchen.project.business.mapper.user.UserMapper;
+import com.simplekitchen.project.business.mapper.user.api.UserMapperImpl;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- * Класс реализовывающий интерфейс UserService
+ * Класс сервиса бизнес слоя, реализовывающий интерфейс UserService
  * @see UserService
  * @Author KhrustalevSA
  * @since 29.01.2023
@@ -42,9 +47,9 @@ public class UserServiceImpl implements UserService {
      */
     public Optional<UserImpl> save(UserImpl user) {
         log.debug("Save" + user);
-        Optional<com.simplekitchen.project.dao.entity.user.UserImpl> savedUser = userService.save(DaoToDtoUserMapper.INSTANCE.DtoToDaoUser(user));
+        Optional<com.simplekitchen.project.dao.entity.user.UserImpl> savedUser = userService.save(UserMapper.INSTANCE.map(user));
         log.debug("Saved user" + user);
-        return savedUser.map(DaoToDtoUserMapperImpl.INSTANCE::DaoToDtoUser);
+        return savedUser.map(UserMapperImpl.INSTANCE::map);
     }
 
     /**
@@ -53,21 +58,34 @@ public class UserServiceImpl implements UserService {
      * @return List<daoUserImpl>
      */
     @Override
-    public List<UserImpl> saveAll(List<UserImpl> userList) {
-        log.debug("save objects:" + userList);
+    public List<UserImpl> saveAll(UserInfo userInfo) {
+        log.debug("save objects:" + userInfo); // --- UserInfoImpl
+        if (CollectionUtils.isNotEmpty(userList)) {
+            List<com.simplekitchen.project.dao.entity.user.UserImpl> userDaoList = userService.saveAll(
+                    userList.stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList())
+            );
 
-        log.debug("saved users:" + userList);
-        return ;
+
+            List<UserImpl> users = userDaoList.stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList());
+            log.debug("");
+            return users;
+        }
+
+        return Collections.emptyList();
     }
 
     /**
      * метод получения пользователя по уникальному идентификатору
      * @param id
-     * @return
+     * @return Optional<UserImpl>
      */
     @Override
-    public Optional<com.simplekitchen.project.dao.entity.user.UserImpl> get(Long id) {
-        return Optional.empty();
+    public Optional<UserImpl> get(Long id) {
+        log.debug("received id" + id);
+        Optional<com.simplekitchen.project.dao.entity.user.UserImpl> userOptional = userService.get(id);
+        log.debug("received user" + userOptional.orElseThrow(() -> new UserNotFoundException("user not found", id)));
+        log.debug("received user" + userOptional.toString());
+        return Optional.of(UserMapper.INSTANCE.DaoToDtoUser(userOptional.get()));
     }
 
     /**
@@ -75,56 +93,60 @@ public class UserServiceImpl implements UserService {
      * @return List<com.simplekitchen.project.dao.entity.user.UserImpl>
      */
     @Override
-    public List<com.simplekitchen.project.dao.entity.user.UserImpl> getAll() {
-        return null;
+    public List<UserImpl> getAll() {
+        List<com.simplekitchen.project.dao.entity.user.UserImpl> userList = userService.getAll();
+        log.debug("received userList" + userList);
+        return UserMapper.INSTANCE.DaoToDtoUserList(userList);
     }
-
-    /**
-     * метод получения списка пользователей по списку уникальных идентификаторов
-     * @param ids
-     * @return List<com.simplekitchen.project.dao.entity.user.UserImpl>
-     */
-    @Override
-    public List<com.simplekitchen.project.dao.entity.user.UserImpl> getAllById(List<Long> ids) {
-        return null;
-    }
-
-    /**
-     * метод удаления пользователя по уникальному идентификатору
-     * @param id
-     * @return Boolean
-     */
-    @Override
-    public Boolean deleteById(Long id) {
-        return null;
-    }
-
-    /**
-     * метод удаления польователя по его сущности
-     * @param user
-     * @return Boolean
-     */
-    @Override
-    public Boolean delete(com.simplekitchen.project.dao.entity.user.UserImpl user) {
-        return null;
-    }
-
-    /**
-     * метод удаления пользователей по переданному списку пользователей
-     * @param users
-     * @return Boolean
-     */
-    @Override
-    public Boolean deleteAll(List<com.simplekitchen.project.dao.entity.user.UserImpl> users) {
-        return null;
-    }
-
-    /**
-     * метод удаления всех имеющихся пользователей
-     * @return Boolean
-     */
-    @Override
-    public Boolean deleteAll() {
-        return null;
-    }
+//
+//    /**
+//     * метод получения списка пользователей по списку уникальных идентификаторов
+//     * @param ids
+//     * @return List<com.simplekitchen.project.dao.entity.user.UserImpl>
+//     */
+//    @Override
+//    public List<UserImpl> getAllById(List<Long> ids) {
+//        log.debug("parameter List<long> ids" + ids);
+//
+//        return ;
+//    }
+//
+//    /**
+//     * метод удаления пользователя по уникальному идентификатору
+//     * @param id
+//     * @return Boolean
+//     */
+//    @Override
+//    public Boolean deleteById(Long id) {
+//        return null;
+//    }
+//
+//    /**
+//     * метод удаления польователя по его сущности
+//     * @param user
+//     * @return Boolean
+//     */
+//    @Override
+//    public Boolean delete(com.simplekitchen.project.dao.entity.user.UserImpl user) {
+//        return null;
+//    }
+//
+//    /**
+//     * метод удаления пользователей по переданному списку пользователей
+//     * @param users
+//     * @return Boolean
+//     */
+//    @Override
+//    public Boolean deleteAll(List<com.simplekitchen.project.dao.entity.user.UserImpl> users) {
+//        return null;
+//    }
+//
+//    /**
+//     * метод удаления всех имеющихся пользователей
+//     * @return Boolean
+//     */
+//    @Override
+//    public Boolean deleteAll() {
+//        return null;
+//    }
 }

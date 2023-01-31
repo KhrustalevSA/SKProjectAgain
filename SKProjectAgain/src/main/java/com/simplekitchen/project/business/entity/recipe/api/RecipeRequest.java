@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dto.entity.recipe.api;
+package com.simplekitchen.project.business.entity.recipe.api;
 
 /**
  * Интерфейс для запроса рецепта

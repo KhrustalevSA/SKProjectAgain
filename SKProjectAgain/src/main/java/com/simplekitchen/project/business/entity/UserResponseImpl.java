@@ -1,8 +1,8 @@
-package com.simplekitchen.project.business.mapper.user;
+package com.simplekitchen.project.business.entity;
 
 
 import com.simplekitchen.project.dto.common.StatusImpl;
-import com.simplekitchen.project.dto.entity.user.api.UserInfoResponse;
+import com.simplekitchen.project.business.entity.user.api.UserInfoResponse;
 import com.simplekitchen.project.dto.entity.user.api.UserList;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoResponseImpl implements UserInfoResponse {
+public class UserResponseImpl implements UserInfoResponse {
 
     /**
      * поле статуса запроса

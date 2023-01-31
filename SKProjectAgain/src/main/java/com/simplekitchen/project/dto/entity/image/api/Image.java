@@ -13,7 +13,7 @@ public interface Image {
     /**
      * @return уникальный идентификатор изображения
      */
-    String getUuid();
+    String getId();
 
     /**
      * @return путь к изображению
@@ -25,7 +25,4 @@ public interface Image {
      */
     String getUrl();
 
-    /**
-     * @return Список рецптов
-     */
-    List<RecipeImpl> getRecipe();}
+}

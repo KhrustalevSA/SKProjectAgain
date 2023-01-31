@@ -8,8 +8,17 @@ import lombok.Data;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * класс список пользователей
+ * @author KhrustalevSA
+ * @since 22.01.2023
+ */
 @Data
 @Builder
 public class RecipeListImpl implements RecipeList {
+
+    /**
+     * поле списка рецептов
+     */
     private List<Recipe> recipeList;
 }

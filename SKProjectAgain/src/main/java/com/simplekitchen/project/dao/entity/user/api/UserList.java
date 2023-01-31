@@ -4,9 +4,13 @@ import com.simplekitchen.project.dao.entity.user.UserImpl;
 
 import java.util.List;
 
+/**
+ * интерфейс класса списка пользователей
+ */
 public interface UserList {
+
     /**
-     * список пользователей
+     * @return список пользователей
      */
     List<UserImpl> getUserList();
 }

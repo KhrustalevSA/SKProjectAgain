@@ -19,7 +19,7 @@ public class ImageImpl implements Image {
     /**
      * поле уникального идентификатора изображения
      */
-    private String uuid;
+    private String id;
 
     /**
      * поле для хранения пути к картинке
@@ -31,6 +31,5 @@ public class ImageImpl implements Image {
      */
     private String url;
 
-    private List<RecipeImpl> recipe;
 
 }
