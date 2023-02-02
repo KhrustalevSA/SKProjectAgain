@@ -1,7 +1,7 @@
 package com.simplekitchen.project.business.entity.recipe.api;
 
 
-import com.simplekitchen.project.dto.common.StatusImpl;
+import com.simplekitchen.project.business.entity.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
 
 /**

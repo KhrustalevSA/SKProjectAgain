@@ -1,5 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
+import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 
@@ -33,6 +34,13 @@ public interface UserService {
      * @return Optional объект полученного пользователя
      */
     Optional<UserImpl> get(Long id);
+
+    /**
+     * метод получения пользователя по информационному классу
+     * @param userRequestInfo
+     * @return Optional объект полученного пользователя
+     */
+    Optional<UserImpl> get(UserRequestInfo userRequestInfo);
 
     /**
      * метод получения всех пользователей

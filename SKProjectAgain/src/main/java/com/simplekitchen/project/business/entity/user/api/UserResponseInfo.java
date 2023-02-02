@@ -1,10 +1,9 @@
 package com.simplekitchen.project.business.entity.user.api;
 
 
-import com.simplekitchen.project.dto.common.StatusImpl;
-import com.simplekitchen.project.dto.entity.user.api.UserList;
+import com.simplekitchen.project.business.entity.common.StatusImpl;
 
-public interface UserInfoResponse {
+public interface UserResponseInfo {
     /**
      * @return статус ответа
      */

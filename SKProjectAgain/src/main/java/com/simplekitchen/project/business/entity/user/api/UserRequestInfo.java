@@ -1,15 +1,19 @@
 package com.simplekitchen.project.business.entity.user.api;
 
-public interface UserInfoRequest {
+public interface UserRequestInfo {
     /**
      * @return уникальный идентификатор пользователя
      */
-    String getUuid();
+    Long getId();
 
     /**
      * @return имя пользователя
      */
     String getName();
 
+    /**
+     * @return фамилия пользователя
+     */
+    String getSurname();
 
 }

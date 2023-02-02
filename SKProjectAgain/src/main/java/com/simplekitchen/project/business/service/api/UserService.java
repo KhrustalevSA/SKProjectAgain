@@ -1,6 +1,9 @@
 package com.simplekitchen.project.business.service.api;
 
 
+import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 
 import java.util.List;
@@ -27,7 +30,7 @@ public interface UserService {
      * @param users
      * @return List<UserImpl>
      */
-    List<UserImpl> saveAll(List<UserImpl> users);
+    UserList saveAll(UserList users);
 
     /**
      * метод получения пользователя по уникальному идентификатору
@@ -37,17 +40,24 @@ public interface UserService {
     Optional<UserImpl> get(Long id);
 
     /**
+     * метод получения пользователя по классу информации
+     * @param userInfo
+     * @return Optional<UserImpl>
+     */
+    Optional<UserImpl> get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException;
+
+    /**
      * метод получения всех существующих пользователей
      * @return List<UserImpl>
      */
-    List<UserImpl> getAll();
+    UserList getAll();
 
-    /**
-     * метод для получения списка пользователей по их уникальным идентификаторам
-     * @param ids
-     * @return List<UserImpl>
-     */
-    List<UserImpl> getAllById(List<Long> ids);
+//    /**
+//     * метод для получения списка пользователей по их уникальным идентификаторам
+//     * @param userList
+//     * @return List<UserImpl>
+//     */
+//    UserList getAllById(UserList userList);
 
     /**
      * удалить пользователя по его уникальному идентификатору
@@ -56,19 +66,19 @@ public interface UserService {
      */
     Boolean deleteById(Long id);
 
-    /**
-     * метод для удаления пользователя по его полной сущности
-     * @param user
-     * @return Boolean
-     */
-    Boolean delete(UserImpl user);
+//    /**
+//     * метод для удаления пользователя по его полной сущности
+//     * @param user
+//     * @return Boolean
+//     */
+//    Boolean delete(UserImpl user);
 
     /**
      * метод для удаления списка пользователей из сущности пользователей
-     * @param users
+     * @param userList
      * @return Boolean
      */
-    Boolean deleteAll(List<UserImpl> users);
+    Boolean deleteAll(UserList userList);
 
     /**
      * метод для удаления всех имеющихся пользователей

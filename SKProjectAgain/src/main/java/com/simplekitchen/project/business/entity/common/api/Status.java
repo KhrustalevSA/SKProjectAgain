@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dto.common.api;
+package com.simplekitchen.project.business.entity.common.api;
 
 /**
  * Интерфейс сущности изображений

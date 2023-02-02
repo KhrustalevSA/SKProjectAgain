@@ -1,5 +1,7 @@
 package com.simplekitchen.project.dao.service;
 
+import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
+import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -69,6 +71,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserImpl> get(Long id) {
         return userRepository.findById(id);
+    }
+
+    /**
+     * поиск пользователя по имеющейся инофрмации
+     * @param userRequestInfo
+     * @return Optional<UserImpl> сущность пользователя
+     */
+    @Override
+    public Optional<UserImpl> get(UserRequestInfo userRequestInfo) {
+        log.debug("received userInfo = " + userRequestInfo);
+        if (userRequestInfo.getId() != null) {
+            log.debug("request id = " + userRequestInfo.getId());
+            Optional<UserImpl> foundUserById = userRepository.findById(userRequestInfo.getId());
+            log.debug("found user =" + foundUserById);
+            return foundUserById;
+        }
+        else if (!userRequestInfo.getName().isEmpty()) {
+            log.debug("name is = " + userRequestInfo.getName());
+            Optional<UserImpl> foundUserByName = userRepository.findByName(userRequestInfo.getName());
+            log.debug("found user = " + foundUserByName);
+            return foundUserByName;
+        }
+        else if (!userRequestInfo.getSurname().isEmpty()) {
+            log.debug("surname is = " + userRequestInfo.getSurname());
+            Optional<UserImpl> foundUserBySurname = userRepository.findBySurname(userRequestInfo.getSurname());
+            log.debug("found user = " + foundUserBySurname);
+            return foundUserBySurname;
+        }
+        else return Optional.empty();
     }
 
     /**

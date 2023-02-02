@@ -1,8 +1,14 @@
 package com.simplekitchen.project.controller;
 
+import com.simplekitchen.project.business.entity.common.StatusImpl;
+import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
+import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
+import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
-import com.simplekitchen.project.business.entity.user.api.UserInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +22,14 @@ import java.util.List;
  */
 @RestController
 public class UserController {
-//mapstract переделать ДжаваДоки Ломбок наружу ДТО Бины
-    // response request переделать, отказ от листов,
+//mapstract Бины
+// response request переделать, отказ от листов,
+
+// orElseThrow в сервисе так или нет?
+// метод с испльзованием класса информации о пользователе как правильно?
+// метод get в сервисе дао?
+// dao service должен ли знать о бизнес слое?
+
     private final UserService userService;
 
     /**
@@ -41,25 +53,49 @@ public class UserController {
     }
 
     @PostMapping("/save/all")
-    public ResponseEntity<List<UserImpl>> saveAll(@RequestBody UserInfoRequestSave ) {
-        return new ResponseEntity<>(userService.saveAll(users), HttpStatus.OK);
+    public ResponseEntity<UserList> saveAll(@RequestBody UserList userList) {
+        if (userList.getUserList().isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userService.saveAll(userList), HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<UserImpl> get(@RequestParam UserInfoRequest userInfo) {
-       return userService.get().map(u -> new ResponseEntity<>(u, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public UserResponseInfo get(@RequestParam UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException {
+        if (userRequestInfo == null) {
+            return UserResponseInfoImpl.builder()
+                    .status(StatusImpl.builder()
+                                        .success(false).description("UserResponse are null")
+                                        .build())
+                    .build();
+        }
+
+        ///////////////////////////////////////////////
+        UserList userList = new UserListImpl();
+        userList.add(userService.get(userRequestInfo));
+        ///////////////////////////////////////////////
+
+        return UserResponseInfoImpl.builder()
+                .userList(userList).status(StatusImpl.builder().success(true).build()).build();
+
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<UserImpl>> getAll() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    public UserResponseInfo getAll() {
+        UserList userList = userService.getAll();
+
+        if (userList == null)
+        return UserResponseInfoImpl.builder().status(StatusImpl.builder()
+                .success(false).description("users not found").build()).build();
+
+        return UserResponseInfoImpl.builder()
+                .userList(userList).status(StatusImpl.builder().success(true).build()).build();
     }
 
-    @GetMapping("/get/all/ids")
-    public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
-        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
-    }
+//    @GetMapping("/get/all/ids")
+//    public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
+//        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
+//    }
 
     @PostMapping("/showUserEntity")
     public UserImpl showUserEntity(){
