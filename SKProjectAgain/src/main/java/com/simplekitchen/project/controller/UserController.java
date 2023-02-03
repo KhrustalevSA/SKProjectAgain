@@ -2,20 +2,25 @@ package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.business.entity.common.StatusImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
-import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * РЕСТ контроллер для работы с пользователями
@@ -29,6 +34,7 @@ public class UserController {
 // метод с испльзованием класса информации о пользователе как правильно?
 // метод get в сервисе дао?
 // dao service должен ли знать о бизнес слое?
+// должен ли знать сервис о requestInfo
 
     private final UserService userService;
 
@@ -53,43 +59,54 @@ public class UserController {
     }
 
     @PostMapping("/save/all")
-    public ResponseEntity<UserList> saveAll(@RequestBody UserList userList) {
-        if (userList.getUserList().isEmpty()) {
+    public ResponseEntity<UserList> saveAll(@RequestBody UserListImpl userList) {
+        if (userList.getUserList() == null) {
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(userService.saveAll(userList), HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public UserResponseInfo get(@RequestParam UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException {
+    public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) throws UserRequestInfoNotFoundException {
         if (userRequestInfo == null) {
             return UserResponseInfoImpl.builder()
                     .status(StatusImpl.builder()
-                                        .success(false).description("UserResponse are null")
-                                        .build())
+
+                            .success(false)
+                            .description("UserResponse are null")
+                            .build())
                     .build();
         }
 
         ///////////////////////////////////////////////
-        UserList userList = new UserListImpl();
-        userList.add(userService.get(userRequestInfo));
+        //Сейчас работает
+        ////
+        List<UserImpl> listUser = new ArrayList<>();
+        listUser = userService.get(userRequestInfo).getUserList();
+        //listUser.add(userService.get(userRequestInfo).orElseThrow(() -> new UserRequestInfoNotFoundException("user not found", userRequestInfo)));
+        ///////////////////////////////////////////////
+        //
+        //Было но не работает
+        ///////////////////////////////////////////////
+        //UserListImpl userList = new UserListImpl();
+        //userList.add(userService.get(userRequestInfo));
         ///////////////////////////////////////////////
 
         return UserResponseInfoImpl.builder()
-                .userList(userList).status(StatusImpl.builder().success(true).build()).build();
+                .userList(userService.get(userRequestInfo).getUserList())
+                .status(StatusImpl.builder().success(true).build()).build();
 
     }
 
     @GetMapping("/get/all")
-    public UserResponseInfo getAll() {
-        UserList userList = userService.getAll();
+    public UserResponseInfo getAll() throws UserResponseInfoNotFoundException {
+        if (userService.getAll().isPresent()) {
 
-        if (userList == null)
+            return UserResponseInfoImpl.builder()
+                    .userList(userService.getAll().get()).build();
+        }
         return UserResponseInfoImpl.builder().status(StatusImpl.builder()
                 .success(false).description("users not found").build()).build();
-
-        return UserResponseInfoImpl.builder()
-                .userList(userList).status(StatusImpl.builder().success(true).build()).build();
     }
 
 //    @GetMapping("/get/all/ids")
@@ -97,6 +114,26 @@ public class UserController {
 //        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
 //    }
 
+    @PostMapping("/deleteById")
+    public Boolean deleteById(@RequestBody Long id) {
+        userService.deleteById(id);
+        return Boolean.TRUE;
+    }
+
+    @PostMapping("/deleteByIdList")
+    public UserResponseInfo deleteById(@RequestBody UserListImpl userList) {
+        if (!userList.getUserList().isEmpty()) {
+            List<UserImpl> userListWithId = userList.getUserList();
+            for (UserImpl user : userListWithId) {
+                userService.deleteById(user.getId());
+            }
+            return UserResponseInfoImpl.builder().status(StatusImpl.builder().success(true).build()).build();
+        }
+        return UserResponseInfoImpl.builder().status(StatusImpl.builder()
+                .success(false).description("users not found").build()).build();
+
+    }
+    
     @PostMapping("/showUserEntity")
     public UserImpl showUserEntity(){
         return UserImpl.builder().id(1L).name("Ivan").surname("").patronymic("").build();

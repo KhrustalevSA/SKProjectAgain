@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.service.api;
 
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
 import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 
@@ -40,13 +41,13 @@ public interface UserService {
      * @param userRequestInfo
      * @return Optional объект полученного пользователя
      */
-    Optional<UserImpl> get(UserRequestInfo userRequestInfo);
+    Optional<List<UserImpl>> get(UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException;
 
     /**
      * метод получения всех пользователей
      * @return список пользователей
      */
-    List<UserImpl> getAll();
+    Optional<List<UserImpl>> getAll();
 
     /**
      * метод получения пользователей по уникальному идентификатору

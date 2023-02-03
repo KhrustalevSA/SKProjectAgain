@@ -1,8 +1,10 @@
 package com.simplekitchen.project.dto.entity.city;
 
 import com.simplekitchen.project.dto.entity.city.api.City;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ДТО класс города
@@ -11,6 +13,8 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CityImpl implements City {
 
     /**

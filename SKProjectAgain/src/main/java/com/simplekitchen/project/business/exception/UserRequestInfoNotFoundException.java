@@ -6,14 +6,14 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * класс ошибки для UserInfoRequest
+ * класс ошибки для UserRequestInfo
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
 public class UserRequestInfoNotFoundException extends Exception{
     /**
-     * уникальзный идентификатор не найденного пользователя
+     * полученная информация изза которой возникла ошибка
      */
     private UserRequestInfo userRequestInfo;
 

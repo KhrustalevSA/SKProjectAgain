@@ -41,8 +41,11 @@ public interface UserMapper {
      * @param daoCity
      * @return com.simplekitchen.project.dto.entity.city.api.City
      */
-    @Mapping(target = "cityName", source = "daoCity.cityName.cityName")
-    City map(CityImpl daoCity);
+    @Mapping(target = "cityName", source = "cityName.cityName")
+    com.simplekitchen.project.dto.entity.city.CityImpl map(CityImpl daoCity);
+
+    @Mapping(target = "cityName")
+    CityNameImpl map(String cityName);
 
 
 }

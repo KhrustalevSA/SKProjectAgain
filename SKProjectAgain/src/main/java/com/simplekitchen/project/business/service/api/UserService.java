@@ -1,9 +1,12 @@
 package com.simplekitchen.project.business.service.api;
 
 
+import com.simplekitchen.project.business.entity.user.UserListImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 
 import java.util.List;
@@ -30,7 +33,7 @@ public interface UserService {
      * @param users
      * @return List<UserImpl>
      */
-    UserList saveAll(UserList users);
+    UserListImpl saveAll(UserListImpl users);
 
     /**
      * метод получения пользователя по уникальному идентификатору
@@ -44,13 +47,13 @@ public interface UserService {
      * @param userInfo
      * @return Optional<UserImpl>
      */
-    Optional<UserImpl> get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException;
+    UserResponseInfo get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException;
 
     /**
      * метод получения всех существующих пользователей
      * @return List<UserImpl>
      */
-    UserList getAll();
+    Optional<List<UserImpl>> getAll() throws UserResponseInfoNotFoundException;
 
 //    /**
 //     * метод для получения списка пользователей по их уникальным идентификаторам
@@ -73,17 +76,5 @@ public interface UserService {
 //     */
 //    Boolean delete(UserImpl user);
 
-    /**
-     * метод для удаления списка пользователей из сущности пользователей
-     * @param userList
-     * @return Boolean
-     */
-    Boolean deleteAll(UserList userList);
-
-    /**
-     * метод для удаления всех имеющихся пользователей
-     * @return Boolean
-     */
-    Boolean deleteAll();
 
 }

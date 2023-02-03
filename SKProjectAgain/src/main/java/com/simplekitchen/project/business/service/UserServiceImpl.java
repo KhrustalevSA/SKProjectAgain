@@ -1,14 +1,19 @@
 package com.simplekitchen.project.business.service;
 
+import com.simplekitchen.project.business.entity.common.StatusImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
 import com.simplekitchen.project.business.mapper.user.UserMapper;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,20 +61,19 @@ public class UserServiceImpl implements UserService {
     /**
      * метод сохранения списка переданных пользователей
      * @param userList
-     * @return List<daoUserImpl>
+     * @return UserListImpl
      */
     @Override
-    public UserList saveAll(UserList userList) {
+    public UserListImpl saveAll(UserListImpl userList) {
         log.debug("save objects:" + userList); // работает или нет?
         if (CollectionUtils.isNotEmpty(userList.getUserList())) {
             List<com.simplekitchen.project.dao.entity.user.UserImpl> userDaoList = userService.saveAll(
                     userList.getUserList().stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList())
             );
 
-            UserList savedUsers = new UserListImpl(userDaoList.stream().map(UserMapper.INSTANCE::map)
-                    .collect(Collectors.toList()));
-            log.debug("");
-            return savedUsers;
+            return UserListImpl.builder()
+                    .userList(userDaoList.stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList()))
+                    .build();
         }
 
         return UserListImpl.builder().build();
@@ -94,13 +98,16 @@ public class UserServiceImpl implements UserService {
      * @return Optional<UserImpl>
      */
     @Override
-    public Optional<UserImpl> get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException {
+    public UserResponseInfo get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException {
         log.debug("requested userInfo" + userInfo);
-        Optional<com.simplekitchen.project.dao.entity.user.UserImpl> userOptional = userService.get(userInfo);
-        log.debug("received user" + userOptional.orElseThrow(() ->
+        Optional<List<com.simplekitchen.project.dao.entity.user.UserImpl>> usersOptional = userService.get(userInfo);
+        log.debug("received user" + usersOptional.orElseThrow(() ->
                 new UserRequestInfoNotFoundException("user not found", userInfo)));
-        log.debug("received user" + userOptional);
-        return Optional.of(UserMapper.INSTANCE.map(userOptional.get()));
+        return UserResponseInfoImpl.builder()
+                .status(StatusImpl.builder().success(true).build())
+                .userList(usersOptional.get()
+                        .stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList()))
+                .build();
     }
 
     /**
@@ -108,12 +115,15 @@ public class UserServiceImpl implements UserService {
      * @return List<com.simplekitchen.project.dao.entity.user.UserImpl>
      */
     @Override
-    public UserList getAll() {
-        UserList userListClassVar = UserListImpl.builder()
-                .userList(userService.getAll().stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList()))
-                .build();
-        log.debug("received userList" + userListClassVar);
-        return userListClassVar;
+    public Optional<List<UserImpl>> getAll() throws UserResponseInfoNotFoundException {
+        if (userService.getAll().isPresent()) {
+            Optional<List<UserImpl>> userListOptional = Optional.of(userService.getAll().get()
+                    .stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList()));
+            log.debug("received userList" + userListOptional);
+            return userListOptional;
+        }
+
+        return Optional.empty();
     }
 
 //    /**
@@ -157,30 +167,4 @@ public class UserServiceImpl implements UserService {
 //        userService.delete()
 //    }
 
-    /**
-     * метод удаления пользователей по переданному списку пользователей
-     * @param userList
-     * @return Boolean
-     */
-    @Override
-    public Boolean deleteAll(UserList userList) {
-        log.debug("received user list = " + userList);
-        List<UserImpl> allFoundUsers = userService.getAll().stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList());
-        log.debug("found users: " + allFoundUsers);
-        if (!allFoundUsers.isEmpty()) {
-            userService.deleteAll(userList.getUserList().stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList()));
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * метод удаления всех имеющихся пользователей
-     * @return Boolean
-     */
-    @Override
-    public Boolean deleteAll() {
-        userService.deleteAll();
-        return true;
-    }
 }

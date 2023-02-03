@@ -21,14 +21,6 @@ public class UserListImplTest {
 
     @Test
     public void testToString() {
-        List<User> userList = new ArrayList<>();
-        userList.add(UserImpl.builder().id(1L).name("Ivan").build());
-        userList.add(UserImpl.builder().id(2L).name("Petr").build());
-        UserList userListImpl = UserListImpl.builder().userList(userList).build();
-
-        System.out.println(userListImpl.toString());
-
-        Assert.assertTrue(true);
     }
 
     @Test

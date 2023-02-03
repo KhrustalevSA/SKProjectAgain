@@ -5,7 +5,10 @@ package com.simplekitchen.project.business.entity.user;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.common.StatusImpl;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * Класс для получения найденных из запроса поьзователей
@@ -26,5 +29,5 @@ public class UserResponseInfoImpl implements UserResponseInfo {
     /**
      * поле списка пользователей
      */
-    private UserList userList;
+    private List<UserImpl> userList;
 }

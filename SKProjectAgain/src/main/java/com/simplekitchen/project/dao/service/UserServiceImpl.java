@@ -2,6 +2,7 @@ package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -12,6 +13,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,25 +81,26 @@ public class UserServiceImpl implements UserService {
      * @return Optional<UserImpl> сущность пользователя
      */
     @Override
-    public Optional<UserImpl> get(UserRequestInfo userRequestInfo) {
+    public Optional<List<UserImpl>> get(UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException {
         log.debug("received userInfo = " + userRequestInfo);
         if (userRequestInfo.getId() != null) {
             log.debug("request id = " + userRequestInfo.getId());
             Optional<UserImpl> foundUserById = userRepository.findById(userRequestInfo.getId());
             log.debug("found user =" + foundUserById);
-            return foundUserById;
+            return Optional.of(Lists.newArrayList(foundUserById.
+                    orElseThrow(() -> new UserRequestInfoNotFoundException("user not found", userRequestInfo))));
         }
-        else if (!userRequestInfo.getName().isEmpty()) {
+        else if (userRequestInfo.getName() != null) {
             log.debug("name is = " + userRequestInfo.getName());
-            Optional<UserImpl> foundUserByName = userRepository.findByName(userRequestInfo.getName());
-            log.debug("found user = " + foundUserByName);
-            return foundUserByName;
+            Optional<List<UserImpl>> foundUsersByName = userRepository.findByName(userRequestInfo.getName());
+            log.debug("found user = " + foundUsersByName);
+            return foundUsersByName;
         }
-        else if (!userRequestInfo.getSurname().isEmpty()) {
+        else if (userRequestInfo.getSurname() != null) {
             log.debug("surname is = " + userRequestInfo.getSurname());
-            Optional<UserImpl> foundUserBySurname = userRepository.findBySurname(userRequestInfo.getSurname());
-            log.debug("found user = " + foundUserBySurname);
-            return foundUserBySurname;
+            Optional<List<UserImpl>> foundUsersBySurname = userRepository.findBySurname(userRequestInfo.getSurname());
+            log.debug("found user = " + foundUsersBySurname);
+            return foundUsersBySurname;
         }
         else return Optional.empty();
     }
@@ -107,8 +110,8 @@ public class UserServiceImpl implements UserService {
      * @return список пользователей
      */
     @Override
-    public List<UserImpl> getAll() {
-        return Lists.newArrayList(userRepository.findAll());
+    public Optional<List<UserImpl>> getAll() {
+        return Optional.of(Lists.newArrayList(userRepository.findAll()));
     }
 
     /**
