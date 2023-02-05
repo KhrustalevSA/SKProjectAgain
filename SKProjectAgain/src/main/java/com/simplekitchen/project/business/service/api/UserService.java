@@ -2,11 +2,11 @@ package com.simplekitchen.project.business.service.api;
 
 
 import com.simplekitchen.project.business.entity.user.UserListImpl;
-import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserNotFoundException;
 import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
+import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public interface UserService {
      * @param userInfo
      * @return Optional<UserImpl>
      */
-    UserResponseInfo get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException;
+    UserResponseInfo get(UserRequestInfo userInfo) throws UserNotFoundException, ValidationException;
 
     /**
      * метод получения всех существующих пользователей

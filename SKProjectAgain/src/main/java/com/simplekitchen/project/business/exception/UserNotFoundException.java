@@ -11,13 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
-public class UserRequestInfoNotFoundException extends Exception{
+public class UserNotFoundException extends Throwable{
     /**
      * полученная информация изза которой возникла ошибка
      */
     private UserRequestInfo userRequestInfo;
 
-    public UserRequestInfoNotFoundException(String message, UserRequestInfo userRequestInfo){
+    public UserNotFoundException(String message, UserRequestInfo userRequestInfo){
         super(message);
         this.userRequestInfo =userRequestInfo;
     }

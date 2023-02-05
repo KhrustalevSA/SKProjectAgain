@@ -1,9 +1,9 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
-import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
+import com.simplekitchen.project.dao.entity.user.api.User;
+import com.simplekitchen.project.dao.entity.user.api.UserList;
+import com.simplekitchen.project.dao.exception.DataBaseException;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +34,15 @@ public interface UserService {
      * @param id
      * @return Optional объект полученного пользователя
      */
-    Optional<UserImpl> get(Long id);
+    User get(Long id) throws DataBaseException;
 
     /**
-     * метод получения пользователя по информационному классу
-     * @param userRequestInfo
-     * @return Optional объект полученного пользователя
+     * метод получения пользователя по имени и фамилии
+     * @param name
+     * @param surname
+     * @return список найденных пользователей
      */
-    Optional<List<UserImpl>> get(UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException;
+    UserList get(String name, String surname);
 
     /**
      * метод получения всех пользователей

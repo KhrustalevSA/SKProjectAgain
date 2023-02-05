@@ -6,25 +6,22 @@ import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
 import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * РЕСТ контроллер для работы с пользователями
  */
+@Slf4j
 @RestController
 public class UserController {
 //mapstract Бины
@@ -36,6 +33,11 @@ public class UserController {
 // dao service должен ли знать о бизнес слое?
 // должен ли знать сервис о requestInfo
 
+// Переделать get методы сервисов
+// Валидатор
+// Exception классы
+// UserController переделать до низа. Контроллер всегда отвечает, все делает сервис он не кидает исключений,
+//          все ошибки в плохой ответ, в бд сервисе только исключения БД
     private final UserService userService;
 
     /**
@@ -58,6 +60,11 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
+    /**
+     * Метод сохранения списка переданных пользователей
+     * @param userList
+     * @return саисок сохраненных пользователей
+     */
     @PostMapping("/save/all")
     public ResponseEntity<UserList> saveAll(@RequestBody UserListImpl userList) {
         if (userList.getUserList() == null) {
@@ -66,42 +73,37 @@ public class UserController {
         return new ResponseEntity<>(userService.saveAll(userList), HttpStatus.OK);
     }
 
+    /**
+     * метод получения пользователя по имеющейся информации
+     * @param userRequestInfo
+     * @return информация о пользователе
+     */
     @GetMapping("/get")
-    public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) throws UserRequestInfoNotFoundException {
-        if (userRequestInfo == null) {
+    public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) {
+
+        try {
+
+            return userService.get(userRequestInfo);
+        } catch (Throwable e) {
+            log.error("Ошибка при получении пользователя.", e);
             return UserResponseInfoImpl.builder()
                     .status(StatusImpl.builder()
-
                             .success(false)
-                            .description("UserResponse are null")
+                            .description(e.getMessage())
                             .build())
                     .build();
         }
 
-        ///////////////////////////////////////////////
-        //Сейчас работает
-        ////
-        List<UserImpl> listUser = new ArrayList<>();
-        listUser = userService.get(userRequestInfo).getUserList();
-        //listUser.add(userService.get(userRequestInfo).orElseThrow(() -> new UserRequestInfoNotFoundException("user not found", userRequestInfo)));
-        ///////////////////////////////////////////////
-        //
-        //Было но не работает
-        ///////////////////////////////////////////////
-        //UserListImpl userList = new UserListImpl();
-        //userList.add(userService.get(userRequestInfo));
-        ///////////////////////////////////////////////
-
-        return UserResponseInfoImpl.builder()
-                .userList(userService.get(userRequestInfo).getUserList())
-                .status(StatusImpl.builder().success(true).build()).build();
-
     }
 
+    /**
+     * Метод получения всех имеющихся пользователей
+     * @return информация о пользователях
+     * @throws UserResponseInfoNotFoundException
+     */
     @GetMapping("/get/all")
     public UserResponseInfo getAll() throws UserResponseInfoNotFoundException {
         if (userService.getAll().isPresent()) {
-
             return UserResponseInfoImpl.builder()
                     .userList(userService.getAll().get()).build();
         }
@@ -114,8 +116,13 @@ public class UserController {
 //        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
 //    }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @PostMapping("/deleteById")
-    public Boolean deleteById(@RequestBody Long id) {
+    public Boolean deleteById(@RequestParam Long id) {
         userService.deleteById(id);
         return Boolean.TRUE;
     }

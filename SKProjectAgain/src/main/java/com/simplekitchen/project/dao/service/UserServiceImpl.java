@@ -1,19 +1,22 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserNotFoundException;
 import com.simplekitchen.project.dao.entity.user.UserImpl;
+import com.simplekitchen.project.dao.entity.user.api.User;
+import com.simplekitchen.project.dao.entity.user.api.UserList;
+import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
-import lombok.AllArgsConstructor;
+import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
+import org.hibernate.loader.plan.build.internal.returns.ScalarReturnImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +31,11 @@ import java.util.stream.Collectors;
 @Data
 public class UserServiceImpl implements UserService {
 
+    private static final String USER_NOT_FOUND_MESSAGE = "Пользователь не найден";
+    private static final String USER_NOT_FOUND_BY_ID_MESSAGE = "Пользователь не найден по уникальному идентификатору %s";
+    private static final String RECEIVED_USER_NAME_AND_SURNAME = "Запрошенные имя = %s и фамилия = %s";
+    private static final String FOUND_USER = "Найденный пользователь = %s.";
+    private static final String USER_NOT_FOUND_BY_NAME_AND_SURNAME = "Пользователь не найден по имени %s = и фамилии = %s";
     /**
      * репозиторий пользователей
      */
@@ -71,9 +79,17 @@ public class UserServiceImpl implements UserService {
      * @return Optional объект полученного пользователя
      */
     @Override
-    public Optional<UserImpl> get(Long id) {
-        return userRepository.findById(id);
-    }
+    public User get(Long id) throws DataBaseException {
+        try {
+            log.debug("request id = " + id);
+            User user = userRepository.findById(id).orElse(null);
+            log.debug(String.format(FOUND_USER,user));
+            return user;
+        } catch (Exception e) {
+            String errorMessage = String.format(USER_NOT_FOUND_BY_ID_MESSAGE, id);
+            log.error(errorMessage);
+            throw new DataBaseException(errorMessage);
+        }    }
 
     /**
      * поиск пользователя по имеющейся инофрмации
@@ -81,28 +97,43 @@ public class UserServiceImpl implements UserService {
      * @return Optional<UserImpl> сущность пользователя
      */
     @Override
-    public Optional<List<UserImpl>> get(UserRequestInfo userRequestInfo) throws UserRequestInfoNotFoundException {
-        log.debug("received userInfo = " + userRequestInfo);
-        if (userRequestInfo.getId() != null) {
-            log.debug("request id = " + userRequestInfo.getId());
-            Optional<UserImpl> foundUserById = userRepository.findById(userRequestInfo.getId());
-            log.debug("found user =" + foundUserById);
-            return Optional.of(Lists.newArrayList(foundUserById.
-                    orElseThrow(() -> new UserRequestInfoNotFoundException("user not found", userRequestInfo))));
+    public UserList get(String name, String surname) {
+        try {
+            log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
+            List<User> userByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            log.debug(String.format(FOUND_USER,userByNameAndSurname));
+            return userByNameAndSurname;
+        } catch (Exception e) {
+            String errorMessage = String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME,name,surname);
+            log.error(errorMessage);
+            throw new DataBaseException(errorMessage);
         }
-        else if (userRequestInfo.getName() != null) {
-            log.debug("name is = " + userRequestInfo.getName());
-            Optional<List<UserImpl>> foundUsersByName = userRepository.findByName(userRequestInfo.getName());
-            log.debug("found user = " + foundUsersByName);
-            return foundUsersByName;
+    }
+
+    public User findById(Long id) throws DataBaseException {
+        try {
+            log.debug("request id = " + id);
+            User user = userRepository.findById(id).orElse(null);
+            log.debug(String.format(FOUND_USER,user));
+            return user;
+        } catch (Exception e) {
+            String errorMessage = String.format(USER_NOT_FOUND_BY_ID_MESSAGE, id);
+            log.error(errorMessage);
+            throw new DataBaseException(errorMessage);
         }
-        else if (userRequestInfo.getSurname() != null) {
-            log.debug("surname is = " + userRequestInfo.getSurname());
-            Optional<List<UserImpl>> foundUsersBySurname = userRepository.findBySurname(userRequestInfo.getSurname());
-            log.debug("found user = " + foundUsersBySurname);
-            return foundUsersBySurname;
+    }
+
+    public List<User> findByNameAndSurname(@NonNull String name, @NonNull String surname) throws DataBaseException {
+        try {
+            log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
+            List<User> userByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            log.debug(String.format(FOUND_USER,userByNameAndSurname));
+            return userByNameAndSurname;
+        } catch (Exception e) {
+            String errorMessage = String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME,name,surname);
+            log.error(errorMessage);
+            throw new DataBaseException(errorMessage);
         }
-        else return Optional.empty();
     }
 
     /**

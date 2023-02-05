@@ -2,18 +2,18 @@ package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.entity.common.StatusImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.business.exception.UserRequestInfoNotFoundException;
+import com.simplekitchen.project.business.exception.UserNotFoundException;
 import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
+import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.mapper.user.UserMapper;
 import com.simplekitchen.project.business.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,11 +98,14 @@ public class UserServiceImpl implements UserService {
      * @return Optional<UserImpl>
      */
     @Override
-    public UserResponseInfo get(UserRequestInfo userInfo) throws UserRequestInfoNotFoundException {
+    public UserResponseInfo get(UserRequestInfo userInfo) throws ValidationException, UserNotFoundException {
+
+        // Перенести метод из сервиса ДАО
+
+        validate(userInfo);
         log.debug("requested userInfo" + userInfo);
         Optional<List<com.simplekitchen.project.dao.entity.user.UserImpl>> usersOptional = userService.get(userInfo);
-        log.debug("received user" + usersOptional.orElseThrow(() ->
-                new UserRequestInfoNotFoundException("user not found", userInfo)));
+        log.debug("received user" + usersOptional);
         return UserResponseInfoImpl.builder()
                 .status(StatusImpl.builder().success(true).build())
                 .userList(usersOptional.get()
@@ -155,6 +158,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    private void validate(Object o) throws ValidationException {
+        if (o == null) {
+            throw new ValidationException("Некорректный запрос.");
+        }
+    }
+
+    private void validate(UserRequestInfoImpl userRequestInfo) throws ValidationException {
+        if (userRequestInfo == null) {
+            throw new ValidationException("Некорректный запрос.");
+        }
+
     }
 
 //    /**
