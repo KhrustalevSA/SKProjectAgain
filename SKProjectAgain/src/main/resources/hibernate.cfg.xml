@@ -7,7 +7,7 @@
         <property name="connection.url">jdbc:h2:mem:test</property>
         <property name="connection.username">sa</property>
         <property name="connection.password"/>
-        <property name="connection.pool_size">10</property>                  <!--  -->
+        <property name="connection.pool_size">20</property>                  <!--  -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property> <!--  -->
         <property name="show_sql">true</property>
         <property name="current_session_context_class">thread</property>    <!--  -->
@@ -19,22 +19,22 @@
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
 
 
-        <mapping class="com.simplekitchen.project.dao.entity.city.CityImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.city.api.City" />
-        <mapping class="com.simplekitchen.project.dao.entity.city.CityNameImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.city.api.CityName" />
-        <!--mapping class="com.simplekitchen.project.dao.entity.common.entity.AbstractEntity" /-->
-        <mapping class="com.simplekitchen.project.dao.entity.image.ImageImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.image.api.Image" />
-        <mapping class="com.simplekitchen.project.dao.entity.ingredient.IngredientImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.ingredient.api.Ingredient" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.api.Recipe" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.api.StepDescription" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.RecipeImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.recipe.StepDescriptionImpl" />
-        <mapping class="com.simplekitchen.project.dao.entity.user.api.User" />
-        <mapping class="com.simplekitchen.project.dao.entity.city.api.City" />
-        <mapping class="com.simplekitchen.project.dao.entity.user.UserImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.api.CityEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.CityEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.api.CityNameEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.city.CityNameEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.image.ImageEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.image.api.ImageEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.recipe.api.StepDescriptionEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.recipe.StepDescriptionEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.ingredient.api.IngredientEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl" />
+        <mapping class="com.simplekitchen.project.dao.entity.user.api.UserEntity" />
+        <mapping class="com.simplekitchen.project.dao.entity.user.UserEntityImpl" />
+
+
 
 
 

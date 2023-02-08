@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Класс реализующий интерфейс Image
+ * Класс реализующий интерфейс ImageEntity
  * @see Image
  * @author KhrustalevSA
  * @since 03.10.2022

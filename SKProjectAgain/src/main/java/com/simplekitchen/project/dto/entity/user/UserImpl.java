@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Класс реализовывающий интерфейс User
+ * Класс реализовывающий интерфейс UserEntity
  * @see User
  * @author  KhrustalevSA
  * @since 28.09.2022

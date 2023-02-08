@@ -2,6 +2,7 @@ package com.simplekitchen.project.business.entity.user.api;
 
 
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +16,6 @@ public interface UserList {
     /**
      * список пользователей
      */
-    List<UserImpl> getUserList();
+    List<User> getUserList();
 
-    /**
-     * добавить пользователя в список
-     */
-    Boolean add(Optional<UserImpl> user);
 }

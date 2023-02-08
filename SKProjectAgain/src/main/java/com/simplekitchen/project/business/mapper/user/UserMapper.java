@@ -1,10 +1,12 @@
 package com.simplekitchen.project.business.mapper.user;
 
-import com.simplekitchen.project.business.entity.user.api.UserList;
-import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.dao.entity.city.CityImpl;
-import com.simplekitchen.project.dao.entity.city.CityNameImpl;
-import com.simplekitchen.project.dto.entity.city.api.City;
+import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
+import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
+import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.entity.user.api.UserEntity;
+import com.simplekitchen.project.dao.entity.user.api.UserList;
+import com.simplekitchen.project.dto.entity.city.CityImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
 import org.mapstruct.Mapper;
@@ -24,28 +26,48 @@ public interface UserMapper {
 
     /**
      * метод преобразующий ДАО сущность пользователя в ДТО сущность
-     * @param daoUser
+     * @param daoUser сущность польщователя
      * @return daoUser
      */
-    UserImpl map(com.simplekitchen.project.dao.entity.user.UserImpl daoUser);
+    UserImpl map(UserEntity daoUser);
 
     /**
      * метод преобразующий ДТО сущность пользователя в ДАО сущность
-     * @param dtoUser
+     * @param dtoUser ДТО пользователь
      * @return daoUser
      */
-    com.simplekitchen.project.dao.entity.user.UserImpl map(UserImpl dtoUser);
+    UserEntityImpl map(User dtoUser);
+
+    /**
+     * метод преобразования списков пользователей
+     * @param userList список пользователей бизнесс слоя
+     * @return ДАО список пользователей
+     */
+    UserListImpl map(com.simplekitchen.project.business.entity.user.api.UserList userList);
+
+    /**
+     * метод преобразования списков пользователей
+     * @param userList список пользователей ДАО слоя
+     * @return бизнесс список пользователей
+     */
+    @Mapping(target = "userList", source = "userEntityList")
+    com.simplekitchen.project.business.entity.user.UserListImpl map (UserList userList);
 
     /**
      * метод преобразования класса города к интерфейсу города
-     * @param daoCity
-     * @return com.simplekitchen.project.dto.entity.city.api.City
+     * @param daoCity ДАО сущность города
+     * @return ДТО город
      */
     @Mapping(target = "cityName", source = "cityName.cityName")
-    com.simplekitchen.project.dto.entity.city.CityImpl map(CityImpl daoCity);
+    CityImpl map(CityEntityImpl daoCity);
 
+    /**
+     * метод преобразования строки с названием города к ДАО сщности с названиями городов
+     * @param cityName название города
+     * @return ДАО сущность города
+     */
     @Mapping(target = "cityName")
-    CityNameImpl map(String cityName);
+    CityNameEntityImpl map(String cityName);
 
 
 }

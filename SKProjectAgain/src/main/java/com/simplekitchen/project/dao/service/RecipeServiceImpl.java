@@ -1,13 +1,11 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.repository.RecipeRepository;
 import com.simplekitchen.project.dao.service.api.RecipeService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,22 +35,22 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод сохранения рецепта
-     * @param recipe
+     * @param recipeEntity
      * @return сохраненный Optional объект рецепта
      */
     @Override
-    public Optional<Recipe> save(Recipe recipe) {
-        return Optional.of(recipeRepository.save(recipe));
+    public Optional<RecipeEntity> save(RecipeEntity recipeEntity) {
+        return Optional.of(recipeRepository.save(recipeEntity));
     }
 
     /**
      * метод сохранения списка рецептов
-     * @param recipeList
+     * @param recipeEntityList
      * @return список сохраненных рецептов
      */
     @Override
-    public List<Recipe> saveAll(List<Recipe> recipeList) {
-        return Lists.newArrayList(recipeRepository.saveAll(recipeList));
+    public List<RecipeEntity> saveAll(List<RecipeEntity> recipeEntityList) {
+        return Lists.newArrayList(recipeRepository.saveAll(recipeEntityList));
     }
 
     /**
@@ -61,7 +59,7 @@ public class RecipeServiceImpl implements RecipeService {
      * @return Optional объект полученного рецепта
      */
     @Override
-    public Optional<Recipe> get(Long id) {
+    public Optional<RecipeEntity> get(Long id) {
         return recipeRepository.findById(id);
     }
 
@@ -70,7 +68,7 @@ public class RecipeServiceImpl implements RecipeService {
      * @return список рецептов
      */
     @Override
-    public List<Recipe> getAll() {
+    public List<RecipeEntity> getAll() {
         return Lists.newArrayList(recipeRepository.findAll());
     }
 
@@ -80,7 +78,7 @@ public class RecipeServiceImpl implements RecipeService {
      * @return список рецептов
      */
     @Override
-    public List<Recipe> getAllById(List<Long> ids) {
+    public List<RecipeEntity> getAllById(List<Long> ids) {
         return Lists.newArrayList(recipeRepository.findAllById(ids));
     }
 
@@ -97,24 +95,24 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод удаления рецепта по его сущности
-     * @param recipe
+     * @param recipeEntity
      * @return Boolean объект
      */
     @Override
-    public Boolean delete(Recipe recipe) {
-        recipeRepository.delete(recipe);
-        return !recipeRepository.findById(recipe.getId()).isPresent();
+    public Boolean delete(RecipeEntity recipeEntity) {
+        recipeRepository.delete(recipeEntity);
+        return !recipeRepository.findById(recipeEntity.getId()).isPresent();
     }
 
     /**
      * метод удаления списка рецептов
-     * @param recipeList
+     * @param recipeEntityList
      * @return Boolean объект
      */
     @Override
-    public Boolean deleteAll(List<Recipe> recipeList) {
-        recipeRepository.deleteAll(recipeList);
-        return Lists.newArrayList(recipeRepository.findAllById(recipeList.stream().map(Recipe::getId).collect(Collectors.toList()))).isEmpty();
+    public Boolean deleteAll(List<RecipeEntity> recipeEntityList) {
+        recipeRepository.deleteAll(recipeEntityList);
+        return Lists.newArrayList(recipeRepository.findAllById(recipeEntityList.stream().map(RecipeEntity::getId).collect(Collectors.toList()))).isEmpty();
     }
 
     /**

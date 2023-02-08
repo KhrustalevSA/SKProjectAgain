@@ -1,7 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,58 +14,58 @@ public interface RecipeService {
 
     /**
      * метод сохранения рецепта
-     * @param recipe
+     * @param recipeEntity сущность рецепта
      * @return сохраненный Optional объект рецепта
      */
-    Optional<Recipe> save(Recipe recipe);
+    Optional<RecipeEntity> save(RecipeEntity recipeEntity);
 
     /**
      * метод сохранения списка рецептов
-     * @param recipeList
+     * @param recipeEntityList список сущностей рецептов
      * @return список сохраненных рецептов
      */
-    List<Recipe> saveAll(List<Recipe> recipeList);
+    List<RecipeEntity> saveAll(List<RecipeEntity> recipeEntityList);
 
     /**
-     * метод получения рецпта по уникальному идентификатору
-     * @param id
+     * метод получения рецепта по уникальному идентификатору
+     * @param id уникальный идентификатор
      * @return Optional объект полученного рецепта
      */
-    Optional<Recipe> get(Long id);
+    Optional<RecipeEntity> get(Long id);
 
     /**
      * метод получения всех рецептов
      * @return список рецептов
      */
-    List<Recipe> getAll();
+    List<RecipeEntity> getAll();
 
     /**
      * метод получения рецептов по уникальному идентификатору
-     * @param ids
+     * @param ids список идентификаторов
      * @return список рецептов
      */
-    List<Recipe> getAllById(List<Long> ids);
+    List<RecipeEntity> getAllById(List<Long> ids);
 
     /**
      * метод удаления рецепта по его уникальному идентификатору
-     * @param id
+     * @param id уникальный идентификатор
      * @return Boolean объект
      */
     Boolean deleteById(Long id);
 
     /**
      * метод удаления рецепта по его сущности
-     * @param recipe
+     * @param recipeEntity сущность рецепта
      * @return Boolean объект
      */
-    Boolean delete(Recipe recipe);
+    Boolean delete(RecipeEntity recipeEntity);
 
     /**
      * метод удаления списка рецептов
-     * @param recipeList
+     * @param recipeEntityList список сущностей рецепта
      * @return Boolean объект
      */
-    Boolean deleteAll(List<Recipe> recipeList);
+    Boolean deleteAll(List<RecipeEntity> recipeEntityList);
 
     /**
      * метод удаления всех рецептов

@@ -1,12 +1,10 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.user.UserImpl;
-import com.simplekitchen.project.dao.entity.user.api.User;
+import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
+import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * интерфейс сервиса пользователей
@@ -17,70 +15,66 @@ public interface UserService {
 
     /**
      * метод сохранения пользователя
-     * @param user
+     * @param user сущность пользователя
      * @return сохраненный Optional объект пользователя
      */
-    Optional<UserImpl> save(UserImpl user);
+    UserEntity save(UserEntityImpl user) throws DataBaseException;
 
     /**
      * метод сохранения списка пользователей
-     * @param userList
+     * @param userList список пользователей
      * @return список сохраненных пользователей
      */
-    List<UserImpl> saveAll(List<UserImpl> userList);
+    UserList saveAll(UserList userList) throws DataBaseException;
 
     /**
      * метод получения пользователя по уникальному идентификатору
-     * @param id
+     * @param id уникальный идентификатор
      * @return Optional объект полученного пользователя
      */
-    User get(Long id) throws DataBaseException;
+    UserEntity findById(Long id) throws DataBaseException;
 
     /**
      * метод получения пользователя по имени и фамилии
-     * @param name
-     * @param surname
+     * @param name имя пользователя
+     * @param surname фамилия пользователя
      * @return список найденных пользователей
      */
-    UserList get(String name, String surname);
+    UserList findByNameAndSurname(String name, String surname) throws DataBaseException;
 
     /**
      * метод получения всех пользователей
      * @return список пользователей
      */
-    Optional<List<UserImpl>> getAll();
+    UserList findAll() throws DataBaseException;
 
     /**
      * метод получения пользователей по уникальному идентификатору
-     * @param ids
+     * @param longList список идентификаторов
      * @return список пользователей
      */
-    List<UserImpl> getAllById(List<Long> ids);
+    UserList findAllById(LongList longList) throws DataBaseException;
 
     /**
      * метод удаления пользователя по его уникальному идентификатору
-     * @param id
+     * @param id уникальный идентификатор
      * @return Boolean объект
      */
-    Boolean deleteById(Long id);
+    Boolean deleteById(Long id) throws DataBaseException;
 
     /**
      * метод удаления пользователя по его сущности
-     * @param user
+     * @param name имя пользователя
+     * @param surname фамилия пользователя
      * @return Boolean объект
      */
-    Boolean delete(UserImpl user);
+    Boolean deleteByNameAndSurname(String name, String surname) throws DataBaseException ;
 
     /**
      * метод удаления списка пользователей
-     * @param userList
+     * @param longList список идентификаторов
      * @return Boolean объект
      */
-    Boolean deleteAll(List<UserImpl> userList);
+    Boolean deleteAllById(LongList longList) throws DataBaseException ;
 
-    /**
-     * метод удаления всех пользователей
-     * @return Boolean объект
-     */
-    Boolean deleteAll();
 }

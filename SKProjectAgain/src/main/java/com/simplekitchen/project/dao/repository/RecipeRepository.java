@@ -1,7 +1,6 @@
 package com.simplekitchen.project.dao.repository;
 
-import com.simplekitchen.project.dao.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dao.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @since 31.01.2023
  */
 @Repository
-public interface RecipeRepository extends CrudRepository<Recipe, Long> {
+public interface RecipeRepository extends CrudRepository<RecipeEntity, Long> {
 }

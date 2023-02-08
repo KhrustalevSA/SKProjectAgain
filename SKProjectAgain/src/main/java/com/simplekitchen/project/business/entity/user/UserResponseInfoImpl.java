@@ -6,6 +6,7 @@ import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
 import lombok.*;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public class UserResponseInfoImpl implements UserResponseInfo {
     /**
      * поле списка пользователей
      */
-    private List<UserImpl> userList;
+    private List<User> userList;
 }

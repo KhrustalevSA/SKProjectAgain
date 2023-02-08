@@ -1,11 +1,9 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl;
 import com.simplekitchen.project.dao.repository.IngredientRepository;
 import com.simplekitchen.project.dao.service.api.IngredientService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +41,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return сохраненный Optional объект ингредиента
      */
     @Override
-    public Optional<IngredientImpl> save(IngredientImpl ingredient) {
+    public Optional<IngredientEntityImpl> save(IngredientEntityImpl ingredient) {
         return Optional.of(ingredientRepository.save(ingredient));
     }
 
@@ -53,7 +51,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return список сохраненных ингредиентов
      */
     @Override
-    public List<IngredientImpl> saveAll(List<IngredientImpl> ingredientList) {
+    public List<IngredientEntityImpl> saveAll(List<IngredientEntityImpl> ingredientList) {
         return Lists.newArrayList(ingredientRepository.saveAll(ingredientList));
     }
 
@@ -63,7 +61,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return Optional объект полученного ингредиента
      */
     @Override
-    public Optional<IngredientImpl> get(Long id) {
+    public Optional<IngredientEntityImpl> get(Long id) {
         return ingredientRepository.findById(id);
     }
 
@@ -72,7 +70,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return список ингредиентов
      */
     @Override
-    public List<IngredientImpl> getAll() {
+    public List<IngredientEntityImpl> getAll() {
         return Lists.newArrayList(ingredientRepository.findAll());
     }
 
@@ -82,7 +80,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return список ингредиентов
      */
     @Override
-    public List<IngredientImpl> getAllById(List<Long> ids) {
+    public List<IngredientEntityImpl> getAllById(List<Long> ids) {
         return Lists.newArrayList(ingredientRepository.findAllById(ids));
     }
 
@@ -103,7 +101,7 @@ public class IngredientServiceImpl implements IngredientService {
      * @return Boolean объект
      */
     @Override
-    public Boolean delete(IngredientImpl ingredient) {
+    public Boolean delete(IngredientEntityImpl ingredient) {
         ingredientRepository.delete(ingredient);
         return !ingredientRepository.findById(ingredient.getId()).isPresent();
     }
@@ -114,9 +112,9 @@ public class IngredientServiceImpl implements IngredientService {
      * @return Boolean объект
      */
     @Override
-    public Boolean deleteAll(List<IngredientImpl> ingredientList) {
+    public Boolean deleteAll(List<IngredientEntityImpl> ingredientList) {
         ingredientRepository.deleteAll(ingredientList);
-        return Lists.newArrayList(ingredientRepository.findAllById(ingredientList.stream().map(IngredientImpl::getId).collect(Collectors.toList()))).isEmpty();
+        return Lists.newArrayList(ingredientRepository.findAllById(ingredientList.stream().map(IngredientEntityImpl::getId).collect(Collectors.toList()))).isEmpty();
     }
 
     /**

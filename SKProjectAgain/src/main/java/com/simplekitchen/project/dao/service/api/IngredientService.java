@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.ingredient.IngredientImpl;
+import com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,34 +17,34 @@ public interface IngredientService {
      * @param ingredient
      * @return сохраненный Optional объект ингредиента
      */
-    Optional<IngredientImpl> save(IngredientImpl ingredient);
+    Optional<IngredientEntityImpl> save(IngredientEntityImpl ingredient);
 
     /**
      * метод сохранения списка ингредиентов
      * @param ingredientList
      * @return список сохраненных ингредиентов
      */
-    List<IngredientImpl> saveAll(List<IngredientImpl> ingredientList);
+    List<IngredientEntityImpl> saveAll(List<IngredientEntityImpl> ingredientList);
 
     /**
      * метод получения ингредиента по уникальному идентификатору
      * @param id
      * @return Optional объект полученного ингредиента
      */
-    Optional<IngredientImpl> get(Long id);
+    Optional<IngredientEntityImpl> get(Long id);
 
     /**
      * метод получения всех ингредиентов
      * @return список ингредиентов
      */
-    List<IngredientImpl> getAll();
+    List<IngredientEntityImpl> getAll();
 
     /**
      * метод получения ингредиентов по уникальному идентификатору
      * @param ids
      * @return список ингредиентов
      */
-    List<IngredientImpl> getAllById(List<Long> ids);
+    List<IngredientEntityImpl> getAllById(List<Long> ids);
 
     /**
      * метод удаления ингредиента по его уникальному идентификатору
@@ -58,14 +58,14 @@ public interface IngredientService {
      * @param ingredient
      * @return Boolean объект
      */
-    Boolean delete(IngredientImpl ingredient);
+    Boolean delete(IngredientEntityImpl ingredient);
 
     /**
      * метод удаления списка ингредиентов
      * @param ingredientList
      * @return Boolean объект
      */
-    Boolean deleteAll(List<IngredientImpl> ingredientList);
+    Boolean deleteAll(List<IngredientEntityImpl> ingredientList);
 
     /**
      * метод удаления всех ингредиентов

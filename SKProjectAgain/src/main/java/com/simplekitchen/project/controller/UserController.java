@@ -1,18 +1,18 @@
 package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.business.entity.common.StatusImpl;
+import com.simplekitchen.project.business.entity.common.api.LongList;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
 import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.business.exception.UserResponseInfoNotFoundException;
-import com.simplekitchen.project.business.service.api.UserService;
+import com.simplekitchen.project.business.exception.BaseException;
+import com.simplekitchen.project.business.service.api.UserControllerService;
+import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,27 +37,39 @@ public class UserController {
 // Валидатор
 // Exception классы
 // UserController переделать до низа. Контроллер всегда отвечает, все делает сервис он не кидает исключений,
-//          все ошибки в плохой ответ, в бд сервисе только исключения БД
-    private final UserService userService;
+// все ошибки в плохой ответ, в бд сервисе только исключения БД
+    private final UserControllerService userControllerService;
+    private static final UserResponseInfoImpl INVALID_DATA = UserResponseInfoImpl.builder()
+            .status(StatusImpl.builder().success(false).description("Некорректно введенные данные").build())
+            .build();
 
     /**
      * конструктор с автоопределением бина
      * @param service
      */
     @Autowired
-    public UserController(UserService service) {
-        this.userService = service;
+    public UserController(UserControllerService service) {
+        this.userControllerService = service;
     }
 
     /**
      * метод сохранения пользователя
      * @param user
-     * @return ResponseEntity<UserImpl>
+     * @return ResponseEntity<UserEntityImpl>
      */
     @PostMapping("/save")
-    public ResponseEntity<UserImpl> save(@RequestBody UserImpl user) {
-        return userService.save(user).map(u -> new ResponseEntity<>(u, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public UserResponseInfo save(@RequestBody UserImpl user) throws BaseException, DataBaseException {
+        if (validate(user)) {
+            UserList savedUser = (UserList) userControllerService.save(user);
+            if (savedUser.getUserList() != null) {
+                return UserResponseInfoImpl.builder()
+                        .userList(savedUser.getUserList())
+                        .status(StatusImpl.builder().success(true).build())
+                        .build();
+            }
+        }
+        return INVALID_DATA;
+
     }
 
     /**
@@ -66,11 +78,17 @@ public class UserController {
      * @return саисок сохраненных пользователей
      */
     @PostMapping("/save/all")
-    public ResponseEntity<UserList> saveAll(@RequestBody UserListImpl userList) {
-        if (userList.getUserList() == null) {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    public UserResponseInfo saveAll(@RequestBody UserListImpl userList) throws BaseException, DataBaseException {
+        if (validate(userList)) {
+            UserList savedUser = userControllerService.saveAll(userList);
+            if (savedUser.getUserList() != null) {
+                return UserResponseInfoImpl.builder()
+                        .userList(savedUser.getUserList())
+                        .status(StatusImpl.builder().success(true).build())
+                        .build();
+            }
         }
-        return new ResponseEntity<>(userService.saveAll(userList), HttpStatus.OK);
+        return INVALID_DATA;
     }
 
     /**
@@ -79,41 +97,39 @@ public class UserController {
      * @return информация о пользователе
      */
     @GetMapping("/get")
-    public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) {
-
-        try {
-
-            return userService.get(userRequestInfo);
-        } catch (Throwable e) {
-            log.error("Ошибка при получении пользователя.", e);
-            return UserResponseInfoImpl.builder()
-                    .status(StatusImpl.builder()
-                            .success(false)
-                            .description(e.getMessage())
-                            .build())
-                    .build();
-        }
-
+    public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) throws BaseException {
+       if (validate(userRequestInfo)) {
+           UserList userList = userControllerService.get(userRequestInfo);
+           if (userList.getUserList() != null) {
+               return UserResponseInfoImpl.builder()
+                       .userList(userList.getUserList())
+                       .status(StatusImpl.builder().success(true).build())
+                       .build();
+           }
+       }
+        return INVALID_DATA;
     }
 
     /**
      * Метод получения всех имеющихся пользователей
      * @return информация о пользователях
-     * @throws UserResponseInfoNotFoundException
+     * @throws BaseException
      */
     @GetMapping("/get/all")
-    public UserResponseInfo getAll() throws UserResponseInfoNotFoundException {
-        if (userService.getAll().isPresent()) {
+    public UserResponseInfo getAll() throws BaseException {
+        UserList allUsers = userControllerService.getAll();
+        if (allUsers.getUserList() != null) {
             return UserResponseInfoImpl.builder()
-                    .userList(userService.getAll().get()).build();
+                    .status(StatusImpl.builder().success(true).build())
+                    .userList(allUsers.getUserList())
+                    .build();
         }
-        return UserResponseInfoImpl.builder().status(StatusImpl.builder()
-                .success(false).description("users not found").build()).build();
+        return INVALID_DATA;
     }
 
 //    @GetMapping("/get/all/ids")
-//    public ResponseEntity<List<UserImpl>> getAllById(@RequestBody List<Long> ids) {
-//        return new ResponseEntity<>(userService.getAllById(ids), HttpStatus.OK);
+//    public ResponseEntity<List<UserEntityImpl>> getAllById(@RequestBody List<Long> ids) {
+//        return new ResponseEntity<>(userControllerService.getAllById(ids), HttpStatus.OK);
 //    }
 
     /**
@@ -122,22 +138,24 @@ public class UserController {
      * @return
      */
     @PostMapping("/deleteById")
-    public Boolean deleteById(@RequestParam Long id) {
-        userService.deleteById(id);
-        return Boolean.TRUE;
+    public Boolean deleteById(@RequestParam Long id) throws BaseException {
+        if (validate(id)){
+            return userControllerService.deleteById(id);
+        }
+        return false;
     }
 
+
     @PostMapping("/deleteByIdList")
-    public UserResponseInfo deleteById(@RequestBody UserListImpl userList) {
-        if (!userList.getUserList().isEmpty()) {
-            List<UserImpl> userListWithId = userList.getUserList();
-            for (UserImpl user : userListWithId) {
-                userService.deleteById(user.getId());
+    public Boolean deleteByIdList(@RequestBody LongList longList) throws BaseException {
+        if (validate(longList)) {
+            //longList.getLongList().stream().map(userControllerService::deleteById).collect(Collectors.toList());
+            for (Long id : longList.getLongList()) {
+                userControllerService.deleteById(id);
             }
-            return UserResponseInfoImpl.builder().status(StatusImpl.builder().success(true).build()).build();
+            return true;
         }
-        return UserResponseInfoImpl.builder().status(StatusImpl.builder()
-                .success(false).description("users not found").build()).build();
+        return false;
 
     }
     
@@ -161,6 +179,10 @@ public class UserController {
         list.add(2L);
         list.add(3L);
         return list;
+    }
+
+    private Boolean validate(Object o){
+        return o != null;
     }
 
 }
