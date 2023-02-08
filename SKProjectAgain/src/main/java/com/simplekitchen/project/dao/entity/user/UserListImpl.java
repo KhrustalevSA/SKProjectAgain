@@ -21,5 +21,5 @@ public class UserListImpl implements UserList {
     /**
      * поле список пользователей
      */
-    private List<UserEntity> userEntityList;
+    private List<UserEntityImpl> userEntityList;
 }

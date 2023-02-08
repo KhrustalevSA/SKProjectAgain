@@ -1,5 +1,7 @@
 package com.simplekitchen.project.dao.entity.user.api;
 
+import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+
 import java.util.List;
 
 /**
@@ -10,5 +12,5 @@ public interface UserList {
     /**
      * @return список пользователей
      */
-    List<UserEntity> getUserEntityList();
+    List<UserEntityImpl> getUserEntityList();
 }

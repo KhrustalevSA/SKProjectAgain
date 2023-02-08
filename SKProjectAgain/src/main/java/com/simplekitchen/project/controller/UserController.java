@@ -11,6 +11,7 @@ import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.service.api.UserControllerService;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -60,13 +61,13 @@ public class UserController {
     @PostMapping("/save")
     public UserResponseInfo save(@RequestBody UserImpl user) throws BaseException, DataBaseException {
         if (validate(user)) {
-            UserList savedUser = (UserList) userControllerService.save(user);
-            if (savedUser.getUserList() != null) {
-                return UserResponseInfoImpl.builder()
-                        .userList(savedUser.getUserList())
-                        .status(StatusImpl.builder().success(true).build())
-                        .build();
-            }
+            User savedUser = userControllerService.save(user);
+            List<User> userList = new ArrayList<>();
+            userList.add(savedUser);
+            return UserResponseInfoImpl.builder()
+                    .userList(userList)
+                    .status(StatusImpl.builder().success(true).build())
+                    .build();
         }
         return INVALID_DATA;
 

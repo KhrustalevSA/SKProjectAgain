@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public UserList saveAll(UserList userList) throws DataBaseException {
         try {
             log.debug(String.format(REQUESTED_USER_LIST,userList));
-            List<UserEntity> receivedUserEntityList = (List<UserEntity>) userRepository.saveAll(userList.getUserEntityList());
+            List<UserEntityImpl> receivedUserEntityList = (List<UserEntityImpl>) userRepository.saveAll(userList.getUserEntityList());
             log.debug(String.format(RECEIVED_USER_LIST, receivedUserEntityList));
             return UserListImpl.builder().userEntityList(receivedUserEntityList).build();
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     public UserList findByNameAndSurname(String name, String surname) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntity> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
             return UserListImpl.builder().userEntityList(userEntityByNameAndSurname).build();
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserList findAll() throws DataBaseException {
         try {
-            List<UserEntity> userEntityList = (List<UserEntity>) userRepository.findAll();
+            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAll();
             log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
             return UserListImpl.builder().userEntityList(userEntityList).build();
         } catch (Exception e) {
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
     public UserList findAllById(LongList longList) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_ID_LIST,longList));
-            List<UserEntity> userEntityList = (List<UserEntity>) userRepository.findAllById(longList.getLongList());
+            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
             log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
             return UserListImpl.builder().userEntityList(userEntityList).build();
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
     public Boolean deleteById(Long id) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_ID,id));
-            Optional<UserEntity> userFoundById = userRepository.findById(id);
+            Optional<UserEntityImpl> userFoundById = userRepository.findById(id);
             log.debug(String.format("Удаляемый пользователь %s",userFoundById));
             userRepository.deleteById(id);
             userFoundById =  userRepository.findById(id);
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
     public Boolean deleteByNameAndSurname(String name, String surname) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntity> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
             userRepository.deleteAllByNameAndSurname(name, surname);
             userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
@@ -227,10 +227,10 @@ public class UserServiceImpl implements UserService {
         String errorMessage = String.format(DELETE_USER_LIST_BY_ID_FAILED, longList);
         try {
             log.debug(String.format(RECEIVED_ID_LIST,longList));
-            List<UserEntity> userEntityList = (List<UserEntity>) userRepository.findAllById(longList.getLongList());
+            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
             log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
             userRepository.deleteAllById(longList.getLongList());
-            userEntityList = (List<UserEntity>) userRepository.findAllById(longList.getLongList());
+            userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
             if (!userEntityList.isEmpty()) {
                 log.debug(errorMessage);
                 return false;
