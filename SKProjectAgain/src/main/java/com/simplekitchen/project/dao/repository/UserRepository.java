@@ -19,6 +19,6 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<UserEntityImpl, Long>  {
     Optional<List<UserEntityImpl>> findByName(String name);
     Optional<List<UserEntityImpl>> findBySurname(String surname);
-    List<UserEntityImpl> findByNameAndSurname(String name, String surname);
+    Optional<List<UserEntityImpl>> findByNameAndSurname(String name, String surname);
     void deleteAllByNameAndSurname(String name, String surname);
 }

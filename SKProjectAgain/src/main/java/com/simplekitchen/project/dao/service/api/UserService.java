@@ -1,8 +1,11 @@
 package com.simplekitchen.project.dao.service.api;
 
+import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.entity.user.UserImplListImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
+import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 
@@ -26,6 +29,13 @@ public interface UserService {
      * @return список сохраненных пользователей
      */
     UserList saveAll(UserList userList) throws DataBaseException;
+
+    /**
+     * метод сохранения списка пользователей
+     * @param userList список пользователей
+     * @return список сохраненных пользователей
+     */
+    UserList saveAll(UserImplListImpl userList) throws DataBaseException;
 
     /**
      * метод получения пользователя по уникальному идентификатору
@@ -75,6 +85,6 @@ public interface UserService {
      * @param longList список идентификаторов
      * @return Boolean объект
      */
-    Boolean deleteAllById(LongList longList) throws DataBaseException ;
+    Boolean deleteAllById(LongListImpl longList) throws DataBaseException ;
 
 }

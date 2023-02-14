@@ -1,7 +1,9 @@
 package com.simplekitchen.project.dao.service;
 
+import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.entity.user.UserImplListImpl;
 import com.simplekitchen.project.dao.entity.user.UserListImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
@@ -12,6 +14,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +98,18 @@ public class UserServiceImpl implements UserService {
             throw new DataBaseException(e.getMessage());
         }
     }
+@Override
+    public UserList saveAll(UserImplListImpl userList) throws DataBaseException {
+        try {
+            log.debug(String.format(REQUESTED_USER_LIST,userList));
+            List<UserEntityImpl> receivedUserEntityList = (List<UserEntityImpl>) userRepository.saveAll(userList.getUserList());
+            log.debug(String.format(RECEIVED_USER_LIST, receivedUserEntityList));
+            return UserListImpl.builder().userEntityList(receivedUserEntityList).build();
+        } catch (Exception e) {
+            log.error(String.format(USER_LIST_NOT_SAVED,userList));
+            throw new DataBaseException(e.getMessage());
+        }
+    }
 
     /**
      * метод получения пользователя по уникальному идентификатору
@@ -124,7 +139,7 @@ public class UserServiceImpl implements UserService {
     public UserList findByNameAndSurname(String name, String surname) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
             return UserListImpl.builder().userEntityList(userEntityByNameAndSurname).build();
         } catch (Exception e) {
@@ -202,10 +217,10 @@ public class UserServiceImpl implements UserService {
     public Boolean deleteByNameAndSurname(String name, String surname) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
             userRepository.deleteAllByNameAndSurname(name, surname);
-            userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname);
+            userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
             if (!userEntityByNameAndSurname.isEmpty()) {
                 log.debug(String.format(DELETE_USER_LIST_FAILED, userEntityByNameAndSurname));
                 return false;
@@ -223,7 +238,7 @@ public class UserServiceImpl implements UserService {
      * @return Boolean объект
      */
     @Override
-    public Boolean deleteAllById(LongList longList) throws DataBaseException {
+    public Boolean deleteAllById(@RequestBody LongListImpl longList) throws DataBaseException {
         String errorMessage = String.format(DELETE_USER_LIST_BY_ID_FAILED, longList);
         try {
             log.debug(String.format(RECEIVED_ID_LIST,longList));

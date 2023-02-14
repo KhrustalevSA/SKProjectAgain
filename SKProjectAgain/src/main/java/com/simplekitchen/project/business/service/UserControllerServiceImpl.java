@@ -1,6 +1,7 @@
 package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.business.entity.user.UserImplListImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
@@ -15,6 +16,7 @@ import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,12 +57,29 @@ public class UserControllerServiceImpl implements UserControllerService {
         try {
             validate(user);
             log.debug("Save" + user);
-            UserEntity savedUserEntity = userService.save((UserEntityImpl) UserMapper.INSTANCE.map(user));
+            UserEntity savedUserEntity = userService.save(UserMapper.INSTANCE.map(user));
             log.debug(String.format("Сохраненный пользователь = %s",user));
             return UserMapper.INSTANCE.map(savedUserEntity);
         } catch (Throwable e) {
             log.error(String.format("Не удалось сохранить пользователя %s",user));
-            throw new SaveException(e.getMessage());
+            log.error(e.getMessage(),e.getCause());
+            return UserImpl.builder().build();
+        }
+    }
+
+
+    @Override
+    public UserList saveAll(UserImplListImpl userList) throws BaseException, DataBaseException {
+        try {
+            validate(userList);
+            log.debug(String.format("Запрошенный список пользователей = %s.", userList));
+            com.simplekitchen.project.dao.entity.user.api.UserList userListDao = userService.saveAll(UserMapper.INSTANCE.map(userList));
+            log.debug(String.format("Сохраненный список пользователй = %s.",userListDao));
+            return UserMapper.INSTANCE.map(userListDao);
+        } catch (Throwable e) {
+            log.error(String.format("Не удалось созранить список пользователей %s.", userList));
+            log.error(e.getMessage(),e.getCause());
+            return null;
         }
     }
 
@@ -79,7 +98,8 @@ public class UserControllerServiceImpl implements UserControllerService {
             return UserMapper.INSTANCE.map(userListDao);
         } catch (Throwable e) {
             log.error(String.format("Не удалось созранить список пользователей %s.", userList));
-            throw new SaveException(e.getMessage(),e.getCause());
+            log.error(e.getMessage(),e.getCause());
+            return null;
         }
     }
 
@@ -98,7 +118,8 @@ public class UserControllerServiceImpl implements UserControllerService {
             return UserMapper.INSTANCE.map(foundUser);
         } catch (Throwable e) {
             log.error(String.format("Не удалось найти пользователя по идентификатору %s",id));
-            throw new GetException(e.getMessage(), e.getCause());
+            log.error(e.getMessage(),e.getCause());
+            return null;
         }
     }
 
@@ -112,9 +133,9 @@ public class UserControllerServiceImpl implements UserControllerService {
         try {
             validate(userInfo);
             if (userInfo.getId() != null) {
-                UserList userList = (UserList) get(userInfo.getId());
-                log.debug(String.format("Пользователь по идентификатору = %s",userList));
-                return userList;
+                User user = get(userInfo.getId());
+                log.debug(String.format("Пользователь по идентификатору = %s",user.getId()));
+                return UserListImpl.builder().userList(Lists.newArrayList(user)).build();
             } else if (validate(userInfo.getName()) && validate(userInfo.getSurname())) {
                 String receivedName = userInfo.getName();
                 String receivedSurname = userInfo.getSurname();
@@ -128,7 +149,8 @@ public class UserControllerServiceImpl implements UserControllerService {
             return null;
         } catch (Throwable e) {
             log.error(String.format("Ошибка получения пользователя по инофрмации = %s",userInfo));
-            throw new GetException(e.getMessage(),e.getCause());
+            log.error(e.getMessage(),e.getCause());
+            return null;
         }
     }
 
@@ -185,7 +207,8 @@ public class UserControllerServiceImpl implements UserControllerService {
             return deleteCheck;
         } catch (Throwable e) {
             log.error("Удаление пользователя по идентификатору = %s, не удалось");
-            throw new DeleteException(e.getMessage(), e.getCause());
+            log.error(e.getMessage(),e.getCause());
+            return false;
         }
     }
 

@@ -1,10 +1,12 @@
 package com.simplekitchen.project.business.mapper.user;
 
+import com.simplekitchen.project.business.entity.user.UserImplListImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
+import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dto.entity.city.CityImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
@@ -69,5 +71,6 @@ public interface UserMapper {
     @Mapping(target = "cityName")
     CityNameEntityImpl map(String cityName);
 
+    com.simplekitchen.project.dao.entity.user.UserImplListImpl map(UserImplListImpl userImplList);
 
 }

@@ -1,8 +1,8 @@
 package com.simplekitchen.project.controller;
 
+import com.simplekitchen.project.business.entity.common.LongListImpl;
 import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.business.entity.common.api.LongList;
-import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.business.entity.user.UserImplListImpl;
 import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
@@ -13,11 +13,13 @@ import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * РЕСТ контроллер для работы с пользователями
@@ -26,19 +28,10 @@ import java.util.List;
 @RestController
 public class UserController {
 //mapstract Бины
-// response request переделать, отказ от листов,
-
-// orElseThrow в сервисе так или нет?
-// метод с испльзованием класса информации о пользователе как правильно?
-// метод get в сервисе дао?
-// dao service должен ли знать о бизнес слое?
-// должен ли знать сервис о requestInfo
-
-// Переделать get методы сервисов
-// Валидатор
-// Exception классы
 // UserController переделать до низа. Контроллер всегда отвечает, все делает сервис он не кидает исключений,
 // все ошибки в плохой ответ, в бд сервисе только исключения БД
+// saveAll методы + UserList как сделать правильно?
+
     private final UserControllerService userControllerService;
     private static final UserResponseInfoImpl INVALID_DATA = UserResponseInfoImpl.builder()
             .status(StatusImpl.builder().success(false).description("Некорректно введенные данные").build())
@@ -62,15 +55,20 @@ public class UserController {
     public UserResponseInfo save(@RequestBody UserImpl user) throws BaseException, DataBaseException {
         if (validate(user)) {
             User savedUser = userControllerService.save(user);
-            List<User> userList = new ArrayList<>();
-            userList.add(savedUser);
+            if (savedUser.getId() == null) {
+                return UserResponseInfoImpl.builder()
+                        .status(StatusImpl.builder()
+                                .success(false)
+                                .description("Ошибка сохранения пользователя")
+                                .build())
+                        .build();
+            }
             return UserResponseInfoImpl.builder()
-                    .userList(userList)
+                    .userList(Lists.newArrayList(savedUser))
                     .status(StatusImpl.builder().success(true).build())
                     .build();
         }
         return INVALID_DATA;
-
     }
 
     /**
@@ -79,7 +77,7 @@ public class UserController {
      * @return саисок сохраненных пользователей
      */
     @PostMapping("/save/all")
-    public UserResponseInfo saveAll(@RequestBody UserListImpl userList) throws BaseException, DataBaseException {
+    public UserResponseInfo saveAll(@RequestBody UserImplListImpl userList) throws BaseException, DataBaseException {
         if (validate(userList)) {
             UserList savedUser = userControllerService.saveAll(userList);
             if (savedUser.getUserList() != null) {
@@ -148,16 +146,16 @@ public class UserController {
 
 
     @PostMapping("/deleteByIdList")
-    public Boolean deleteByIdList(@RequestBody LongList longList) throws BaseException {
+    public Boolean deleteByIdList(@RequestBody LongListImpl longList) throws BaseException {
         if (validate(longList)) {
+            Boolean deleteCheck = true;
             //longList.getLongList().stream().map(userControllerService::deleteById).collect(Collectors.toList());
             for (Long id : longList.getLongList()) {
-                userControllerService.deleteById(id);
+                deleteCheck = userControllerService.deleteById(id);
             }
-            return true;
+            return deleteCheck;
         }
         return false;
-
     }
     
     @PostMapping("/showUserEntity")

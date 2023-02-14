@@ -2,6 +2,7 @@ package com.simplekitchen.project.business.service.api;
 
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.business.entity.user.UserImplListImpl;
 import com.simplekitchen.project.business.entity.user.UserListImpl;
 import com.simplekitchen.project.business.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
@@ -30,6 +31,13 @@ public interface UserControllerService {
      * @return Optional<UserEntityImpl> user
      */
     User save(UserImpl user) throws DataBaseException, BaseException;
+
+    /**
+     * метод сохранения всех пользователей, возвращает список сохраненных пользователей
+     * @param userList
+     * @return List<UserEntityImpl>
+     */
+    UserList saveAll(UserImplListImpl userList) throws BaseException, DataBaseException;
 
     /**
      * метод сохранения всех пользователей, возвращает список сохраненных пользователей

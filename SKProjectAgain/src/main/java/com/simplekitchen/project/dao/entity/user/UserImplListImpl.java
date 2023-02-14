@@ -1,7 +1,7 @@
-package com.simplekitchen.project.business.entity.user;
+package com.simplekitchen.project.dao.entity.user;
 
-import com.simplekitchen.project.business.entity.user.api.UserList;
-import com.simplekitchen.project.dto.entity.user.api.User;
+
+import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,21 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * Класс списка пользователей
- * @author KhrustalevSA
- * @since 16.10.2022
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserListImpl implements UserList {
+public class UserImplListImpl implements UserImplList {
 
     /**
      * список пользователей
      */
-    private List<User> userList;
+    private List<UserEntityImpl> userList;
 
     @Override
     public String toString() {
