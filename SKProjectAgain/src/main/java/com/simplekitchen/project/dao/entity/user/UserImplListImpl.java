@@ -1,6 +1,5 @@
 package com.simplekitchen.project.dao.entity.user;
 
-
 import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

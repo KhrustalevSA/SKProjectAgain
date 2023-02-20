@@ -18,7 +18,7 @@ import java.util.Objects;
  * @since 22.01.2023
  */
 @Entity
-@Table(name = "Recipes")
+@Table(name = "recipe")
 @Builder
 @Getter
 @Setter

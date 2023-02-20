@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
      * @return Boolean объект
      */
     @Override
-    public Boolean deleteAllById(@RequestBody LongListImpl longList) throws DataBaseException {
+    public Boolean deleteAllById(LongListImpl longList) throws DataBaseException {
         String errorMessage = String.format(DELETE_USER_LIST_BY_ID_FAILED, longList);
         try {
             log.debug(String.format(RECEIVED_ID_LIST,longList));

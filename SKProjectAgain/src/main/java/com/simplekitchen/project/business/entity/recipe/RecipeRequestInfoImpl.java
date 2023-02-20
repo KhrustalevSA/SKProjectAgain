@@ -1,23 +1,23 @@
 package com.simplekitchen.project.business.entity.recipe;
 
 
-import com.simplekitchen.project.business.entity.recipe.api.RecipeRequest;
+import com.simplekitchen.project.business.entity.recipe.api.RecipeRequestInfo;
 import lombok.*;
 
 /**
- * Класс реализующий интерфейс RecipeRequest
- * @see RecipeRequest
+ * Класс реализующий интерфейс RecipeRequestInfo
+ * @see RecipeRequestInfo
  * @author KhrustalevSA
  * @since 03.10.2022
  */
 @Data
 @Builder
-public class RecipeRequestImpl implements RecipeRequest {
+public class RecipeRequestInfoImpl implements RecipeRequestInfo {
 
     /**
      * поле уникального идентификатора рецепта
      */
-    private String uuid;
+    private Long id;
 
     /**
      * поле названия рецепта

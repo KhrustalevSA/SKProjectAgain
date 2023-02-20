@@ -2,8 +2,10 @@ package com.simplekitchen.project.dao.entity.recipe;
 
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,10 +16,12 @@ import java.util.List;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeListImpl implements RecipeList {
 
     /**
      * поле списка рецептов
      */
-    private List<RecipeEntity> recipeEntityList;
+    private List<RecipeEntityImpl> recipeEntityList;
 }

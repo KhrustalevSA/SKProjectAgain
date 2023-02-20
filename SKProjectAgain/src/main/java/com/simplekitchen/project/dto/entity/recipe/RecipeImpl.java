@@ -20,8 +20,8 @@ import java.util.List;
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class RecipeImpl implements Recipe {
 
     /**

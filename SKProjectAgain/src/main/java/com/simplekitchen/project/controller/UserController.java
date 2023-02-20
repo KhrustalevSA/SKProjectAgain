@@ -2,10 +2,10 @@ package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.business.entity.common.LongListImpl;
 import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.business.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
 import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
-import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.dto.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.service.api.UserControllerService;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * РЕСТ контроллер для работы с пользователями
  */
 @Slf4j
 @RestController
+@RequestMapping("/user")
 public class UserController {
 //mapstract Бины
 // UserController переделать до низа. Контроллер всегда отвечает, все делает сервис он не кидает исключений,
@@ -152,6 +152,9 @@ public class UserController {
             //longList.getLongList().stream().map(userControllerService::deleteById).collect(Collectors.toList());
             for (Long id : longList.getLongList()) {
                 deleteCheck = userControllerService.deleteById(id);
+                if (!deleteCheck) {
+                    return false;
+                }
             }
             return deleteCheck;
         }

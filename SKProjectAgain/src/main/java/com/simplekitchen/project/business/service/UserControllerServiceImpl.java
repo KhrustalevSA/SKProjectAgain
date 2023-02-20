@@ -1,14 +1,16 @@
 package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
-import com.simplekitchen.project.business.entity.user.UserImplListImpl;
-import com.simplekitchen.project.business.entity.user.UserListImpl;
-import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserListImpl;
+import com.simplekitchen.project.dto.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.exception.*;
+import com.simplekitchen.project.business.exception.BaseException;
+import com.simplekitchen.project.business.exception.DeleteException;
+import com.simplekitchen.project.business.exception.GetException;
+import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.mapper.user.UserMapper;
 import com.simplekitchen.project.business.service.api.UserControllerService;
-import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -44,7 +46,7 @@ public class UserControllerServiceImpl implements UserControllerService {
      * @param userServiceDao
      */
     @Autowired
-    public UserControllerServiceImpl(com.simplekitchen.project.dao.service.api.UserService userServiceDao) {
+    public UserControllerServiceImpl(UserService userServiceDao) {
         userService = userServiceDao;
     }
 
@@ -166,7 +168,8 @@ public class UserControllerServiceImpl implements UserControllerService {
             return UserMapper.INSTANCE.map(foundAllUserList);
         } catch (Throwable e) {
             log.error("Ошибка получения списка всех пользователей");
-            throw new GetException(e.getMessage(), e.getCause());
+            log.error(e.getMessage(), e.getCause());
+            return null;
         }
     }
 
@@ -185,9 +188,9 @@ public class UserControllerServiceImpl implements UserControllerService {
             log.debug(String.format("Найденные пользователи = %s",foundAllUsersById));
             return UserMapper.INSTANCE.map(foundAllUsersById);
         } catch (Throwable e) {
-            log.error(String.format
-                    ("ошибка получения пользователей по списку уникальных идентификаторов = %s", longList));
-            throw new GetException(e.getMessage(), e.getCause());
+            log.error(String.format("ошибка получения пользователей по списку идентификаторов = %s", longList));
+            log.error(e.getMessage(), e.getCause());
+            return null;
         }
 
     }
@@ -212,6 +215,11 @@ public class UserControllerServiceImpl implements UserControllerService {
         }
     }
 
+    /**
+     * метод удаления пользователей по имени и фамилии
+     * @param userInfo информация о пользователе
+     * @return Boolean
+     */
     @Override
     public Boolean deleteByNameAndSurname(UserRequestInfo userInfo) throws BaseException {
         try {
@@ -235,22 +243,15 @@ public class UserControllerServiceImpl implements UserControllerService {
         }
     }
 
-
+    /**
+     * метод для проверки объекта на null
+     * @param o объект для проверки
+     * @return Boolean
+     */
     private Boolean validate(Object o) throws ValidationException {
         if (o == null) {
             throw new ValidationException("Некорректный запрос.");
         }
         return true;
     }
-
-//    /**
-//     * метод удаления польователя по пришедшей информации
-//     * @param user
-//     * @return Boolean
-//     */
-//    @Override
-//    public Boolean delete(UserRequestInfo userRequestInfo) {
-//        userService.delete()
-//    }
-
 }

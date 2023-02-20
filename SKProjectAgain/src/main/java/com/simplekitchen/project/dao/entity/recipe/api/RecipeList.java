@@ -1,5 +1,7 @@
 package com.simplekitchen.project.dao.entity.recipe.api;
 
+import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+
 import java.util.List;
 
 /**
@@ -11,5 +13,5 @@ public interface RecipeList {
     /**
      * @return список рецептов
      */
-    List<RecipeEntity> getRecipeEntityList();
+    List<RecipeEntityImpl> getRecipeEntityList();
 }

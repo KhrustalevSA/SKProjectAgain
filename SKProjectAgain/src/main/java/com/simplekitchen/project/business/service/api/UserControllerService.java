@@ -2,19 +2,15 @@ package com.simplekitchen.project.business.service.api;
 
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
-import com.simplekitchen.project.business.entity.user.UserImplListImpl;
-import com.simplekitchen.project.business.entity.user.UserListImpl;
-import com.simplekitchen.project.business.entity.user.api.UserList;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserListImpl;
+import com.simplekitchen.project.dto.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.*;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * интерфейс сервиса пользователей дао слоя

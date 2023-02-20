@@ -2,14 +2,17 @@ package com.simplekitchen.project.business.entity.recipe.api;
 
 
 import com.simplekitchen.project.business.entity.common.StatusImpl;
+import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
+
+import java.util.List;
 
 /**
  * Интерфейс для ответа на запроса рецепта пользователем
  * @author KhrustalevSA
  * @since 09.10.2022
  */
-public interface RecipeResponse {
+public interface RecipeResponseInfo {
     /**
      * @return статус ответа
      */
@@ -18,5 +21,5 @@ public interface RecipeResponse {
     /**
      * @return сущность рецепта
      */
-    RecipeList getRecipeList();
+    List<Recipe> getRecipeList();
 }

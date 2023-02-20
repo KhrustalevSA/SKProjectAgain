@@ -1,12 +1,16 @@
 package com.simplekitchen.project.dao.service;
 
+import com.simplekitchen.project.controller.UserController;
 import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
 import com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.repository.UserRepository;
+import com.simplekitchen.project.dao.service.api.UserService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -20,8 +24,20 @@ public class ServiceTestJunit4 {
 //    private static UserRepository repository;
 //    private static UserControllerServiceImpl userService;
 
+
     @Test
+    @Autowired
     public void save() {
+
+        UserRepository repository = null;
+
+        UserService service = new UserServiceImpl(repository);
+
+        ServiceBase<UserEntityImpl> serviceBase = new ServiceBase<UserEntityImpl>(UserEntityImpl.class) {
+        };
+
+        serviceBase.add(UserEntityImpl.builder().name("AAA").build());
+
         List<UserEntityImpl> userList = new ArrayList<>();
         List<RecipeEntityImpl> recipeList = new ArrayList<>();
         List<IngredientEntityImpl> ingredientList = new ArrayList<>();

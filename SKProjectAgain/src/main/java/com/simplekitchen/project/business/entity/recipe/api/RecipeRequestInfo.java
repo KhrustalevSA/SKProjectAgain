@@ -5,12 +5,12 @@ package com.simplekitchen.project.business.entity.recipe.api;
  * @author KhrustalevSA
  * @since 09.10.2022
  */
-public interface RecipeRequest {
+public interface RecipeRequestInfo {
 
     /**
      * @return уникальный идентификатор запроса рецепта
      */
-    String getUuid();
+    Long getId();
 
     /**
      * @return название рецепта

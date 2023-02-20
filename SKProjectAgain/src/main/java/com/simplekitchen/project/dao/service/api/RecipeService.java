@@ -1,6 +1,13 @@
 package com.simplekitchen.project.dao.service.api;
 
+import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
+import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
+import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
+import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
+import com.simplekitchen.project.dao.exception.DataBaseException;
+import com.simplekitchen.project.dao.service.RecipeServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,59 +24,55 @@ public interface RecipeService {
      * @param recipeEntity сущность рецепта
      * @return сохраненный Optional объект рецепта
      */
-    Optional<RecipeEntity> save(RecipeEntity recipeEntity);
+    RecipeEntity save(RecipeEntityImpl recipeEntity) throws DataBaseException ;
 
     /**
      * метод сохранения списка рецептов
-     * @param recipeEntityList список сущностей рецептов
+     * @param recipeList список сущностей рецептов
      * @return список сохраненных рецептов
      */
-    List<RecipeEntity> saveAll(List<RecipeEntity> recipeEntityList);
+    RecipeList saveAll(RecipeListImpl recipeList) throws DataBaseException;
 
     /**
      * метод получения рецепта по уникальному идентификатору
      * @param id уникальный идентификатор
      * @return Optional объект полученного рецепта
      */
-    Optional<RecipeEntity> get(Long id);
+    RecipeEntity findById(Long id) throws DataBaseException;
+
+    RecipeList findByName(String name) throws DataBaseException ;
+
+    RecipeList findByDifficulty(String difficulty) throws DataBaseException;
+
+    RecipeList findByCookingTime(Long cookingTime) throws DataBaseException;
 
     /**
      * метод получения всех рецептов
      * @return список рецептов
      */
-    List<RecipeEntity> getAll();
+    RecipeList findAll() throws DataBaseException ;
 
     /**
      * метод получения рецептов по уникальному идентификатору
      * @param ids список идентификаторов
      * @return список рецептов
      */
-    List<RecipeEntity> getAllById(List<Long> ids);
+    RecipeList findAllById(LongListImpl longList) throws DataBaseException;
 
     /**
      * метод удаления рецепта по его уникальному идентификатору
      * @param id уникальный идентификатор
      * @return Boolean объект
      */
-    Boolean deleteById(Long id);
+    Boolean deleteById(Long id) throws DataBaseException ;
 
-    /**
-     * метод удаления рецепта по его сущности
-     * @param recipeEntity сущность рецепта
-     * @return Boolean объект
-     */
-    Boolean delete(RecipeEntity recipeEntity);
+    Boolean deleteByName(String name) throws DataBaseException;
 
     /**
      * метод удаления списка рецептов
      * @param recipeEntityList список сущностей рецепта
      * @return Boolean объект
      */
-    Boolean deleteAll(List<RecipeEntity> recipeEntityList);
+    Boolean deleteAllById(LongListImpl longList) throws DataBaseException;
 
-    /**
-     * метод удаления всех рецептов
-     * @return Boolean объект
-     */
-    Boolean deleteAll();
 }

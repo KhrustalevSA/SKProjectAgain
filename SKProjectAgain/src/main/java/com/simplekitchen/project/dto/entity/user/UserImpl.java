@@ -20,10 +20,9 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserImpl implements User {
 
-    public UserImpl() {
-    }
 
     /**
      * уникальный идентификатор пользователя

@@ -1,12 +1,11 @@
 package com.simplekitchen.project.business.mapper.user;
 
-import com.simplekitchen.project.business.entity.user.UserImplListImpl;
-import com.simplekitchen.project.business.entity.user.UserListImpl;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserListImpl;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
-import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dto.entity.city.CityImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
@@ -45,7 +44,7 @@ public interface UserMapper {
      * @param userList список пользователей бизнесс слоя
      * @return ДАО список пользователей
      */
-    UserListImpl map(com.simplekitchen.project.business.entity.user.api.UserList userList);
+    UserListImpl map(com.simplekitchen.project.dto.entity.user.api.UserList userList);
 
     /**
      * метод преобразования списков пользователей
@@ -53,7 +52,7 @@ public interface UserMapper {
      * @return бизнесс список пользователей
      */
     @Mapping(target = "userList", source = "userEntityList")
-    com.simplekitchen.project.business.entity.user.UserListImpl map (UserList userList);
+    UserListImpl map (UserList userList);
 
     /**
      * метод преобразования класса города к интерфейсу города

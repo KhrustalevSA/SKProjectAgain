@@ -1,4 +1,4 @@
-package com.simplekitchen.project.business.entity.user.api;
+package com.simplekitchen.project.dto.entity.user.api;
 
 
 import com.simplekitchen.project.dto.entity.user.api.User;
