@@ -1,6 +1,5 @@
 package com.simplekitchen.project.dto.entity.recipe;
 
-
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
 import lombok.AllArgsConstructor;
@@ -15,5 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeListImpl implements RecipeList {
+
+    /**
+     * список рецептов
+     */
     private List<Recipe> recipeList;
 }

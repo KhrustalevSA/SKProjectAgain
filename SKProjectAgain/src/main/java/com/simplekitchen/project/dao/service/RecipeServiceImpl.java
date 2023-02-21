@@ -2,6 +2,7 @@ package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.recipe.RecipeImplListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
@@ -67,10 +68,10 @@ public class RecipeServiceImpl implements RecipeService {
      * @return список сохраненных рецептов
      */
     @Override
-    public RecipeList saveAll(RecipeListImpl recipeList) throws DataBaseException {
+    public RecipeList saveAll(RecipeImplListImpl recipeList) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_RECIPE_LIST, recipeList));
-            Iterable<RecipeEntityImpl> recipeEntitiesI = recipeRepository.saveAll(recipeList.getRecipeEntityList());
+            Iterable<RecipeEntityImpl> recipeEntitiesI = recipeRepository.saveAll(recipeList.getRecipeList());
             List<RecipeEntityImpl> receivedRecipeList = (List<RecipeEntityImpl>) recipeEntitiesI;
             log.debug(String.format("Cохраненный список рецептов: %s", receivedRecipeList));
             return RecipeListImpl.builder().recipeEntityList(receivedRecipeList).build();

@@ -3,6 +3,7 @@ package com.simplekitchen.project.dao.service.api;
 import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.recipe.RecipeImplListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
@@ -31,7 +32,7 @@ public interface RecipeService {
      * @param recipeList список сущностей рецептов
      * @return список сохраненных рецептов
      */
-    RecipeList saveAll(RecipeListImpl recipeList) throws DataBaseException;
+    RecipeList saveAll(RecipeImplListImpl recipeList) throws DataBaseException;
 
     /**
      * метод получения рецепта по уникальному идентификатору

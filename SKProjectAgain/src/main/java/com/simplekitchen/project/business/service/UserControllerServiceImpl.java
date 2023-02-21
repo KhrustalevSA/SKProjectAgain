@@ -1,9 +1,6 @@
 package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
-import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
-import com.simplekitchen.project.dto.entity.user.UserListImpl;
-import com.simplekitchen.project.dto.entity.user.api.UserList;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.exception.DeleteException;
@@ -15,7 +12,10 @@ import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserListImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
+import com.simplekitchen.project.dto.entity.user.api.UserList;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
@@ -75,7 +75,8 @@ public class UserControllerServiceImpl implements UserControllerService {
         try {
             validate(userList);
             log.debug(String.format("Запрошенный список пользователей = %s.", userList));
-            com.simplekitchen.project.dao.entity.user.api.UserList userListDao = userService.saveAll(UserMapper.INSTANCE.map(userList));
+            com.simplekitchen.project.dao.entity.user.api.UserList userListDao =
+                    userService.saveAll(UserMapper.INSTANCE.map(userList));
             log.debug(String.format("Сохраненный список пользователй = %s.",userListDao));
             return UserMapper.INSTANCE.map(userListDao);
         } catch (Throwable e) {

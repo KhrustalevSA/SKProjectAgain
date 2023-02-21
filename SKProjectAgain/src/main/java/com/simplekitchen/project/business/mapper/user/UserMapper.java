@@ -27,7 +27,7 @@ public interface UserMapper {
 
     /**
      * метод преобразующий ДАО сущность пользователя в ДТО сущность
-     * @param daoUser сущность польщователя
+     * @param daoUser сущность пользователя
      * @return daoUser
      */
     UserImpl map(UserEntity daoUser);

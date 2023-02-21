@@ -10,6 +10,7 @@ import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.RecipeService;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
@@ -52,11 +53,12 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
     }
 
     @Override
-    public RecipeList saveAll(RecipeListImpl recipeList) throws BaseException, DataBaseException {
+    public RecipeList saveAll(RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
         try {
             validate(recipeList);
             log.debug(String.format("Запрошенный список рецептов = %s.", recipeList));
-            com.simplekitchen.project.dao.entity.recipe.api.RecipeList recipeEntityList = recipeService.saveAll(RecipeMapper.INSTANCE.map(recipeList));
+            com.simplekitchen.project.dao.entity.recipe.api.RecipeList recipeEntityList =
+                    recipeService.saveAll(RecipeMapper.INSTANCE.map(recipeList));
             log.debug(String.format("Сохраненный список рецептов = %s.",recipeEntityList));
             return RecipeMapper.INSTANCE.map(recipeEntityList);
         } catch (Throwable e) {
@@ -88,7 +90,7 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
             if (recipeRequestInfo.getId() != null) {
                 Recipe recipe = get(recipeRequestInfo.getId());
                 log.debug(String.format("Рецепт найденный по идентификатору = %s", recipe.getId()));
-                return RecipeListImpl.builder().recipeList(Lists.newArrayList((RecipeImpl) recipe)).build();
+                return RecipeListImpl.builder().recipeList(Lists.newArrayList(recipe)).build();
             } else if (validate(recipeRequestInfo.getName())) {
                 String receivedName = recipeRequestInfo.getName();
                 log.debug(String.format("Полученное название рецепта %s",receivedName));

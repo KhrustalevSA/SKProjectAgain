@@ -1,7 +1,6 @@
 package com.simplekitchen.project.dto.entity.user;
 
 import com.simplekitchen.project.dto.entity.user.api.UserImplList;
-import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

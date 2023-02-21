@@ -10,6 +10,7 @@ import com.simplekitchen.project.business.service.RecipeControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
@@ -58,7 +59,7 @@ public class RecipeController {
     }
 
     @PostMapping("/save/all")
-    public RecipeResponseInfo saveAll(@RequestBody RecipeListImpl recipeList) throws BaseException, DataBaseException {
+    public RecipeResponseInfo saveAll(@RequestBody RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
         if (validate(recipeList)) {
             RecipeList savedRecipe = recipeControllerService.saveAll(recipeList);
             if (recipeList.getRecipeList() != null) {
