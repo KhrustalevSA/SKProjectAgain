@@ -16,5 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class LongListImpl implements LongList {
+
+    /**
+     * список целых чисел
+     */
     private List<Long> longList;
 }

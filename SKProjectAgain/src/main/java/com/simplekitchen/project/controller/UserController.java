@@ -22,6 +22,8 @@ import java.util.List;
 
 /**
  * РЕСТ контроллер для работы с пользователями
+ * @author KhrustalevSA
+ * @since 26.02.2023
  */
 @Slf4j
 @RestController
@@ -32,14 +34,21 @@ public class UserController {
 // все ошибки в плохой ответ, в бд сервисе только исключения БД
 // saveAll методы + UserList как сделать правильно?
 
+    /**
+     * сервис работы с пользователями
+     */
     private final UserControllerService userControllerService;
+
+    /**
+     * объект некорректного веб ответа
+     */
     private static final UserResponseInfoImpl INVALID_DATA = UserResponseInfoImpl.builder()
             .status(StatusImpl.builder().success(false).description("Некорректно введенные данные").build())
             .build();
 
     /**
      * конструктор с автоопределением бина
-     * @param service
+     * @param service сервис пользователей
      */
     @Autowired
     public UserController(UserControllerService service) {
@@ -48,8 +57,8 @@ public class UserController {
 
     /**
      * метод сохранения пользователя
-     * @param user
-     * @return ResponseEntity<UserEntityImpl>
+     * @param user объект сохраняемого пользователя
+     * @return информация о сохраненном пользователе
      */
     @PostMapping("/save")
     public UserResponseInfo save(@RequestBody UserImpl user) throws BaseException, DataBaseException {
@@ -73,8 +82,8 @@ public class UserController {
 
     /**
      * Метод сохранения списка переданных пользователей
-     * @param userList
-     * @return саисок сохраненных пользователей
+     * @param userList список пользователей
+     * @return информация содержащая список сохраненных пользователей
      */
     @PostMapping("/save/all")
     public UserResponseInfo saveAll(@RequestBody UserImplListImpl userList) throws BaseException, DataBaseException {
@@ -91,9 +100,9 @@ public class UserController {
     }
 
     /**
-     * метод получения пользователя по имеющейся информации
-     * @param userRequestInfo
-     * @return информация о пользователе
+     * метод получения пользователей по имеющейся информации
+     * @param userRequestInfo информация для получения пользователей
+     * @return информация о найденных пользователях
      */
     @GetMapping("/get")
     public UserResponseInfo get(@RequestBody UserRequestInfoImpl userRequestInfo) throws BaseException {
@@ -106,13 +115,13 @@ public class UserController {
                        .build();
            }
        }
-        return INVALID_DATA;
+       return INVALID_DATA;
     }
 
     /**
      * Метод получения всех имеющихся пользователей
-     * @return информация о пользователях
-     * @throws BaseException
+     * @return класс информации со списком всех имеющихся пользователей
+     * @throws BaseException общий класс ошибки обработки исключения приложения
      */
     @GetMapping("/get/all")
     public UserResponseInfo getAll() throws BaseException {
@@ -126,15 +135,10 @@ public class UserController {
         return INVALID_DATA;
     }
 
-//    @GetMapping("/get/all/ids")
-//    public ResponseEntity<List<UserEntityImpl>> getAllById(@RequestBody List<Long> ids) {
-//        return new ResponseEntity<>(userControllerService.getAllById(ids), HttpStatus.OK);
-//    }
-
     /**
-     *
-     * @param id
-     * @return
+     * метод удаления пользователя по уникальному идентификатору
+     * @param id идентификатор пользователя
+     * @return логический ответ
      */
     @PostMapping("/deleteById")
     public Boolean deleteById(@RequestParam Long id) throws BaseException {
@@ -144,7 +148,12 @@ public class UserController {
         return false;
     }
 
-
+    /**
+     * метод удаления пользователей по списку идентификаторов
+     * @param longList список идентификаторов пользователей
+     * @return логический ответ
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     */
     @PostMapping("/deleteByIdList")
     public Boolean deleteByIdList(@RequestBody LongListImpl longList) throws BaseException {
         if (validate(longList)) {
@@ -183,6 +192,11 @@ public class UserController {
         return list;
     }
 
+    /**
+     * метод проверки объекта на null
+     * @param o объект проверки
+     * @return логический ответ
+     */
     private Boolean validate(Object o){
         return o != null;
     }

@@ -30,6 +30,7 @@ public class RecipeServiceImpl implements RecipeService {
     private static final String RECEIVED_RECIPE_LIST = "Полученный список рецептов: %s";
     private static final String RECEIVED_ID = "Полученный уникальный идентификатор: %d";
     private static final String RECEIVED_RECIPE_ID_LIST = "Полученный список идентификаторов %s";
+
     /**
      * репозиторий рецептов
      */
@@ -37,7 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * конструктор сервиса с автоматическим подключением
-     * @param recipeRepository
+     * @param recipeRepository репозиторий рецептов
      */
     @Autowired
     public RecipeServiceImpl(RecipeRepository recipeRepository) {
@@ -46,8 +47,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод сохранения рецепта
-     * @param recipeEntity
-     * @return сохраненный Optional объект рецепта
+     * @param recipeEntity сущность рецепта
+     * @return сохраненный рецепт
      */
     @Override
     public RecipeEntity save(RecipeEntityImpl recipeEntity) throws DataBaseException {
@@ -64,7 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод сохранения списка рецептов
-     * @param recipeEntityList
+     * @param recipeList список рецептов
      * @return список сохраненных рецептов
      */
     @Override
@@ -83,8 +84,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод получения рецпта по уникальному идентификатору
-     * @param id
-     * @return Optional объект полученного рецепта
+     * @param id идентификатор рецепта
+     * @return найденный рецепт
      */
     @Override
     public RecipeEntity findById(Long id) throws DataBaseException {
@@ -99,6 +100,12 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    /**
+     * метод поиска рецепта по названию рецепта
+     * @param name название рецепта
+     * @return список рецептов
+     * @throws DataBaseException ошибки базы данных
+     */
     @Override
     public RecipeList findByName(String name) throws DataBaseException {
         try {
@@ -114,6 +121,12 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    /**
+     * метод поиска рецепта по сложности
+     * @param difficulty сложность рецепта
+     * @return список рецептов
+     * @throws DataBaseException ошибки базы данных
+     */
     @Override
     public RecipeList findByDifficulty(String difficulty) throws DataBaseException {
         try {
@@ -129,6 +142,12 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    /**
+     * метод поиска рецептов по времени приготовления
+     * @param cookingTime время приготовления рецепта
+     * @return список рецептов
+     * @throws DataBaseException ошибки базы данных
+     */
     @Override
     public RecipeList findByCookingTime(Long cookingTime) throws DataBaseException {
         try {
@@ -159,8 +178,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     /**
-     * метод получения рецептов по уникальному идентификатору
-     * @param ids
+     * метод получения рецептов по списку уникальных идентификаторов
+     * @param longList список идентификаторов
      * @return список рецептов
      */
     @Override
@@ -178,8 +197,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод удаления рецепта по его уникальному идентификатору
-     * @param id
-     * @return Boolean объект
+     * @param id иеднтификатор рецепта
+     * @return логичский ответ
      */
     @Override
     public Boolean deleteById(Long id) throws DataBaseException {
@@ -201,11 +220,21 @@ public class RecipeServiceImpl implements RecipeService {
 
     }
 
+    /**
+     * метод удаления рецептов по названию
+     * @param name название рецептов
+     * @return логический ответ
+     * @throws DataBaseException ошибки базы данных
+     */
     @Override
     public Boolean deleteByName(String name) throws DataBaseException {
         try {
             log.debug(String.format("Полученное название рецепта %s", name));
             List<RecipeEntityImpl> recipeEntityList = recipeRepository.findByName(name).orElse(null);
+            if (recipeEntityList == null) {
+                log.error(String.format("рецепт по имени %s не найден", name));
+                return false;
+            }
             log.debug(String.format("Удаляемый список рецептов %s", recipeEntityList));
             recipeRepository.deleteAllByName(name);
             Optional<List<RecipeEntityImpl>> deleteRecipeEntities = recipeRepository.findByName(name);
@@ -221,9 +250,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     /**
-     * метод удаления списка рецептов
-     * @param recipeEntityList
-     * @return Boolean объект
+     * метод удаления списка рецептов по списку уникальных идентификаторов
+     * @param longList список идентификаторов
+     * @return логический ответ
      */
     @Override
     public Boolean deleteAllById(LongListImpl longList) throws DataBaseException {

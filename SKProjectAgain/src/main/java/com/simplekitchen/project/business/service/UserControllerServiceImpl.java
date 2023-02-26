@@ -82,7 +82,7 @@ public class UserControllerServiceImpl implements UserControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось созранить список пользователей %s.", userList));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return UserListImpl.builder().build();
         }
     }
 
@@ -102,7 +102,7 @@ public class UserControllerServiceImpl implements UserControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось созранить список пользователей %s.", userList));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return UserListImpl.builder().build();
         }
     }
 
@@ -122,7 +122,7 @@ public class UserControllerServiceImpl implements UserControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось найти пользователя по идентификатору %s",id));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return UserImpl.builder().build();
         }
     }
 
@@ -134,9 +134,9 @@ public class UserControllerServiceImpl implements UserControllerService {
     @Override
     public UserList get(UserRequestInfo userInfo) throws BaseException {
         try {
-            validate(userInfo);
+            this.validate(userInfo);
             if (userInfo.getId() != null) {
-                User user = get(userInfo.getId());
+                User user = this.get(userInfo.getId());
                 log.debug(String.format("Пользователь по идентификатору = %s",user.getId()));
                 return UserListImpl.builder().userList(Lists.newArrayList(user)).build();
             } else if (validate(userInfo.getName()) && validate(userInfo.getSurname())) {
@@ -149,11 +149,11 @@ public class UserControllerServiceImpl implements UserControllerService {
                         receivedName,receivedSurname,userListFoundByNameAndSurname));
                 return UserMapper.INSTANCE.map(userListFoundByNameAndSurname);
             }
-            return null;
+            return UserListImpl.builder().build();
         } catch (Throwable e) {
             log.error(String.format("Ошибка получения пользователя по инофрмации = %s",userInfo));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return UserListImpl.builder().build();
         }
     }
 
@@ -170,7 +170,7 @@ public class UserControllerServiceImpl implements UserControllerService {
         } catch (Throwable e) {
             log.error("Ошибка получения списка всех пользователей");
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return UserListImpl.builder().build();
         }
     }
 
@@ -191,7 +191,7 @@ public class UserControllerServiceImpl implements UserControllerService {
         } catch (Throwable e) {
             log.error(String.format("ошибка получения пользователей по списку идентификаторов = %s", longList));
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return UserListImpl.builder().build();
         }
 
     }
@@ -237,7 +237,7 @@ public class UserControllerServiceImpl implements UserControllerService {
                 log.debug(String.format(DELETE_RESULT,deleteCheck));
                 return deleteCheck;
             }
-            return null;
+            return false;
         } catch (Throwable e) {
             log.error(String.format("Ошибка удаления пользователя по инофрмации = %s",userInfo));
             throw new DeleteException(e.getMessage(), e.getCause());

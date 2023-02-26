@@ -15,9 +15,32 @@ import java.util.Optional;
  */
 @Repository
 public interface RecipeRepository extends CrudRepository<RecipeEntityImpl, Long> {
+
+    /**
+     * поиск рецепта по названию в базе данных
+     * @param name название рецепта
+     * @return Optional объект списка найденных рецептов
+     */
     Optional<List<RecipeEntityImpl>> findByName(String name);
+
+    /**
+     * поиск рецепта по сложности в базе данных
+     * @param difficulty сложность рецепта
+     * @return Optional объект списка найденных рецептов
+     */
     Optional<List<RecipeEntityImpl>> findByDifficulty(String difficulty);
+
+    /**
+     * поиск рецепта по времени приготовления в базе данных
+     * @param time время приготовления рецепта
+     * @return Optional объект списка найденных рецептов
+     */
     Optional<List<RecipeEntityImpl>> findByCookingTime(Long time);
+
+    /**
+     * метод удаления рецептов по названию
+     * @param name название рецепта
+     */
     void deleteAllByName(String name);
 }
 

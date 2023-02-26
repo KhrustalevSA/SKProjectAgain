@@ -16,6 +16,8 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * интерфейс создающий маппер преобразования ДТО пользователя в ДАО
+ * @since 21.02.2023
+ * @author KhrustalevSA
  */
 @Mapper
 public interface UserMapper {

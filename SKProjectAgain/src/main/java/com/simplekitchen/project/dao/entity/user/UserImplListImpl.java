@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * класс списка класса сущности пользователя
+ * @author KhrustalevSA
+ * @since 26.02.2023
+ */
 @Data
 @Builder
 @NoArgsConstructor

@@ -14,7 +14,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
     private static final String RECEIVED_ID = "Полученный уникальный идентификатор = %s";
     private static final String DELETE_USER_FAILED_BY_ID = "Ошибка удаления пользователя по идентификатору = %s";
     private static final String RECEIVED_ID_LIST = "Пришедший список уникальных идентификаторов = %s";
-    private static final String DELETE_USER_LIST_FAILED = "Удаление пользователей %s не удалось";
+    private static final String DELETE_USER_LIST_FAILED = "Удаление пользователей по имени %s и фамилии %s не удалось";
     private static final String DELETE_USER_LIST_BY_ID_FAILED = "Удаление пользователей по идентификаторам %s не удалось";
 
 
@@ -98,7 +97,13 @@ public class UserServiceImpl implements UserService {
             throw new DataBaseException(e.getMessage());
         }
     }
-@Override
+    /**
+     * метод сохранения списка пользователей
+     * @param userList список пользователей
+     * @return список пользователей
+     * @throws DataBaseException ошибки базы данных
+     */
+    @Override
     public UserList saveAll(UserImplListImpl userList) throws DataBaseException {
         try {
             log.debug(String.format(REQUESTED_USER_LIST,userList));
@@ -221,8 +226,8 @@ public class UserServiceImpl implements UserService {
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
             userRepository.deleteAllByNameAndSurname(name, surname);
             userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
-            if (!userEntityByNameAndSurname.isEmpty()) {
-                log.debug(String.format(DELETE_USER_LIST_FAILED, userEntityByNameAndSurname));
+            if (userEntityByNameAndSurname != null) {
+                log.debug(String.format(DELETE_USER_LIST_FAILED, name, surname));
                 return false;
             }
             return true;

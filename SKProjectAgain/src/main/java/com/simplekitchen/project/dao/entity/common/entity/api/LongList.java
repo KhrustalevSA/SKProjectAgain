@@ -9,5 +9,10 @@ import java.util.List;
  */
 
 public interface LongList {
+
+    /**
+     * метод возвращающий список целых чисел
+     * @return список целых чисел
+     */
     List<Long> getLongList();
 }

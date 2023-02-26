@@ -21,23 +21,42 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * РЕСТ контроллер для работы с рецептами
+ * @author KhrustalevSA
+ * @since 26.02.2023
  */
 @Slf4j
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
 
+    /**
+     * поле некорректного веб ответа
+     */
     private static final RecipeResponseInfo INVALID_DATA = RecipeResponseInfoImpl.builder()
             .status(StatusImpl.builder().success(false).description("Некорректно введенные данные").build())
             .build();
 
+    /**
+     * сервис рецептов
+     */
     private final RecipeControllerService recipeControllerService;
 
+    /**
+     * контроллер с автоматическим определением сервиса
+     * @param recipeService сервис с методами обработки рецептов
+     */
     @Autowired
     RecipeController(RecipeControllerServiceImpl recipeService) {
         recipeControllerService = recipeService;
     }
 
+    /**
+     * метод сохранения рецепта
+     * @param recipe объект рецепта для сохранения
+     * @return сохраненный рецепт
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     * @throws DataBaseException ошибки работы с базой данных
+     */
     @PostMapping("/save")
     public RecipeResponseInfo save(@RequestBody RecipeImpl recipe) throws BaseException, DataBaseException {
         if (validate(recipe)) {
@@ -58,6 +77,13 @@ public class RecipeController {
         return INVALID_DATA;
     }
 
+    /**
+     * метод сохранения списка рецептов
+     * @param recipeList список сохраняемых рецептов
+     * @return список сохраненных рецептов
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     * @throws DataBaseException ошибки работы с базой данных
+     */
     @PostMapping("/save/all")
     public RecipeResponseInfo saveAll(@RequestBody RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
         if (validate(recipeList)) {
@@ -72,6 +98,12 @@ public class RecipeController {
         return INVALID_DATA;
     }
 
+    /**
+     * меттод получения рецептов по переданнной информации
+     * @param recipeRequestInfo переданная информация о рецепте
+     * @return информация о найденных рецептах
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     */
     @GetMapping("/get")
     public RecipeResponseInfo get(@RequestBody RecipeRequestInfoImpl recipeRequestInfo) throws BaseException {
         if (validate(recipeRequestInfo)) {
@@ -86,6 +118,10 @@ public class RecipeController {
         return INVALID_DATA;
     }
 
+    /**
+     * метод получения всех имеющихся рецептов
+     * @return информация о найденных рецептах
+     */
     @GetMapping("/get/all")
     public RecipeResponseInfo getAll() {
         RecipeList recipeList = recipeControllerService.getAll();
@@ -98,6 +134,12 @@ public class RecipeController {
         return INVALID_DATA;
     }
 
+    /**
+     * метод удаления рецепта по уникальному идентификатору
+     * @param id идентификатор рецепта
+     * @return логический ответ
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     */
     @PostMapping("/deleteById")
     public Boolean deleteById(@RequestParam Long id) throws BaseException {
         if (validate(id)){
@@ -106,6 +148,12 @@ public class RecipeController {
         return false;
     }
 
+    /**
+     * метод удаления рецептов по списку идентификаторов
+     * @param longList список уникальных идентификаторов
+     * @return логический ответ
+     * @throws BaseException общий класс ошибки обработки исключения приложения
+     */
     @PostMapping("/deleteByIdList")
     public Boolean deleteByIdList(@RequestBody LongListImpl longList) throws BaseException {
         if (validate(longList)) {
@@ -121,20 +169,11 @@ public class RecipeController {
         return false;
     }
 
-    @PostMapping("/showRecipeEntity")
-    public RecipeImpl showUserEntity(){
-        return RecipeImpl.builder().id(1L).name("Pasta").build();
-    }
-
-    @PostMapping("/showRecipeListEntity")
-    public RecipeList showUserListEntity(){
-        return RecipeListImpl.builder()
-                .recipeList(Lists.newArrayList(
-                        RecipeImpl.builder().id(1L).name("Pasta").build(),
-                        RecipeImpl.builder().id(2L).name("Eggs").build()))
-                .build();
-    }
-
+    /**
+     * метод проверки объекта на null
+     * @param o переданный объект для валидации
+     * @return логичский ответ
+     */
     private Boolean validate(Object o){
         return o != null;
     }

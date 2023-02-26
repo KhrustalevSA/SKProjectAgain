@@ -20,6 +20,11 @@ import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * класс севриса контроллера рецептов
+ * @since 21.02.2023
+ * @author KhrustalevSA
+ */
 @Slf4j
 @Service
 @NoArgsConstructor
@@ -29,14 +34,27 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
     private static final String RECEIVED_ID_LIST = "Полученный список идентификаторов %s.";
     private static final String DELETE_RESULT = "Результат удаления: %b";
 
-
+    /**
+     * объект сервиса рецептов
+     */
     private static RecipeService recipeService;
 
+    /**
+     * конструктор севриса контроллера рецептов
+     * @param recipeServiceDao дао сервис рецептов
+     */
     @Autowired
     public RecipeControllerServiceImpl(RecipeService recipeServiceDao) {
         recipeService = recipeServiceDao;
     }
 
+    /**
+     * метод сохранения рецепта
+     * @param recipe объект рецепта для сохранения
+     * @return объект сохраненного рецепта
+     * @throws DataBaseException ошибка базы данных
+     * @throws BaseException общий класс ошибок сервиса
+     */
     @Override
     public Recipe save(RecipeImpl recipe) throws DataBaseException, BaseException {
         try {
@@ -48,10 +66,17 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось сохранить рецепт %s", recipe));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return RecipeImpl.builder().build();
         }
     }
 
+    /**
+     * метод сохранения списка рецептов
+     * @param recipeList список рецептов для сохранения
+     * @return список сохраненных рецептов
+     * @throws DataBaseException ошибка базы данных
+     * @throws BaseException общий класс ошибок сервиса
+     */
     @Override
     public RecipeList saveAll(RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
         try {
@@ -64,10 +89,17 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось сохранить список рецептов %s.", recipeList));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return RecipeListImpl.builder().build();
         }
     }
 
+    /**
+     * метод получения рецепта по уникальному идентификатору
+     * @param id уникальный идентификатор рецепта
+     * @return наденный рецепт
+     * @throws DataBaseException ошибка базы данных
+     * @throws BaseException общий класс ошибок сервиса
+     */
     @Override
     public Recipe get(Long id) throws DataBaseException, BaseException {
         try {
@@ -79,10 +111,16 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error(String.format("Не удалось найти рецепт по идентификатору %d",id));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return RecipeImpl.builder().build();
         }
     }
 
+    /**
+     * метод получения списка рецептов по имеющийся информации
+     * @param recipeRequestInfo объект содержащий информацию для поиска
+     * @return список найденных рецептов
+     * @throws BaseException общий класс ошибок сервиса
+     */
     @Override
     public RecipeList get(RecipeRequestInfo recipeRequestInfo) throws BaseException {
         try {
@@ -99,14 +137,18 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
                         receivedName,recipeList));
                 return recipeList;
             }
-            return null;
+            return RecipeListImpl.builder().build();
         } catch (Throwable e) {
             log.error(String.format("Ошибка получения рецепта по информации = %s", recipeRequestInfo));
             log.error(e.getMessage(),e.getCause());
-            return null;
+            return RecipeListImpl.builder().build();
         }
     }
 
+    /**
+     * метод получения списка всех имеющихся рецептов
+     * @return список всех найденнх рецептов
+     */
     @Override
     public RecipeList getAll(){
         try {
@@ -116,10 +158,15 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error("Ошибка получения списка всех рецептов");
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return RecipeListImpl.builder().build();
         }
     }
 
+    /**
+     * метод получения списка рецептов по списку идентификаторов
+     * @param longList список идентификаторов
+     * @return список рецептов
+     */
     @Override
     public RecipeList getAllById(LongList longList){
         try {
@@ -131,10 +178,16 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error(String.format("ошибка получения рецептов по списку идентификаторов: %s", longList));
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return RecipeListImpl.builder().build();
         }
     }
 
+    /**
+     * метод удаления рецепта по идентификатор
+     * @param id уникаьлный идентификатор
+     * @return логический ответ
+     * @throws BaseException
+     */
     @Override
     public Boolean deleteById(Long id) throws BaseException {
         try {
@@ -150,6 +203,11 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         }
     }
 
+    /**
+     * метод удаления рецепта по имени
+     * @param recipeRequestInfo класс с информацией для удаления
+     * @return логический ответ
+     */
     @Override
     public Boolean deleteByName(RecipeRequestInfo recipeRequestInfo) {
         try {
@@ -163,17 +221,20 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
                 log.debug(String.format(DELETE_RESULT,deleteCheck));
                 return deleteCheck;
             }
-            return null;
+            return false;
         } catch (Throwable e) {
             log.error(String.format("Ошибка удаления рецепта по информации = %s", recipeRequestInfo));
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return false;
         }
     }
 
-
-
-
+    /**
+     * метод валидации объекта
+     * @param o объект для операции валидации
+     * @return логичский ответ
+     * @throws ValidationException ошибка валидации
+     */
     private Boolean validate(Object o) throws ValidationException {
         if (o == null) {
             throw new ValidationException("Некорректный запрос.");
