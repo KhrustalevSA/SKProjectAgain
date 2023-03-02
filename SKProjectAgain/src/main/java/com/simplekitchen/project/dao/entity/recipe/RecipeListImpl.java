@@ -23,5 +23,5 @@ public class RecipeListImpl implements RecipeList {
     /**
      * поле списка рецептов
      */
-    private List<RecipeEntityImpl> recipeEntityList;
+    private List<RecipeEntity> recipeEntityList;
 }

@@ -16,4 +16,10 @@ public interface UserRequestInfo {
      */
     String getSurname();
 
+    /**
+     * метод получения отчества
+     * @return отчество полльзователя
+     */
+    String getPatronymic();
+
 }

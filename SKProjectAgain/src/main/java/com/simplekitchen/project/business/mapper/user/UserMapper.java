@@ -1,7 +1,5 @@
 package com.simplekitchen.project.business.mapper.user;
 
-import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
-import com.simplekitchen.project.dto.entity.user.UserListImpl;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
@@ -9,6 +7,8 @@ import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dto.entity.city.CityImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
+import com.simplekitchen.project.dto.entity.user.UserListImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

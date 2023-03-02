@@ -1,6 +1,7 @@
 package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.business.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.business.entity.recipe.api.RecipeRequestInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.exception.ValidationException;
@@ -10,15 +11,18 @@ import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.RecipeService;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
-import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * класс севриса контроллера рецептов
@@ -52,11 +56,10 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * метод сохранения рецепта
      * @param recipe объект рецепта для сохранения
      * @return объект сохраненного рецепта
-     * @throws DataBaseException ошибка базы данных
      * @throws BaseException общий класс ошибок сервиса
      */
     @Override
-    public Recipe save(RecipeImpl recipe) throws DataBaseException, BaseException {
+    public Recipe save(RecipeImpl recipe) throws BaseException {
         try {
             validate(recipe);
             log.debug("Полученный рецепт для сохранения" + recipe);
@@ -74,74 +77,75 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * метод сохранения списка рецептов
      * @param recipeList список рецептов для сохранения
      * @return список сохраненных рецептов
-     * @throws DataBaseException ошибка базы данных
-     * @throws BaseException общий класс ошибок сервиса
      */
     @Override
-    public RecipeList saveAll(RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
+    public List<Recipe> saveAll(List<RecipeImpl> recipeList) {
         try {
             validate(recipeList);
             log.debug(String.format("Запрошенный список рецептов = %s.", recipeList));
-            com.simplekitchen.project.dao.entity.recipe.api.RecipeList recipeEntityList =
-                    recipeService.saveAll(RecipeMapper.INSTANCE.map(recipeList));
-            log.debug(String.format("Сохраненный список рецептов = %s.",recipeEntityList));
-            return RecipeMapper.INSTANCE.map(recipeEntityList);
+            List<RecipeEntity> recipeEntities = recipeService.saveAll(
+                    recipeList.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList()));
+            log.debug(String.format("Сохраненный список рецептов = %s.",recipeEntities));
+            return recipeEntities.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
         } catch (Throwable e) {
             log.error(String.format("Не удалось сохранить список рецептов %s.", recipeList));
             log.error(e.getMessage(),e.getCause());
-            return RecipeListImpl.builder().build();
+            return null;
         }
     }
 
     /**
-     * метод получения рецепта по уникальному идентификатору
-     * @param id уникальный идентификатор рецепта
-     * @return наденный рецепт
-     * @throws DataBaseException ошибка базы данных
-     * @throws BaseException общий класс ошибок сервиса
-     */
-    @Override
-    public Recipe get(Long id) throws DataBaseException, BaseException {
-        try {
-            validate(id);
-            log.debug(String.format(RECEIVED_ID,id));
-            Recipe foundRecipe = RecipeMapper.INSTANCE.map(recipeService.findById(id));
-            log.debug(String.format("Реуепт найденный по идентификатору %s = %s", id, foundRecipe));
-            return foundRecipe;
-        } catch (Throwable e) {
-            log.error(String.format("Не удалось найти рецепт по идентификатору %d",id));
-            log.error(e.getMessage(),e.getCause());
-            return RecipeImpl.builder().build();
-        }
-    }
-
-    /**
-     * метод получения списка рецептов по имеющийся информации
-     * @param recipeRequestInfo объект содержащий информацию для поиска
+     * метод получения рецептов по имеющейя информации
+     * @param recipeRequestInfo запрос с инофрмацией о рецептах
      * @return список найденных рецептов
-     * @throws BaseException общий класс ошибок сервиса
+     * @throws BaseException общий класс ошибок
      */
     @Override
-    public RecipeList get(RecipeRequestInfo recipeRequestInfo) throws BaseException {
+    public List<Recipe> get(RecipeRequestInfoImpl recipeRequestInfo) throws BaseException {
+        ObjectUtils.requireNonEmpty(recipeRequestInfo);
+        if (recipeRequestInfo.getId() != null) {
+            return Lists.newArrayList(getById(recipeRequestInfo.getId()));
+        } else if (StringUtils.isNotBlank(recipeRequestInfo.getName())) {
+            return getByName(recipeRequestInfo.getName());
+        }
+        return null;
+    }
+
+    /**
+     * метод поиска рецептов по идентификатору
+     * @param id уникальный идентификатор рецепта
+     * @return найденный рецепт
+     */
+    protected Recipe getById(@NonNull Long id) {
         try {
-            validate(recipeRequestInfo);
-            if (recipeRequestInfo.getId() != null) {
-                Recipe recipe = get(recipeRequestInfo.getId());
-                log.debug(String.format("Рецепт найденный по идентификатору = %s", recipe.getId()));
-                return RecipeListImpl.builder().recipeList(Lists.newArrayList(recipe)).build();
-            } else if (validate(recipeRequestInfo.getName())) {
-                String receivedName = recipeRequestInfo.getName();
-                log.debug(String.format("Полученное название рецепта %s",receivedName));
-                RecipeList recipeList = RecipeMapper.INSTANCE.map(recipeService.findByName(receivedName));
-                log.debug(String.format("Рецепты найденные по названию %s = %s",
-                        receivedName,recipeList));
-                return recipeList;
-            }
-            return RecipeListImpl.builder().build();
+            ObjectUtils.requireNonEmpty(id);
+            log.debug(String.format(RECEIVED_ID,id));
+            RecipeEntity recipeEntity = recipeService.findById(id);
+            log.debug(String.format("Рецепт найденный по идентификатору %s = %s", id, recipeEntity));
+            return RecipeMapper.INSTANCE.map(recipeEntity);
+        }  catch (Throwable e) {
+            log.error(String.format("Ошибка нахождения рецепта по идентификатору %s", id));
+            log.error(e.getMessage(), e.getCause());
+            return null;
+        }
+    }
+
+    /**
+     * мето поиска рецептов по названию
+     * @param name название рецепта
+     * @return список найденных рецептов
+     */
+    protected List<Recipe> getByName(@NonNull String name) {
+        try {
+            ObjectUtils.requireNonEmpty(name);
+            log.debug(String.format("Запрошенное имя %s", name));
+            List<RecipeEntity> recipeEntities = recipeService.findByName(name);
+            log.debug(String.format("Список найденных рецептов: %s", recipeEntities));
+            return recipeEntities.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
         } catch (Throwable e) {
-            log.error(String.format("Ошибка получения рецепта по информации = %s", recipeRequestInfo));
-            log.error(e.getMessage(),e.getCause());
-            return RecipeListImpl.builder().build();
+            log.error(String.format("Ошибка нахождения рецепта по названию %s", name));
+            log.error(e.getMessage(), e.getCause());
+            return null;
         }
     }
 
@@ -150,15 +154,16 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * @return список всех найденнх рецептов
      */
     @Override
-    public RecipeList getAll(){
+    public List<Recipe> getAll(){
         try {
-            RecipeList recipeList = RecipeMapper.INSTANCE.map(recipeService.findAll());
+            List<Recipe> recipeList =
+                    recipeService.findAll().stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
             log.debug(String.format("Все имеющиеся рецепты = %s", recipeList));
             return recipeList;
         } catch (Throwable e) {
             log.error("Ошибка получения списка всех рецептов");
             log.error(e.getMessage(), e.getCause());
-            return RecipeListImpl.builder().build();
+            return null;
         }
     }
 
@@ -168,17 +173,17 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * @return список рецептов
      */
     @Override
-    public RecipeList getAllById(LongList longList){
+    public List<Recipe> getAllById(LongList longList){
         try {
             validate(longList);
             log.debug(String.format(RECEIVED_ID_LIST,longList));
-            RecipeList recipeList = RecipeMapper.INSTANCE.map(recipeService.findAll());
+            List<RecipeEntity> recipeList = recipeService.findAll();
             log.debug(String.format("Найденные рецепты = %s", recipeList));
-            return recipeList;
+            return recipeList.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
         } catch (Throwable e) {
             log.error(String.format("ошибка получения рецептов по списку идентификаторов: %s", longList));
             log.error(e.getMessage(), e.getCause());
-            return RecipeListImpl.builder().build();
+            return null;
         }
     }
 
@@ -186,7 +191,7 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * метод удаления рецепта по идентификатор
      * @param id уникаьлный идентификатор
      * @return логический ответ
-     * @throws BaseException
+     * @throws BaseException общий класс ошибки
      */
     @Override
     public Boolean deleteById(Long id) throws BaseException {
@@ -216,7 +221,7 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
                 return deleteById(recipeRequestInfo.getId());
             } else if (validate(recipeRequestInfo.getName())) {
                 String receivedName = recipeRequestInfo.getName();
-                log.debug(String.format("Полученное название рецепта: %s",receivedName));
+                log.debug(String.format("Полученное название рецепта: %s", receivedName));
                 Boolean deleteCheck = recipeService.deleteByName(receivedName);
                 log.debug(String.format(DELETE_RESULT,deleteCheck));
                 return deleteCheck;

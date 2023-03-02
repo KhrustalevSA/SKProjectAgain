@@ -8,16 +8,14 @@ import com.simplekitchen.project.business.entity.recipe.api.RecipeResponseInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.service.RecipeControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
-import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
-import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * РЕСТ контроллер для работы с рецептами
@@ -55,10 +53,9 @@ public class RecipeController {
      * @param recipe объект рецепта для сохранения
      * @return сохраненный рецепт
      * @throws BaseException общий класс ошибки обработки исключения приложения
-     * @throws DataBaseException ошибки работы с базой данных
      */
     @PostMapping("/save")
-    public RecipeResponseInfo save(@RequestBody RecipeImpl recipe) throws BaseException, DataBaseException {
+    public RecipeResponseInfo save(@RequestBody RecipeImpl recipe) throws BaseException {
         if (validate(recipe)) {
             Recipe savedRecipe = recipeControllerService.save(recipe);
             if (savedRecipe.getId() == null) {
@@ -80,17 +77,16 @@ public class RecipeController {
     /**
      * метод сохранения списка рецептов
      * @param recipeList список сохраняемых рецептов
-     * @return список сохраненных рецептов
+     * @return информация об успешности операции найденных рецептах
      * @throws BaseException общий класс ошибки обработки исключения приложения
-     * @throws DataBaseException ошибки работы с базой данных
      */
     @PostMapping("/save/all")
-    public RecipeResponseInfo saveAll(@RequestBody RecipeImplListImpl recipeList) throws BaseException, DataBaseException {
+    public RecipeResponseInfo saveAll(@RequestBody List<RecipeImpl> recipeList) throws BaseException {
         if (validate(recipeList)) {
-            RecipeList savedRecipe = recipeControllerService.saveAll(recipeList);
-            if (recipeList.getRecipeList() != null) {
+            List<Recipe> savedRecipe = recipeControllerService.saveAll(recipeList);
+            if (recipeList != null) {
                 return RecipeResponseInfoImpl.builder()
-                        .recipeList(savedRecipe.getRecipeList())
+                        .recipeList(savedRecipe)
                         .status(StatusImpl.builder().success(true).build())
                         .build();
             }
@@ -101,16 +97,16 @@ public class RecipeController {
     /**
      * меттод получения рецептов по переданнной информации
      * @param recipeRequestInfo переданная информация о рецепте
-     * @return информация о найденных рецептах
+     * @return информация об успешности операции найденных рецептах
      * @throws BaseException общий класс ошибки обработки исключения приложения
      */
     @GetMapping("/get")
     public RecipeResponseInfo get(@RequestBody RecipeRequestInfoImpl recipeRequestInfo) throws BaseException {
         if (validate(recipeRequestInfo)) {
-            RecipeList recipeList = recipeControllerService.get(recipeRequestInfo);
-            if (recipeList.getRecipeList() != null) {
+            List<Recipe> recipeList = recipeControllerService.get(recipeRequestInfo);
+            if (recipeList != null) {
                 return RecipeResponseInfoImpl.builder()
-                        .recipeList(recipeList.getRecipeList())
+                        .recipeList(recipeList)
                         .status(StatusImpl.builder().success(true).build())
                         .build();
             }
@@ -120,15 +116,15 @@ public class RecipeController {
 
     /**
      * метод получения всех имеющихся рецептов
-     * @return информация о найденных рецептах
+     * @return информация об успешности операции найденных рецептах
      */
     @GetMapping("/get/all")
     public RecipeResponseInfo getAll() {
-        RecipeList recipeList = recipeControllerService.getAll();
-        if (recipeList.getRecipeList() != null) {
+        List<Recipe> recipeList = recipeControllerService.getAll();
+        if (recipeList != null) {
             return RecipeResponseInfoImpl.builder()
                     .status(StatusImpl.builder().success(true).build())
-                    .recipeList(recipeList.getRecipeList())
+                    .recipeList(recipeList)
                     .build();
         }
         return INVALID_DATA;

@@ -1,17 +1,11 @@
 package com.simplekitchen.project.dao.service.api;
 
 import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
-import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeImplListImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
-import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
-import com.simplekitchen.project.dao.service.RecipeServiceImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * интерфейс сервиса рецептов
@@ -32,7 +26,7 @@ public interface RecipeService {
      * @param recipeList список сущностей рецептов
      * @return список сохраненных рецептов
      */
-    RecipeList saveAll(RecipeImplListImpl recipeList) throws DataBaseException;
+    List<RecipeEntity> saveAll(List<RecipeEntityImpl> recipeList) throws DataBaseException;
 
     /**
      * метод получения рецепта по уникальному идентификатору
@@ -41,38 +35,64 @@ public interface RecipeService {
      */
     RecipeEntity findById(Long id) throws DataBaseException;
 
-    RecipeList findByName(String name) throws DataBaseException ;
+    /**
+     * метод поиска рецепта по названию
+     * @param name название рецепта
+     * @return список найденных рецептов
+     * @throws DataBaseException ошибка базы данных
+     */
+    List<RecipeEntity> findByName(String name) throws DataBaseException ;
 
-    RecipeList findByDifficulty(String difficulty) throws DataBaseException;
+    /**
+     * метод поиска рецепта по сложности
+     * @param difficulty сложность рецепта
+     * @return список найденных рецептов
+     * @throws DataBaseException ошибка базы данных
+     */
+    List<RecipeEntity> findByDifficulty(String difficulty) throws DataBaseException;
 
-    RecipeList findByCookingTime(Long cookingTime) throws DataBaseException;
+    /**
+     * поиск рецепта по времени готовки
+     * @param cookingTime время готовки
+     * @return список найденных рецептов
+     * @throws DataBaseException ошибка базы данных
+     */
+    List<RecipeEntity> findByCookingTime(Long cookingTime) throws DataBaseException;
 
     /**
      * метод получения всех рецептов
-     * @return список рецептов
+     * @return список найденных рецептов
+     * @throws DataBaseException ошибка базы данных
      */
-    RecipeList findAll() throws DataBaseException ;
+    List<RecipeEntity> findAll() throws DataBaseException ;
 
     /**
      * метод получения рецептов по уникальному идентификатору
-     * @param ids список идентификаторов
-     * @return список рецептов
+     * @param longList список идентификаторов
+     * @return список найденных рецептов
+     * @throws DataBaseException ошибка базы данных
      */
-    RecipeList findAllById(LongListImpl longList) throws DataBaseException;
+    List<RecipeEntity> findAllById(LongListImpl longList) throws DataBaseException;
 
     /**
      * метод удаления рецепта по его уникальному идентификатору
      * @param id уникальный идентификатор
-     * @return Boolean объект
+     * @return логический ответ
      */
     Boolean deleteById(Long id) throws DataBaseException ;
 
+    /**
+     * метод удаления рецептов по названию
+     * @param name название рецептов
+     * @return логический ответ
+     * @throws DataBaseException ошибка базы данных
+     */
     Boolean deleteByName(String name) throws DataBaseException;
 
     /**
-     * метод удаления списка рецептов
-     * @param recipeEntityList список сущностей рецепта
-     * @return Boolean объект
+     * метод удаления рецептов по списку идентификаторов
+     * @param longList список уникальных идентификаторов
+     * @return логический ответ
      */
     Boolean deleteAllById(LongListImpl longList) throws DataBaseException;
 

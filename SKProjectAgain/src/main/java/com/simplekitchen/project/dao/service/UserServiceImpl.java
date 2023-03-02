@@ -1,12 +1,8 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
-import com.simplekitchen.project.dao.entity.user.UserImplListImpl;
-import com.simplekitchen.project.dao.entity.user.UserListImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
-import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -15,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,43 +73,7 @@ public class UserServiceImpl implements UserService {
             return savedUser;
         } catch (Exception e) {
             log.error(String.format(USER_NOT_FOUND_MESSAGE,user));
-            throw new DataBaseException(e.getMessage());
-        }
-    }
-
-    /**
-     * метод сохранения списка пользователей
-     * @param userList список пользователей
-     * @return список сохраненных пользователей
-     */
-    @Override
-    public UserList saveAll(UserList userList) throws DataBaseException {
-        try {
-            log.debug(String.format(REQUESTED_USER_LIST,userList));
-            List<UserEntityImpl> receivedUserEntityList = (List<UserEntityImpl>) userRepository.saveAll(userList.getUserEntityList());
-            log.debug(String.format(RECEIVED_USER_LIST, receivedUserEntityList));
-            return UserListImpl.builder().userEntityList(receivedUserEntityList).build();
-        } catch (Exception e) {
-            log.error(String.format(USER_LIST_NOT_SAVED,userList));
-            throw new DataBaseException(e.getMessage());
-        }
-    }
-    /**
-     * метод сохранения списка пользователей
-     * @param userList список пользователей
-     * @return список пользователей
-     * @throws DataBaseException ошибки базы данных
-     */
-    @Override
-    public UserList saveAll(UserImplListImpl userList) throws DataBaseException {
-        try {
-            log.debug(String.format(REQUESTED_USER_LIST,userList));
-            List<UserEntityImpl> receivedUserEntityList = (List<UserEntityImpl>) userRepository.saveAll(userList.getUserList());
-            log.debug(String.format(RECEIVED_USER_LIST, receivedUserEntityList));
-            return UserListImpl.builder().userEntityList(receivedUserEntityList).build();
-        } catch (Exception e) {
-            log.error(String.format(USER_LIST_NOT_SAVED,userList));
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
 
@@ -130,7 +91,7 @@ public class UserServiceImpl implements UserService {
             return userEntity;
         } catch (Exception e) {
             log.error(String.format(USER_NOT_FOUND_BY_ID_MESSAGE, id));
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
 
@@ -141,15 +102,16 @@ public class UserServiceImpl implements UserService {
      * @return список найденных пользователей
      */
     @Override
-    public UserList findByNameAndSurname(String name, String surname) throws DataBaseException {
+    public List<UserEntity> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
-            log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
-            return UserListImpl.builder().userEntityList(userEntityByNameAndSurname).build();
+            List<UserEntity> userEntityByNameAndSurnameAndPatronymic =
+                    userRepository.findByNameAndSurnameAndPatronymic(name, surname, patronymic).orElse(null);
+            log.debug(String.format(FOUND_USER, userEntityByNameAndSurnameAndPatronymic));
+            return userEntityByNameAndSurnameAndPatronymic;
         } catch (Exception e) {
             log.error(String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME,name,surname));
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(),e.getCause());
         }
     }
 
@@ -158,14 +120,15 @@ public class UserServiceImpl implements UserService {
      * @return список всех пользователей
      */
     @Override
-    public UserList findAll() throws DataBaseException {
+    public List<UserEntity> findAll() throws DataBaseException {
         try {
-            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAll();
+            List<UserEntity> userEntityList = new ArrayList<>();
+            userRepository.findAll().forEach(userEntityList::add);
             log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
-            return UserListImpl.builder().userEntityList(userEntityList).build();
+            return userEntityList;
         } catch (Exception e) {
             log.error(USER_LIST_NOT_FOUND);
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
 
@@ -175,15 +138,16 @@ public class UserServiceImpl implements UserService {
      * @return список пользователей
      */
     @Override
-    public UserList findAllById(LongList longList) throws DataBaseException {
+    public List<UserEntity> findAllById(LongList longList) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_ID_LIST,longList));
-            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
+            List<UserEntity> userEntityList = new ArrayList<>();
+            userRepository.findAllById(longList.getLongList()).forEach(userEntityList::add);
             log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
-            return UserListImpl.builder().userEntityList(userEntityList).build();
+            return userEntityList;
         } catch (Exception e) {
             log.error(String.format(USER_LIST_NOT_FOUND_BY_ID,longList));
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
 
@@ -207,59 +171,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (Exception e) {
             log.error(String.format(DELETE_USER_FAILED_BY_ID,id));
-            throw new DataBaseException(e.getMessage());
-        }
-
-    }
-
-    /**
-     * метод удаления пользователя имени и фамилии
-     * @param name имя пользователя
-     * @param surname фамилия пользователя
-     * @return Boolean объект
-     */
-    @Override
-    public Boolean deleteByNameAndSurname(String name, String surname) throws DataBaseException {
-        try {
-            log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntityImpl> userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
-            log.debug(String.format(FOUND_USER, userEntityByNameAndSurname));
-            userRepository.deleteAllByNameAndSurname(name, surname);
-            userEntityByNameAndSurname = userRepository.findByNameAndSurname(name, surname).orElse(null);
-            if (userEntityByNameAndSurname != null) {
-                log.debug(String.format(DELETE_USER_LIST_FAILED, name, surname));
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            log.error(String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME,name,surname));
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
-
-    /**
-     * метод удаления списка пользователей по их уникальным идентификаторам
-     * @param longList список уникальных идентификаторов
-     * @return Boolean объект
-     */
-    @Override
-    public Boolean deleteAllById(LongListImpl longList) throws DataBaseException {
-        String errorMessage = String.format(DELETE_USER_LIST_BY_ID_FAILED, longList);
-        try {
-            log.debug(String.format(RECEIVED_ID_LIST,longList));
-            List<UserEntityImpl> userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
-            log.debug(String.format(RECEIVED_USER_LIST, userEntityList));
-            userRepository.deleteAllById(longList.getLongList());
-            userEntityList = (List<UserEntityImpl>) userRepository.findAllById(longList.getLongList());
-            if (!userEntityList.isEmpty()) {
-                log.debug(errorMessage);
-                return false;
-            }
-            return false;
-        } catch (Exception e) {
-            log.debug(errorMessage);
-            throw new DataBaseException(e.getMessage());
-        }
-    }
-
 }

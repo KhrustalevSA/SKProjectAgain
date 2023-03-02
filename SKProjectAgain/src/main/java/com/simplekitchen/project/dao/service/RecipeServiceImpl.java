@@ -9,11 +9,13 @@ import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.repository.RecipeRepository;
 import com.simplekitchen.project.dao.service.api.RecipeService;
+import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
     private static final String RECEIVED_RECIPE_LIST = "Полученный список рецептов: %s";
     private static final String RECEIVED_ID = "Полученный уникальный идентификатор: %d";
     private static final String RECEIVED_RECIPE_ID_LIST = "Полученный список идентификаторов %s";
+    private static final String RECIPE_BY_NAME_NOT_FOUND = "Не удалось найти рецепты с названием: %s";
 
     /**
      * репозиторий рецептов
@@ -49,6 +52,7 @@ public class RecipeServiceImpl implements RecipeService {
      * метод сохранения рецепта
      * @param recipeEntity сущность рецепта
      * @return сохраненный рецепт
+     * @throws DataBaseException ошибка базы данных
      */
     @Override
     public RecipeEntity save(RecipeEntityImpl recipeEntity) throws DataBaseException {
@@ -67,15 +71,16 @@ public class RecipeServiceImpl implements RecipeService {
      * метод сохранения списка рецептов
      * @param recipeList список рецептов
      * @return список сохраненных рецептов
+     * @throws DataBaseException ошибка базы данных
      */
     @Override
-    public RecipeList saveAll(RecipeImplListImpl recipeList) throws DataBaseException {
+    public List<RecipeEntity> saveAll(List<RecipeEntityImpl> recipeList) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_RECIPE_LIST, recipeList));
-            Iterable<RecipeEntityImpl> recipeEntitiesI = recipeRepository.saveAll(recipeList.getRecipeList());
-            List<RecipeEntityImpl> receivedRecipeList = (List<RecipeEntityImpl>) recipeEntitiesI;
-            log.debug(String.format("Cохраненный список рецептов: %s", receivedRecipeList));
-            return RecipeListImpl.builder().recipeEntityList(receivedRecipeList).build();
+            List<RecipeEntity> recipeEntities = new ArrayList<>();
+            recipeRepository.saveAll(recipeList).forEach(recipeEntities::add);
+            log.debug(String.format("Сохраненный список рецептов: %s", recipeEntities));
+            return recipeEntities;
         } catch (Exception e) {
             log.error(String.format("Не удалось сохранить список рецептов: %s",recipeList));
             throw new DataBaseException(e.getMessage(), e.getCause());
@@ -86,6 +91,7 @@ public class RecipeServiceImpl implements RecipeService {
      * метод получения рецпта по уникальному идентификатору
      * @param id идентификатор рецепта
      * @return найденный рецепт
+     * @throws DataBaseException ошибка базы данных
      */
     @Override
     public RecipeEntity findById(Long id) throws DataBaseException {
@@ -107,16 +113,14 @@ public class RecipeServiceImpl implements RecipeService {
      * @throws DataBaseException ошибки базы данных
      */
     @Override
-    public RecipeList findByName(String name) throws DataBaseException {
+    public List<RecipeEntity> findByName(String name) throws DataBaseException {
         try {
             log.debug(String.format("Полученное название рецепта %s", name));
-            List<RecipeEntityImpl> recipeEntityList = recipeRepository.findByName(name).orElse(null);
+            List<RecipeEntity> recipeEntityList = recipeRepository.findByName(name).orElse(null);
             log.debug(String.format("Найденные рецепты %s", recipeEntityList));
-            return RecipeListImpl.builder()
-                    .recipeEntityList(recipeEntityList)
-                    .build();
+            return recipeEntityList;
         } catch (Exception e) {
-            log.error(String.format("Не удалось найти рецепты с названием: %s", name));
+            log.error(String.format(RECIPE_BY_NAME_NOT_FOUND, name));
             throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
@@ -128,14 +132,12 @@ public class RecipeServiceImpl implements RecipeService {
      * @throws DataBaseException ошибки базы данных
      */
     @Override
-    public RecipeList findByDifficulty(String difficulty) throws DataBaseException {
+    public List<RecipeEntity> findByDifficulty(String difficulty) throws DataBaseException {
         try {
             log.debug(String.format("Полученная сложность %s", difficulty));
-            List<RecipeEntityImpl> recipeEntityList = recipeRepository.findByDifficulty(difficulty).orElse(null);
+            List<RecipeEntity> recipeEntityList = recipeRepository.findByDifficulty(difficulty).orElse(null);
             log.debug(String.format("По сложности %s нашлись рецпты: %s", difficulty,recipeEntityList));
-            return RecipeListImpl.builder()
-                    .recipeEntityList(recipeEntityList)
-                    .build();
+            return recipeEntityList;
         } catch (Exception e) {
             log.error(String.format("Не удалось найти рецепты со сложностью: %s", difficulty));
             throw new DataBaseException(e.getMessage(), e.getCause());
@@ -149,12 +151,12 @@ public class RecipeServiceImpl implements RecipeService {
      * @throws DataBaseException ошибки базы данных
      */
     @Override
-    public RecipeList findByCookingTime(Long cookingTime) throws DataBaseException {
+    public List<RecipeEntity> findByCookingTime(Long cookingTime) throws DataBaseException {
         try {
             log.debug(String.format("Полученное время готовки %d", cookingTime));
-            List<RecipeEntityImpl> recipeEntityList = recipeRepository.findByCookingTime(cookingTime).orElse(null);
+            List<RecipeEntity> recipeEntityList = recipeRepository.findByCookingTime(cookingTime).orElse(null);
             log.debug(String.format("Найденный по времени %d рецепты %s",cookingTime,recipeEntityList));
-            return RecipeListImpl.builder().recipeEntityList(recipeEntityList).build();
+            return recipeEntityList;
         } catch (Exception e) {
             log.error(String.format("Не удалось найти рецепты с временем готовки = %d",cookingTime));
             throw new DataBaseException(e.getMessage(), e.getCause());
@@ -166,11 +168,12 @@ public class RecipeServiceImpl implements RecipeService {
      * @return список рецептов
      */
     @Override
-    public RecipeList findAll() throws DataBaseException {
+    public List<RecipeEntity> findAll() throws DataBaseException {
         try {
-            List<RecipeEntityImpl> recipeEntityList = (List<RecipeEntityImpl>) recipeRepository.findAll();
+            List<RecipeEntity> recipeEntityList = new ArrayList<>();
+            recipeRepository.findAll().forEach(recipeEntityList::add);
             log.debug(String.format(RECEIVED_RECIPE_LIST, recipeEntityList));
-            return RecipeListImpl.builder().recipeEntityList(recipeEntityList).build();
+            return recipeEntityList;
         } catch (Exception e) {
             log.error("Не удалось найти все рецепты");
             throw new DataBaseException(e.getMessage(),e.getCause());
@@ -183,12 +186,13 @@ public class RecipeServiceImpl implements RecipeService {
      * @return список рецептов
      */
     @Override
-    public RecipeList findAllById(LongListImpl longList) throws DataBaseException {
+    public List<RecipeEntity> findAllById(LongListImpl longList) throws DataBaseException {
         try {
             log.debug(String.format(RECEIVED_RECIPE_ID_LIST,longList));
-            List<RecipeEntityImpl> recipeEntityList = (List<RecipeEntityImpl>) recipeRepository.findAllById(longList.getLongList());
+            List<RecipeEntity> recipeEntityList = new ArrayList<>();
+            recipeRepository.findAllById(longList.getLongList()).forEach(recipeEntityList::add);
             log.debug(String.format(RECEIVED_RECIPE_LIST, recipeEntityList));
-            return RecipeListImpl.builder().recipeEntityList(recipeEntityList).build();
+            return recipeEntityList;
         } catch (Exception e) {
             log.error(String.format("Не удалось найти рецепты по идентификаторам: %s",longList));
             throw new DataBaseException(e.getMessage());
@@ -230,14 +234,14 @@ public class RecipeServiceImpl implements RecipeService {
     public Boolean deleteByName(String name) throws DataBaseException {
         try {
             log.debug(String.format("Полученное название рецепта %s", name));
-            List<RecipeEntityImpl> recipeEntityList = recipeRepository.findByName(name).orElse(null);
+            List<RecipeEntity> recipeEntityList = recipeRepository.findByName(name).orElse(null);
             if (recipeEntityList == null) {
-                log.error(String.format("рецепт по имени %s не найден", name));
-                return false;
+                log.error(String.format(RECIPE_BY_NAME_NOT_FOUND, name));
+                throw new DataBaseException(String.format("Не удалось найти рецепт по имени %s для удаления",name));
             }
             log.debug(String.format("Удаляемый список рецептов %s", recipeEntityList));
             recipeRepository.deleteAllByName(name);
-            Optional<List<RecipeEntityImpl>> deleteRecipeEntities = recipeRepository.findByName(name);
+            Optional<List<RecipeEntity>> deleteRecipeEntities = recipeRepository.findByName(name);
             if (deleteRecipeEntities.isPresent()) {
                 log.debug(String.format("Удаление рецептов по имени %s не удалось", name));
                 return false;

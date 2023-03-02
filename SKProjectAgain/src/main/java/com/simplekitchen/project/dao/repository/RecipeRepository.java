@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.repository;
 
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,21 +22,21 @@ public interface RecipeRepository extends CrudRepository<RecipeEntityImpl, Long>
      * @param name название рецепта
      * @return Optional объект списка найденных рецептов
      */
-    Optional<List<RecipeEntityImpl>> findByName(String name);
+    Optional<List<RecipeEntity>> findByName(String name);
 
     /**
      * поиск рецепта по сложности в базе данных
      * @param difficulty сложность рецепта
      * @return Optional объект списка найденных рецептов
      */
-    Optional<List<RecipeEntityImpl>> findByDifficulty(String difficulty);
+    Optional<List<RecipeEntity>> findByDifficulty(String difficulty);
 
     /**
      * поиск рецепта по времени приготовления в базе данных
      * @param time время приготовления рецепта
      * @return Optional объект списка найденных рецептов
      */
-    Optional<List<RecipeEntityImpl>> findByCookingTime(Long time);
+    Optional<List<RecipeEntity>> findByCookingTime(Long time);
 
     /**
      * метод удаления рецептов по названию

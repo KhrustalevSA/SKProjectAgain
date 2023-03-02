@@ -30,4 +30,9 @@ public class UserRequestInfoImpl implements UserRequestInfo {
      */
     private String surname;
 
+    /**
+     * отчество пользователя
+     */
+    private String patronymic;
+
 }

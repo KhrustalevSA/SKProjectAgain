@@ -9,6 +9,8 @@ import com.simplekitchen.project.dao.entity.user.api.UserImplList;
 import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 
+import java.util.List;
+
 /**
  * интерфейс сервиса пользователей
  * @author KhrustalevSA
@@ -24,20 +26,6 @@ public interface UserService {
     UserEntity save(UserEntityImpl user) throws DataBaseException;
 
     /**
-     * метод сохранения списка пользователей
-     * @param userList список пользователей
-     * @return список сохраненных пользователей
-     */
-    UserList saveAll(UserList userList) throws DataBaseException;
-
-    /**
-     * метод сохранения списка пользователей
-     * @param userList список пользователей
-     * @return список сохраненных пользователей
-     */
-    UserList saveAll(UserImplListImpl userList) throws DataBaseException;
-
-    /**
      * метод получения пользователя по уникальному идентификатору
      * @param id уникальный идентификатор
      * @return Optional объект полученного пользователя
@@ -50,20 +38,20 @@ public interface UserService {
      * @param surname фамилия пользователя
      * @return список найденных пользователей
      */
-    UserList findByNameAndSurname(String name, String surname) throws DataBaseException;
+    List<UserEntity> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic) throws DataBaseException;
 
     /**
      * метод получения всех пользователей
      * @return список пользователей
      */
-    UserList findAll() throws DataBaseException;
+    List<UserEntity> findAll() throws DataBaseException;
 
     /**
      * метод получения пользователей по уникальному идентификатору
      * @param longList список идентификаторов
      * @return список пользователей
      */
-    UserList findAllById(LongList longList) throws DataBaseException;
+    List<UserEntity> findAllById(LongList longList) throws DataBaseException;
 
     /**
      * метод удаления пользователя по его уникальному идентификатору
@@ -71,20 +59,5 @@ public interface UserService {
      * @return Boolean объект
      */
     Boolean deleteById(Long id) throws DataBaseException;
-
-    /**
-     * метод удаления пользователя по его сущности
-     * @param name имя пользователя
-     * @param surname фамилия пользователя
-     * @return Boolean объект
-     */
-    Boolean deleteByNameAndSurname(String name, String surname) throws DataBaseException ;
-
-    /**
-     * метод удаления списка пользователей
-     * @param longList список идентификаторов
-     * @return Boolean объект
-     */
-    Boolean deleteAllById(LongListImpl longList) throws DataBaseException ;
 
 }

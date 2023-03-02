@@ -1,16 +1,16 @@
 package com.simplekitchen.project.business.service.api;
 
 
-import com.simplekitchen.project.business.entity.common.api.LongList;
-import com.simplekitchen.project.dto.entity.user.UserImplListImpl;
-import com.simplekitchen.project.dto.entity.user.UserListImpl;
-import com.simplekitchen.project.dto.entity.user.api.UserList;
+import com.simplekitchen.project.business.entity.common.LongListImpl;
 import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.exception.*;
+import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
+import com.simplekitchen.project.business.exception.BaseException;
+import com.simplekitchen.project.business.exception.GetException;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
-import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
+
+import java.util.List;
 
 /**
  * интерфейс сервиса пользователей дао слоя
@@ -22,61 +22,38 @@ import com.simplekitchen.project.dto.entity.user.api.User;
 public interface UserControllerService {
 
     /**
-     * метод сохранения пользователя, возвращает сохраненного пользователя
-     * @param user
-     * @return Optional<UserEntityImpl> user
+     * метод сохранения пользователя
+     * @param user объект пользователя
+     * @return класс информации с сохраненным пользователем и статусом
      */
-    User save(UserImpl user) throws DataBaseException, BaseException;
-
-    /**
-     * метод сохранения всех пользователей, возвращает список сохраненных пользователей
-     * @param userList
-     * @return List<UserEntityImpl>
-     */
-    UserList saveAll(UserImplListImpl userList) throws BaseException, DataBaseException;
-
-    /**
-     * метод сохранения всех пользователей, возвращает список сохраненных пользователей
-     * @param users
-     * @return List<UserEntityImpl>
-     */
-    UserList saveAll(UserListImpl users) throws BaseException, DataBaseException;
-
-    /**
-     * метод получения пользователя по уникальному идентификатору
-     * @param id
-     * @return Optional<UserEntityImpl>
-     */
-    User get(Long id) throws DataBaseException, BaseException;
+    UserResponseInfo save(UserImpl user) throws Throwable;
 
     /**
      * метод получения пользователя по классу информации
-     * @param userInfo
-     * @return Optional<UserEntityImpl>
+     * @param userInfo информация о пользователе
+     * @return список пользователей
      */
-    UserList get(UserRequestInfo userInfo) throws BaseException;
+    List<User> get(UserRequestInfo userInfo) throws Throwable;
 
     /**
      * метод получения всех существующих пользователей
-     * @return List<UserEntityImpl>
+     * @return список пользователей
      */
-    UserList getAll() throws BaseException;
+    List<User> getAll() throws Throwable;
 
     /**
      * метод для получения списка пользователей по их уникальным идентификаторам
-     * @param longList
-     * @return List<UserEntityImpl>
+     * @param longList список уникальных идентификаторов
+     * @return список пользователей
      */
-    UserList getAllById(LongList longList) throws GetException;
+    List<User> getAllById(LongListImpl longList) throws GetException;
 
     /**
      * удалить пользователя по его уникальному идентификатору
-     * @param id
-     * @return Boolean
+     * @param id уникальный идентификатор пользователя
+     * @return логический ответ
      */
     Boolean deleteById(Long id) throws BaseException;
-
-    Boolean deleteByNameAndSurname(UserRequestInfo userInfo) throws BaseException;
 
 
 }

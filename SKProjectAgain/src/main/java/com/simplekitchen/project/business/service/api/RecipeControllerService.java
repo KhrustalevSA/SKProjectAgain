@@ -1,14 +1,14 @@
 package com.simplekitchen.project.business.service.api;
 
 import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.business.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.business.entity.recipe.api.RecipeRequestInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
-import com.simplekitchen.project.dto.entity.recipe.api.RecipeList;
+
+import java.util.List;
 
 /**
  * интерфейс сервиса контроллера рецептов
@@ -19,44 +19,37 @@ public interface RecipeControllerService {
      * метод сохранения рецепта
      * @param recipe объект рецепта для сохранения
      * @return сохраненный рецепт
-     * @throws DataBaseException ошибка базы данных
      * @throws BaseException общий класс ошибок приложения
      */
-    Recipe save(RecipeImpl recipe) throws DataBaseException, BaseException;
+    Recipe save(RecipeImpl recipe) throws BaseException;
 
     /**
      * метод сохранения всех рецептов, возвращает список сохраненных рецептов
      * @param recipeList список рецептов для сохранения
      * @return список сохраненных рецептов
      */
-    RecipeList saveAll(RecipeImplListImpl recipeList) throws BaseException, DataBaseException;
+    List<Recipe> saveAll(List<RecipeImpl> recipeList) throws BaseException;
 
     /**
-     * метод получения рецепта по уникальному идентификатору
-     * @param id уникальный идентификатор рецепта
-     * @return найденный объект рецепта
-     */
-    Recipe get(Long id) throws DataBaseException, BaseException;
-
-    /**
-     * метод получения рецепта по классу информации
-     * @param requestInfo класс с информацией для поиска рецепта
+     * метод получения списка рецептов по запрошенной информации о них
+     * @param recipeRequestInfo запрос с инофрмацией о рецептах
      * @return список найденных рецептов
+     * @throws BaseException ощий клпсс ошибок
      */
-    RecipeList get(RecipeRequestInfo requestInfo) throws BaseException;
+    List<Recipe> get(RecipeRequestInfoImpl recipeRequestInfo) throws BaseException;
 
     /**
      * метод получения всех существующих рецептов
      * @return список всех рецептов
      */
-    RecipeList getAll();
+    List<Recipe> getAll();
 
     /**
      * метод для получения списка рецептов по их уникальным идентификаторам
      * @param longList список идентификаторов
      * @return список найденных рецептов
      */
-    RecipeList getAllById(LongList longList);
+    List<Recipe> getAllById(LongList longList);
 
     /**
      * метод удаления рецепта по его уникальному идентификатору

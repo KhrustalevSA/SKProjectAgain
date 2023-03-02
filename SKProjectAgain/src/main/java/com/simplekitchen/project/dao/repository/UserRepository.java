@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dao.repository;
 
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
+import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,7 @@ public interface UserRepository extends CrudRepository<UserEntityImpl, Long>  {
      * @param surname фамилия пользователя
      * @return Optional объект списка найденных пользователей
      */
-    Optional<List<UserEntityImpl>> findByNameAndSurname(String name, String surname);
+    Optional<List<UserEntity>> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic);
 
     /**
      * метод удаления пользователей по имени и фамилии

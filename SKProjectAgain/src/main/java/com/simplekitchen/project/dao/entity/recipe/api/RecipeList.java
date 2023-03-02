@@ -13,5 +13,5 @@ public interface RecipeList {
     /**
      * @return список рецептов
      */
-    List<RecipeEntityImpl> getRecipeEntityList();
+    List<RecipeEntity> getRecipeEntityList();
 }

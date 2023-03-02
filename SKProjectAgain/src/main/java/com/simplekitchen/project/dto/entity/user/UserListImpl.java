@@ -2,11 +2,9 @@ package com.simplekitchen.project.dto.entity.user;
 
 import com.simplekitchen.project.dto.entity.user.api.UserList;
 import com.simplekitchen.project.dto.entity.user.api.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,10 +12,11 @@ import java.util.List;
  * @author KhrustalevSA
  * @since 16.10.2022
  */
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class UserListImpl implements UserList {
 
     /**
@@ -25,10 +24,10 @@ public class UserListImpl implements UserList {
      */
     private List<User> userList;
 
-    @Override
-    public String toString() {
-        return "UserListImpl{" +
-                "userEntityList=" + userList +
-                '}';
+    public List<User> getUserList() {
+        if(userList == null){
+            userList = new ArrayList<>();
+        }
+        return userList;
     }
 }
