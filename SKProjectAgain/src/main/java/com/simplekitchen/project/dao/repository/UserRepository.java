@@ -31,6 +31,8 @@ public interface UserRepository extends CrudRepository<UserEntityImpl, Long>  {
      */
     Optional<List<UserEntityImpl>> findBySurname(String surname);
 
+    Optional<List<UserEntity>> findByNameAndSurname(String name, String surname);
+
     /**
      * метод поиска пользователя по имени и фамилии
      * @param name имя пользователя
@@ -38,11 +40,4 @@ public interface UserRepository extends CrudRepository<UserEntityImpl, Long>  {
      * @return Optional объект списка найденных пользователей
      */
     Optional<List<UserEntity>> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic);
-
-    /**
-     * метод удаления пользователей по имени и фамилии
-     * @param name имя пользователя
-     * @param surname фамилия пользователя
-     */
-    void deleteAllByNameAndSurname(String name, String surname);
 }

@@ -1,6 +1,6 @@
-package com.simplekitchen.project.business.entity.common;
+package com.simplekitchen.project.dto.common;
 
-import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.dto.common.api.LongList;
 import lombok.*;
 
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Класс списка целых чисел
  * @author KhrustalevSA
+ * @see com.simplekitchen.project.dto.common.api.LongList
  * @since 08.02.2023
  */
 @Data
@@ -16,5 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class LongListImpl implements LongList {
+
+    /**
+     * список целых чисел
+     */
     private List<Long> longList;
 }

@@ -1,8 +1,7 @@
-package com.simplekitchen.project.business.entity.recipe.api;
+package com.simplekitchen.project.dto.entity.recipe.api;
 
 
-import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.common.StatusImpl;
 
 import java.util.List;
 

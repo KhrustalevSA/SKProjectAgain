@@ -1,68 +1,93 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.controller.UserController;
-import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
-import com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
-import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
+import com.simplekitchen.project.business.exception.ValidationException;
+import com.simplekitchen.project.business.service.UserControllerServiceImpl;
+import com.simplekitchen.project.business.service.api.UserControllerService;
+import com.simplekitchen.project.business.utils.UserInfoRequestValidator;
+import com.simplekitchen.project.business.utils.UserValidatorImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
-import com.simplekitchen.project.dao.repository.UserRepository;
+import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
+import com.simplekitchen.project.dto.entity.user.UserRequestInfoImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
+import org.apache.commons.collections4.CollectionUtils;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Collections;
 import java.util.List;
 
 public class ServiceTestJunit4 {
 
-    private static final String db_driver = "org.h2.Driver";
+//    private static final String db_driver = "org.h2.Driver";
 //    private static final Service<RecipeEntityImpl> recipeService = new RecipeServiceImpl();
 //    private static Service<IngredientEntityImpl> ingredientService = new IngredientServiceImpl();
 //    private static UserRepository repository;
-//    private static UserControllerServiceImpl userService;
 
+    private final UserService serviceDao = Mockito.mock(UserService.class);
+
+    private final UserControllerService userService = new UserControllerServiceImpl(
+            serviceDao,
+            new UserInfoRequestValidator(),
+            new UserValidatorImpl());
+
+    @Before
+    public void setUp() throws DataBaseException {
+        Mockito.when(serviceDao.findById(Mockito.anyLong())).thenReturn(UserEntityImpl.builder().build());
+        Mockito.when(serviceDao.findByNameAndSurnameAndPatronymic(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(Collections.singletonList(UserEntityImpl.builder().build()));
+    }
 
     @Test
-    @Autowired
-    public void save() {
+    public void getByIdSuccess() {
+        UserRequestInfoImpl userRequestInfo = UserRequestInfoImpl.builder().id(1L).build();
+        List<User> users = null;
 
-        UserRepository repository = null;
+        try {
+            users = userService.get(userRequestInfo);
+        } catch (Throwable e) {
+            Assert.fail(e.getMessage());
+        }
 
-        UserService service = new UserServiceImpl(repository);
-
-        ServiceBase<UserEntityImpl> serviceBase = new ServiceBase<UserEntityImpl>(UserEntityImpl.class) {
-        };
-
-        serviceBase.add(UserEntityImpl.builder().name("AAA").build());
-
-        List<UserEntityImpl> userList = new ArrayList<>();
-        List<RecipeEntityImpl> recipeList = new ArrayList<>();
-        List<IngredientEntityImpl> ingredientList = new ArrayList<>();
-        CityEntityImpl city = CityEntityImpl.builder()
-                .cityName(CityNameEntityImpl.builder().cityName("Vologda").build()).regionName("Vologodskaya obl").streetName("Gor val")
-                .houseNumber(26L).entranceNumber(1L).flatNumber(112L).build();
-        IngredientEntityImpl ingredientPasta = IngredientEntityImpl.builder().id(1L).name("Pasta").averageWeight(300D).expirationDate(900D)
-                .expirationDateInFridge(9000D).build();
-        IngredientEntityImpl ingredientTomatoes = IngredientEntityImpl.builder().id(2L).name("Tomatoes").averageWeight(0.2D).expirationDate(500D)
-                .expirationDateInFridge(150D).build();
-        RecipeEntityImpl recipe = RecipeEntityImpl.builder().id(1L).name("PastaWithTomatoes").ingredientsList(ingredientList).description("Delicios pasta with tomatoes!")
-                .imagesList(null).cookingTime(50L).author("Author").publishDate(new GregorianCalendar(1998, 05, 23)).stepsDescription(null).difficulty("easy")
-                .userList(userList).build();
-
-        UserEntityImpl user = UserEntityImpl.builder().id(1L)
-                .name("Ivan").surname("Ivanov").patronymic("Ivanovich").sex("M")
-                .build();
-
-        ingredientList.add(ingredientPasta);
-        ingredientList.add(ingredientTomatoes);
-        recipeList.add(recipe);
-
-        //userService.save(user);
-        userList.add(user);
-
-       Assert.assertEquals(userList.get(0),user);
+        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
+        Assert.assertEquals(1, users.size());
     }
+
+    @Test
+    public void getByFioSuccess() {
+        UserRequestInfoImpl userRequestInfo = UserRequestInfoImpl.builder().name("Ivan").surname("Ivanov").build();
+        List<User> users = null;
+
+        try {
+            users = userService.get(userRequestInfo);
+        } catch (Throwable e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
+        Assert.assertEquals(1, users.size());
+    }
+
+    @Test
+    public void getValidationFail() {
+        UserRequestInfoImpl userRequestInfo = UserRequestInfoImpl.builder().name("Ivan").build();
+        Assert.assertThrows(ValidationException.class, () -> userService.get(UserRequestInfoImpl.builder().name("Ivan").build()));
+        Assert.assertThrows(ValidationException.class, () -> userService.get(UserRequestInfoImpl.builder().build()));
+        Assert.assertThrows(ValidationException.class, () -> userService.get(null));
+        Assert.assertThrows(ValidationException.class, () -> userService.get(UserRequestInfoImpl.builder()
+                .surname("Ivanov").patronymic("Ivanovich").build()));
+        Assert.assertThrows(
+                ValidationException.class,
+                () -> userService.get(UserRequestInfoImpl.builder().patronymic("Ivanovich").build())
+        );
+    }
+
+    @After
+    public void reset() {
+        Mockito.reset(serviceDao);
+    }
+
 }

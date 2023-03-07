@@ -1,7 +1,7 @@
-package com.simplekitchen.project.business.entity.recipe;
+package com.simplekitchen.project.dto.entity.recipe;
 
 
-import com.simplekitchen.project.business.entity.recipe.api.RecipeRequestInfo;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeRequestInfo;
 import lombok.*;
 
 /**

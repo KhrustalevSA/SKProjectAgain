@@ -1,8 +1,10 @@
-package com.simplekitchen.project.business.entity.user;
+package com.simplekitchen.project.dto.entity.user;
 
-import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
-import com.simplekitchen.project.business.entity.common.StatusImpl;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
+import com.simplekitchen.project.dto.entity.user.api.UserResponseInfo;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,16 +20,19 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponseInfoImpl implements UserResponseInfo {
 
     /**
      * поле статуса запроса
      */
+    @JsonProperty
     private StatusImpl status;
 
     /**
      * поле списка пользователей
      */
+    @JsonProperty
     private List<User> userList;
 
     public StatusImpl getStatus() {

@@ -1,4 +1,4 @@
-package com.simplekitchen.project.business.entity.common.api;
+package com.simplekitchen.project.dto.common.api;
 
 import java.util.List;
 
@@ -8,5 +8,10 @@ import java.util.List;
  * @since 08.02.2023
  */
 public interface LongList {
+
+    /**
+     * метод получения списка целых чисел
+     * @return список чисел
+     */
     List<Long> getLongList();
 }

@@ -1,5 +1,10 @@
-package com.simplekitchen.project.business.entity.user.api;
+package com.simplekitchen.project.dto.entity.user.api;
 
+/**
+ * интерфейс запроса пользователя
+ * @author KhrustalevSA
+ * @since 07.03.2023
+ */
 public interface UserRequestInfo {
     /**
      * @return уникальный идентификатор пользователя

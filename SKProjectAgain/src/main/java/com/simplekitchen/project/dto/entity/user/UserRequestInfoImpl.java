@@ -1,6 +1,6 @@
-package com.simplekitchen.project.business.entity.user;
+package com.simplekitchen.project.dto.entity.user;
 
-import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.dto.entity.user.api.UserRequestInfo;
 import lombok.*;
 
 /**

@@ -8,6 +8,7 @@ import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,11 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_BY_ID_MESSAGE = "Пользователь не найден по уникальному идентификатору %s";
     private static final String RECEIVED_USER_ID = "Запрошенный уникальный идентификатор %s";
     private static final String RECEIVED_USER_NAME_AND_SURNAME = "Запрошенные имя = %s и фамилия = %s";
+    private static final String RECEIVED_USER_NAME_AND_SURNAME_AND_PATRONYMIC = "Запрошенные имя = %s, фамилия = %s и отчество = %s";
     private static final String FOUND_USER = "Найденный пользователь = %s.";
-    private static final String USER_NOT_FOUND_BY_NAME_AND_SURNAME = "Пользователь не найден по имени %s = и фамилии = %s";
-    private static final String USER_SAVED = "Сохраненный пользователь %s";
+    private static final String USER_NOT_FOUND_BY_NAME_AND_SURNAME = "Пользователь не найден по имени = %s и фамилии = %s";
+    private static final String USER_NOT_FOUND_BY_NAME_AND_SURNAME_AND_PATRONYMIC = "Пользователь не найден по имени = %s, фамилии = %s и отчество = %s";
+    private static final String USER_SAVED = "Сохраненный пользователь (Дао) %s";
     private static final String USER_NOT_SAVED = "Пользователь не сохранился = %s";
     private static final String RECEIVED_USER_LIST = "Полученный список пользователей = %s";
     private static final String REQUESTED_USER_LIST = "Переданный список пользователей = %s";
@@ -67,12 +70,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity save(UserEntityImpl user) throws DataBaseException {
         try {
-            log.debug(String.format(FOUND_USER,user));
+            log.debug(String.format("Сохраняемый пользователь %s",user));
             UserEntityImpl savedUser = userRepository.save(user);
-            log.debug(String.format(USER_SAVED,savedUser));
+            log.debug(String.format(USER_SAVED, savedUser));
             return savedUser;
         } catch (Exception e) {
-            log.error(String.format(USER_NOT_FOUND_MESSAGE,user));
+            log.error(String.format("Ошибка сохранения пользователя %s в БД",user));
             throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
@@ -85,10 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findById(Long id) throws DataBaseException {
         try {
-            log.debug(String.format(RECEIVED_USER_ID,id));
-            UserEntity userEntity = userRepository.findById(id).orElse(null);
-            log.debug(String.format(FOUND_USER, userEntity));
-            return userEntity;
+            return userRepository.findById(id).orElse(null);
         } catch (Exception e) {
             log.error(String.format(USER_NOT_FOUND_BY_ID_MESSAGE, id));
             throw new DataBaseException(e.getMessage(), e.getCause());
@@ -104,13 +104,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic) throws DataBaseException {
         try {
-            log.debug(String.format(RECEIVED_USER_NAME_AND_SURNAME,name,surname));
-            List<UserEntity> userEntityByNameAndSurnameAndPatronymic =
-                    userRepository.findByNameAndSurnameAndPatronymic(name, surname, patronymic).orElse(null);
+            Optional<List<UserEntity>> userEntityByNameAndSurnameAndPatronymic = StringUtils.isNotEmpty(patronymic)
+                    ? userRepository.findByNameAndSurnameAndPatronymic(name, surname, patronymic)
+                    : userRepository.findByNameAndSurname(name, surname);
             log.debug(String.format(FOUND_USER, userEntityByNameAndSurnameAndPatronymic));
-            return userEntityByNameAndSurnameAndPatronymic;
+            return userEntityByNameAndSurnameAndPatronymic.orElse(null);
         } catch (Exception e) {
-            log.error(String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME,name,surname));
+            log.error(String.format(USER_NOT_FOUND_BY_NAME_AND_SURNAME_AND_PATRONYMIC, name, surname, patronymic));
             throw new DataBaseException(e.getMessage(),e.getCause());
         }
     }
@@ -162,13 +162,13 @@ public class UserServiceImpl implements UserService {
             log.debug(String.format(RECEIVED_ID,id));
             Optional<UserEntityImpl> userFoundById = userRepository.findById(id);
             log.debug(String.format("Удаляемый пользователь %s",userFoundById));
-            userRepository.deleteById(id);
-            userFoundById =  userRepository.findById(id);
             if (userFoundById.isPresent()) {
-                log.debug(String.format("Удаление пользователя %s не удалось",userFoundById));
+                userRepository.deleteById(id);
+                return true;
+            } else {
+                log.debug(String.format("Не удалось найти пользователя с идентификатором %s для удаления.", id));
                 return false;
             }
-            return true;
         } catch (Exception e) {
             log.error(String.format(DELETE_USER_FAILED_BY_ID,id));
             throw new DataBaseException(e.getMessage(), e.getCause());

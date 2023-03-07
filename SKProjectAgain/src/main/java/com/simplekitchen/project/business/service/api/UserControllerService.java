@@ -1,14 +1,14 @@
 package com.simplekitchen.project.business.service.api;
 
 
-import com.simplekitchen.project.business.entity.common.LongListImpl;
-import com.simplekitchen.project.business.entity.user.api.UserRequestInfo;
-import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.exception.GetException;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
+import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
+import com.simplekitchen.project.dto.entity.user.api.UserRequestInfo;
+import com.simplekitchen.project.dto.entity.user.api.UserResponseInfo;
 
 import java.util.List;
 

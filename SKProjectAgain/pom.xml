@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>SKProjectAgain</name>
     <description>SKProjectAgain</description>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>8</java.version>

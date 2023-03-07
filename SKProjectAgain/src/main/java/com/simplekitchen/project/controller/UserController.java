@@ -1,14 +1,14 @@
 package com.simplekitchen.project.controller;
 
-import com.simplekitchen.project.business.entity.common.LongListImpl;
-import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.business.entity.user.UserRequestInfoImpl;
-import com.simplekitchen.project.business.entity.user.UserResponseInfoImpl;
-import com.simplekitchen.project.business.entity.user.api.UserResponseInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.service.api.UserControllerService;
 import com.simplekitchen.project.dao.exception.DataBaseException;
+import com.simplekitchen.project.dto.common.LongListImpl;
+import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.UserRequestInfoImpl;
+import com.simplekitchen.project.dto.entity.user.UserResponseInfoImpl;
+import com.simplekitchen.project.dto.entity.user.api.UserResponseInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-// собрать варник и запустить на локальном сервере приложений Jetty
-// как развернуть на локальном сервере свой проект c помощью Jetty
-    //Ошибка в работе метода Get если передавать не 3 значения а 2
-
+    //validation refactoring, Mockito, Jetty, Unit test, Spring Hello-World на Jetty
 
     /**
      * сервис работы с пользователями
@@ -53,7 +50,7 @@ public class UserController {
         try {
             return userControllerService.save(user);
         } catch (Throwable e) {
-            log.error("Ошибка сохранения пользователя", e);
+            log.error(String.format("Ошибка сохранения пользователя %s", user));
             log.error(e.getMessage(), e.getCause());
             return UserResponseInfoImpl.builder()
                     .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
@@ -74,7 +71,7 @@ public class UserController {
                     .status(StatusImpl.builder().success(true).build())
                     .build();
         } catch (Throwable e) {
-            log.error("Ошибка получения пользователя", e);
+            log.error(String.format("Ошибка получения пользователя по запросу %s", userRequestInfo));
             log.error(e.getMessage(), e.getCause());
             return UserResponseInfoImpl.builder()
                     .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
@@ -165,3 +162,4 @@ public class UserController {
         }
     }
 }
+

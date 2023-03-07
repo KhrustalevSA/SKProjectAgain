@@ -1,8 +1,8 @@
-package com.simplekitchen.project.business.entity.recipe;
+package com.simplekitchen.project.dto.entity.recipe;
 
-import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.business.entity.recipe.api.RecipeResponseInfo;
+import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.simplekitchen.project.business.mapper.common;
 
 
-import com.simplekitchen.project.business.entity.common.LongListImpl;
-import com.simplekitchen.project.business.entity.common.api.LongList;
+import com.simplekitchen.project.dto.common.LongListImpl;
+import com.simplekitchen.project.dto.common.api.LongList;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

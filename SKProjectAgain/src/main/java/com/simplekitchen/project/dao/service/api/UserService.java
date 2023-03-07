@@ -1,12 +1,8 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
-import com.simplekitchen.project.dao.entity.user.UserImplListImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
-import com.simplekitchen.project.dao.entity.user.api.UserImplList;
-import com.simplekitchen.project.dao.entity.user.api.UserList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 
 import java.util.List;

@@ -1,15 +1,15 @@
 package com.simplekitchen.project.controller;
 
-import com.simplekitchen.project.business.entity.common.LongListImpl;
-import com.simplekitchen.project.business.entity.common.StatusImpl;
-import com.simplekitchen.project.business.entity.recipe.RecipeRequestInfoImpl;
-import com.simplekitchen.project.business.entity.recipe.RecipeResponseInfoImpl;
-import com.simplekitchen.project.business.entity.recipe.api.RecipeResponseInfo;
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.service.RecipeControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
+import com.simplekitchen.project.dto.common.LongListImpl;
+import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeResponseInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;

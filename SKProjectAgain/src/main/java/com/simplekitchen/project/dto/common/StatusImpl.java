@@ -1,7 +1,7 @@
-package com.simplekitchen.project.business.entity.common;
+package com.simplekitchen.project.dto.common;
 
 
-import com.simplekitchen.project.business.entity.common.api.Status;
+import com.simplekitchen.project.dto.common.api.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
