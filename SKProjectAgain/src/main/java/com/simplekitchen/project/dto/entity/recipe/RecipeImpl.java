@@ -37,7 +37,7 @@ public class RecipeImpl implements Recipe {
     /**
      * список ингредиентов для приготовления
      */
-    private List<IngredientImpl> ingredientList;
+    private List<IngredientImpl> ingredientsList;
 
     /**
      * описание рецепта

@@ -3,8 +3,8 @@ package com.simplekitchen.project.dao.service;
 import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.UserControllerService;
+import com.simplekitchen.project.business.utils.UserSaveValidator;
 import com.simplekitchen.project.business.utils.UserInfoRequestValidator;
-import com.simplekitchen.project.business.utils.UserValidatorImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -32,7 +32,7 @@ public class ServiceTestJunit4 {
     private final UserControllerService userService = new UserControllerServiceImpl(
             serviceDao,
             new UserInfoRequestValidator(),
-            new UserValidatorImpl());
+            new UserSaveValidator());
 
     @Before
     public void setUp() throws DataBaseException {

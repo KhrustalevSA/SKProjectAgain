@@ -19,14 +19,7 @@ public interface RecipeService {
      * @param recipeEntity сущность рецепта
      * @return сохраненный Optional объект рецепта
      */
-    RecipeEntity save(RecipeEntityImpl recipeEntity) throws DataBaseException ;
-
-    /**
-     * метод сохранения списка рецептов
-     * @param recipeList список сущностей рецептов
-     * @return список сохраненных рецептов
-     */
-    List<RecipeEntity> saveAll(List<RecipeEntityImpl> recipeList) throws DataBaseException;
+    List<RecipeEntity> save(List<RecipeEntityImpl> recipeEntity) throws DataBaseException ;
 
     /**
      * метод получения рецепта по уникальному идентификатору

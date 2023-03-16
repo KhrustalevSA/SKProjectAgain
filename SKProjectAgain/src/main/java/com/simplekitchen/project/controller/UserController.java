@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    //validation refactoring, Mockito, Jetty, Unit test, Spring Hello-World на Jetty
-
+    //(done) validation refactoring, Mockito.when -> мы хотим чтобы условие всегда было верным?,
+    //(need to do) Mockito, Unit test, Jetty, Spring Hello-World на Jetty
+    //Exception вместо Throwable
     /**
      * сервис работы с пользователями
      */
@@ -42,11 +43,10 @@ public class UserController {
      * метод сохранения пользователя
      * @param user объект сохраняемого пользователя
      * @return информация о сохраненном пользователе
-     * @throws BaseException общий класс ошибок
      * @throws DataBaseException ошибки базы данных
      */
     @PostMapping("/save")
-    public UserResponseInfo save(@RequestBody UserImpl user) throws BaseException, DataBaseException {
+    public UserResponseInfo save(@RequestBody UserImpl user) throws DataBaseException {
         try {
             return userControllerService.save(user);
         } catch (Throwable e) {

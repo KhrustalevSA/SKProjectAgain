@@ -94,7 +94,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -127,5 +126,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

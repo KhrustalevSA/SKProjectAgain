@@ -1,8 +1,6 @@
 package com.simplekitchen.project.business.service.api;
 
 
-import com.simplekitchen.project.business.exception.BaseException;
-import com.simplekitchen.project.business.exception.GetException;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
@@ -46,14 +44,14 @@ public interface UserControllerService {
      * @param longList список уникальных идентификаторов
      * @return список пользователей
      */
-    List<User> getAllById(LongListImpl longList) throws GetException;
+    List<User> getAllById(LongListImpl longList);
 
     /**
      * удалить пользователя по его уникальному идентификатору
      * @param id уникальный идентификатор пользователя
      * @return логический ответ
      */
-    Boolean deleteById(Long id) throws BaseException;
+    Boolean deleteById(Long id);
 
 
 }

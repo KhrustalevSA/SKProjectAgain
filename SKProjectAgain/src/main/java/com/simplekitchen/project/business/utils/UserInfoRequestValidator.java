@@ -1,7 +1,9 @@
 package com.simplekitchen.project.business.utils;
 
 import com.simplekitchen.project.business.exception.ValidationException;
+import com.simplekitchen.project.business.utils.api.RequestValidator;
 import com.simplekitchen.project.dto.entity.user.api.UserRequestInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,8 @@ public class UserInfoRequestValidator implements RequestValidator<UserRequestInf
     public void validate(UserRequestInfo request) throws ValidationException {
         boolean valid = request != null;
         if (valid) {
-            valid = request.getId() != null || (request.getName()!= null && request.getSurname()!= null);
+            valid = request.getId() != null ||
+                    (StringUtils.isNotBlank(request.getName()) && StringUtils.isNotBlank(request.getSurname()));
         }
         if (!valid) {
             throw new ValidationException("Не все обязательные поля заполнены");

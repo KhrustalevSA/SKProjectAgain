@@ -5,17 +5,17 @@ import com.simplekitchen.project.business.service.RecipeControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.common.StatusImpl;
+import com.simplekitchen.project.dto.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeListRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeResponseInfoImpl;
-import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collections;
 
 /**
  * РЕСТ контроллер для работы с рецептами
@@ -50,48 +50,21 @@ public class RecipeController {
 
     /**
      * метод сохранения рецепта
-     * @param recipe объект рецепта для сохранения
+     * @param recipeListRequestInfo объект рецепта для сохранения
      * @return сохраненный рецепт
      * @throws BaseException общий класс ошибки обработки исключения приложения
      */
     @PostMapping("/save")
-    public RecipeResponseInfo save(@RequestBody RecipeImpl recipe) throws BaseException {
-        if (validate(recipe)) {
-            Recipe savedRecipe = recipeControllerService.save(recipe);
-            if (savedRecipe.getId() == null) {
-                return RecipeResponseInfoImpl.builder()
-                        .status(StatusImpl.builder()
-                                .success(false)
-                                .description("Ошибка сохранения рецепта")
-                                .build())
-                        .build();
-            }
+    public RecipeResponseInfo save(@RequestBody RecipeListRequestInfoImpl recipeListRequestInfo) throws BaseException {
+        try {
+            return recipeControllerService.save(recipeListRequestInfo);
+        } catch (Throwable e) {
+            log.error(String.format("Ошибка сохранения рецепта %s", recipeListRequestInfo));
+            log.error(e.getMessage(), e.getCause());
             return RecipeResponseInfoImpl.builder()
-                    .recipeList(Lists.newArrayList(savedRecipe))
-                    .status(StatusImpl.builder().success(true).build())
+                    .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
                     .build();
         }
-        return INVALID_DATA;
-    }
-
-    /**
-     * метод сохранения списка рецептов
-     * @param recipeList список сохраняемых рецептов
-     * @return информация об успешности операции найденных рецептах
-     * @throws BaseException общий класс ошибки обработки исключения приложения
-     */
-    @PostMapping("/save/all")
-    public RecipeResponseInfo saveAll(@RequestBody List<RecipeImpl> recipeList) throws BaseException {
-        if (validate(recipeList)) {
-            List<Recipe> savedRecipe = recipeControllerService.saveAll(recipeList);
-            if (recipeList != null) {
-                return RecipeResponseInfoImpl.builder()
-                        .recipeList(savedRecipe)
-                        .status(StatusImpl.builder().success(true).build())
-                        .build();
-            }
-        }
-        return INVALID_DATA;
     }
 
     /**
@@ -102,16 +75,18 @@ public class RecipeController {
      */
     @GetMapping("/get")
     public RecipeResponseInfo get(@RequestBody RecipeRequestInfoImpl recipeRequestInfo) throws BaseException {
-        if (validate(recipeRequestInfo)) {
-            List<Recipe> recipeList = recipeControllerService.get(recipeRequestInfo);
-            if (recipeList != null) {
-                return RecipeResponseInfoImpl.builder()
-                        .recipeList(recipeList)
-                        .status(StatusImpl.builder().success(true).build())
-                        .build();
-            }
+        try {
+            return RecipeResponseInfoImpl.builder()
+                    .recipeList(recipeControllerService.get(recipeRequestInfo))
+                    .status(StatusImpl.builder().success(true).build())
+                    .build();
+        } catch (Throwable e) {
+            log.error(String.format("Ошибка получения рецепта %s", recipeRequestInfo));
+            log.error(e.getMessage(), e.getCause());
+            return RecipeResponseInfoImpl.builder()
+                    .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
+                    .build();
         }
-        return INVALID_DATA;
     }
 
     /**
@@ -120,14 +95,17 @@ public class RecipeController {
      */
     @GetMapping("/get/all")
     public RecipeResponseInfo getAll() {
-        List<Recipe> recipeList = recipeControllerService.getAll();
-        if (recipeList != null) {
+        try {
             return RecipeResponseInfoImpl.builder()
-                    .status(StatusImpl.builder().success(true).build())
-                    .recipeList(recipeList)
+                    .recipeList(recipeControllerService.getAll())
+                    .build();
+        } catch (Throwable e) {
+            log.error("Ошибка получения всех рецептов.");
+            log.error(e.getMessage(), e.getCause());
+            return RecipeResponseInfoImpl.builder()
+                    .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
                     .build();
         }
-        return INVALID_DATA;
     }
 
     /**
@@ -138,39 +116,45 @@ public class RecipeController {
      */
     @PostMapping("/deleteById")
     public Boolean deleteById(@RequestParam Long id) throws BaseException {
-        if (validate(id)){
+        try {
             return recipeControllerService.deleteById(id);
+        } catch (Throwable e) {
+            log.error(String.format("Ошибка удаления рецепта по идентификатору %s", id));
+            log.error(e.getMessage(), e.getCause());
+            return false;
         }
-        return false;
     }
 
     /**
      * метод удаления рецептов по списку идентификаторов
      * @param longList список уникальных идентификаторов
      * @return логический ответ
-     * @throws BaseException общий класс ошибки обработки исключения приложения
      */
     @PostMapping("/deleteByIdList")
-    public Boolean deleteByIdList(@RequestBody LongListImpl longList) throws BaseException {
-        if (validate(longList)) {
-            Boolean deleteCheck;
+    public Boolean deleteByIdList(@RequestBody LongListImpl longList) {
+        try {
+            boolean deleteCheck = true;
             for (Long id : longList.getLongList()) {
-                deleteCheck = recipeControllerService.deleteById(id);
-                if (!deleteCheck) {
-                    return false;
-                }
+                deleteCheck = deleteCheck && recipeControllerService.deleteById(id);
             }
-            return true;
+            return deleteCheck;
+        } catch (Throwable e) {
+            log.error(String.format("Ошибка удаления рецептов по списку идентификаторов %s", longList));
+            log.error(e.getMessage(), e.getCause());
+            return false;
         }
-        return false;
     }
 
-    /**
-     * метод проверки объекта на null
-     * @param o переданный объект для валидации
-     * @return логичский ответ
-     */
-    private Boolean validate(Object o){
-        return o != null;
+    @PostMapping("/show")
+    public RecipeListRequestInfoImpl show() {
+        return RecipeListRequestInfoImpl.builder()
+                .recipeList(Collections.singletonList(RecipeImpl.builder()
+                        .name("Name")
+                        .difficulty("Easy")
+                        .ingredientsList(Collections.singletonList(IngredientImpl.builder()
+                                .name("Egg")
+                                .build()))
+                        .build()))
+                .build();
     }
 }

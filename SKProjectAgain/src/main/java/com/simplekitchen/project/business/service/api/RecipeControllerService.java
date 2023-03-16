@@ -1,33 +1,29 @@
 package com.simplekitchen.project.business.service.api;
 
 import com.simplekitchen.project.business.exception.BaseException;
-import com.simplekitchen.project.dto.common.api.LongList;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.common.LongListImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeListRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeRequestInfo;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 
 import java.util.List;
 
 /**
  * интерфейс сервиса контроллера рецептов
+ * @author KhrustalevSA
+ * @since 16.03.2023
  */
 public interface RecipeControllerService {
 
     /**
      * метод сохранения рецепта
-     * @param recipe объект рецепта для сохранения
+     * @param recipeListRequestInfo объект рецепта для сохранения
      * @return сохраненный рецепт
      * @throws BaseException общий класс ошибок приложения
      */
-    Recipe save(RecipeImpl recipe) throws BaseException;
-
-    /**
-     * метод сохранения всех рецептов, возвращает список сохраненных рецептов
-     * @param recipeList список рецептов для сохранения
-     * @return список сохраненных рецептов
-     */
-    List<Recipe> saveAll(List<RecipeImpl> recipeList) throws BaseException;
+    RecipeResponseInfo save(RecipeListRequestInfoImpl recipeListRequestInfo) throws Throwable;
 
     /**
      * метод получения списка рецептов по запрошенной информации о них
@@ -48,7 +44,7 @@ public interface RecipeControllerService {
      * @param longList список идентификаторов
      * @return список найденных рецептов
      */
-    List<Recipe> getAllById(LongList longList);
+    List<Recipe> getAllById(LongListImpl longList);
 
     /**
      * метод удаления рецепта по его уникальному идентификатору

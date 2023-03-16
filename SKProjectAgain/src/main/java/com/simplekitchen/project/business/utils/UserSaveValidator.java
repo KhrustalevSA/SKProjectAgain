@@ -1,7 +1,9 @@
 package com.simplekitchen.project.business.utils;
 
 import com.simplekitchen.project.business.exception.ValidationException;
+import com.simplekitchen.project.business.utils.api.ObjectSaveValidator;
 import com.simplekitchen.project.dto.entity.user.api.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +14,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Qualifier(value = "userValidatorImpl")
-public class UserValidatorImpl implements UserValidator<User>{
+public class UserSaveValidator implements ObjectSaveValidator<User> {
+
+    /**
+     * метод валидации сохраняемого пользователя
+     * @param savedObject объект для сохранения
+     * @throws ValidationException ошибка валидации
+     */
     @Override
-    public void validate(User user) throws ValidationException {
-        boolean valid = user != null;
+    public void validate(User savedObject) throws ValidationException {
+        boolean valid = savedObject != null;
         if (valid) {
-            valid = user.getName() != null && user.getSurname() != null;
+            valid = StringUtils.isNotBlank(savedObject.getName()) && StringUtils.isNotBlank(savedObject.getSurname());
         }
         if (!valid) {
             throw new ValidationException("Не все обязательные поля заполнены");

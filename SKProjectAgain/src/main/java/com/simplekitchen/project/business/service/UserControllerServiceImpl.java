@@ -1,11 +1,10 @@
 package com.simplekitchen.project.business.service;
 
-import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.mapper.common.CommonMapper;
 import com.simplekitchen.project.business.mapper.user.UserMapper;
 import com.simplekitchen.project.business.service.api.UserControllerService;
-import com.simplekitchen.project.business.utils.RequestValidator;
-import com.simplekitchen.project.business.utils.UserValidator;
+import com.simplekitchen.project.business.utils.api.ObjectSaveValidator;
+import com.simplekitchen.project.business.utils.api.RequestValidator;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -25,13 +24,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.ValidationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Класс сервиса бизнес слоя, реализовывающий интерфейс UserControllerService
- *
  * @author KhrustalevSA
  * @see UserControllerService
  * @since 29.01.2023
@@ -52,7 +51,7 @@ public class UserControllerServiceImpl implements UserControllerService {
 
     private RequestValidator<UserRequestInfo> requestValidator;
 
-    private UserValidator<User> userValidator;
+    private ObjectSaveValidator<User> userSaveValidator;
 
     /**
      * конструктор класса с параметром сервиса
@@ -61,10 +60,10 @@ public class UserControllerServiceImpl implements UserControllerService {
     @Autowired
     public UserControllerServiceImpl(UserService userService,
                                      @Qualifier("userInfoRequestValidator") RequestValidator<UserRequestInfo> requestValidator,
-                                     @Qualifier("userValidatorImpl") UserValidator<User> userValidator) {
+                                     @Qualifier("userSaveValidator") ObjectSaveValidator<User> objectSaveValidator) {
         this.userService = userService;
         this.requestValidator = requestValidator;
-        this.userValidator = userValidator;
+        this.userSaveValidator = objectSaveValidator;
     }
 
     /**
@@ -74,22 +73,14 @@ public class UserControllerServiceImpl implements UserControllerService {
      * @throws Throwable ошибка
      */
     public UserResponseInfo save(@NonNull UserImpl user) throws Throwable {
-        try {
-            userValidator.validate(user);
+            userSaveValidator.validate(user);
             log.debug(String.format("Объект пользовтеля передаваемый для сохранения = %s.", user));
             UserEntity savedUserEntity = userService.save(UserMapper.INSTANCE.map(user));
-            log.debug(String.format("Полученный объект сохраненного пользователя = %s.", user));
+            log.debug(String.format("Полученный объект сохраненного пользователя = %s.", savedUserEntity));
             return UserResponseInfoImpl.builder()
                     .userList(Collections.singletonList(UserMapper.INSTANCE.map(savedUserEntity)))
                     .status(StatusImpl.builder().success(true).build())
                     .build();
-        } catch (Throwable e) {
-            log.error(String.format("Не удалось сохранить объект пользователя %s.", user));
-            log.error(e.getMessage(), e.getCause());
-            return UserResponseInfoImpl.builder()
-                    .status(StatusImpl.builder().success(false).description(e.getMessage()).build())
-                    .build();
-        }
     }
 
     /**
@@ -173,6 +164,9 @@ public class UserControllerServiceImpl implements UserControllerService {
     public List<User> getAllById(@NonNull LongListImpl longList) {
         try {
             ObjectUtils.requireNonEmpty(longList);
+            if (longList.getLongList().isEmpty()) {
+                throw new ValidationException("Передан пустой список целых чисел.");
+            }
             log.debug(String.format("Полученный список идентификаторов = %s.", longList));
             List<User> userEntities = userService.findAllById(CommonMapper.INSTANCE.map(longList))
                     .stream().map(UserMapper.INSTANCE::map).collect(Collectors.toList());
@@ -191,7 +185,7 @@ public class UserControllerServiceImpl implements UserControllerService {
      * @return логический ответ
      */
     @Override
-    public Boolean deleteById(@NonNull Long id) throws BaseException {
+    public Boolean deleteById(@NonNull Long id) {
         try {
             ObjectUtils.requireNonEmpty(id);
             log.debug(String.format("Полученный идентификатор %s.", id));

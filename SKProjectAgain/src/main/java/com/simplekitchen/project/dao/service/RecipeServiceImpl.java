@@ -2,14 +2,10 @@ package com.simplekitchen.project.dao.service;
 
 import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeImplListImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeListImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
-import com.simplekitchen.project.dao.entity.recipe.api.RecipeList;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.repository.RecipeRepository;
 import com.simplekitchen.project.dao.service.api.RecipeService;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,40 +46,21 @@ public class RecipeServiceImpl implements RecipeService {
 
     /**
      * метод сохранения рецепта
-     * @param recipeEntity сущность рецепта
+     * @param recipeEntityList сущность рецепта
      * @return сохраненный рецепт
      * @throws DataBaseException ошибка базы данных
      */
     @Override
-    public RecipeEntity save(RecipeEntityImpl recipeEntity) throws DataBaseException {
+    public List<RecipeEntity> save(List<RecipeEntityImpl> recipeEntityList) throws DataBaseException {
         try {
-            log.debug(String.format("Рецепт пришедший на сохранение %s.",recipeEntity));
-            RecipeEntity savedRecipe = recipeRepository.save(recipeEntity);
+            log.debug(String.format("Рецепт пришедший на сохранение %s.",recipeEntityList));
+            List<RecipeEntity> savedRecipe = new ArrayList<>();
+            recipeRepository.saveAll(recipeEntityList).forEach(savedRecipe::add);
             log.debug(String.format("Сохраненный рецепт: %s.",savedRecipe));
             return savedRecipe;
         } catch (Exception e) {
-            log.error(String.format("Не удалось сохранить рецепт: %s", recipeEntity));
+            log.error(String.format("Не удалось сохранить рецепт: %s", recipeEntityList));
             throw new DataBaseException(e.getMessage());
-        }
-    }
-
-    /**
-     * метод сохранения списка рецептов
-     * @param recipeList список рецептов
-     * @return список сохраненных рецептов
-     * @throws DataBaseException ошибка базы данных
-     */
-    @Override
-    public List<RecipeEntity> saveAll(List<RecipeEntityImpl> recipeList) throws DataBaseException {
-        try {
-            log.debug(String.format(RECEIVED_RECIPE_LIST, recipeList));
-            List<RecipeEntity> recipeEntities = new ArrayList<>();
-            recipeRepository.saveAll(recipeList).forEach(recipeEntities::add);
-            log.debug(String.format("Сохраненный список рецептов: %s", recipeEntities));
-            return recipeEntities;
-        } catch (Exception e) {
-            log.error(String.format("Не удалось сохранить список рецептов: %s",recipeList));
-            throw new DataBaseException(e.getMessage(), e.getCause());
         }
     }
 

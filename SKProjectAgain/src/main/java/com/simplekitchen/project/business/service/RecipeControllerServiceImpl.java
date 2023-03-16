@@ -2,24 +2,33 @@ package com.simplekitchen.project.business.service;
 
 import com.simplekitchen.project.business.exception.BaseException;
 import com.simplekitchen.project.business.exception.ValidationException;
+import com.simplekitchen.project.business.mapper.common.CommonMapper;
 import com.simplekitchen.project.business.mapper.recipe.RecipeMapper;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
+import com.simplekitchen.project.business.utils.api.ObjectSaveValidator;
+import com.simplekitchen.project.business.utils.api.RequestValidator;
+import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.service.api.RecipeService;
-import com.simplekitchen.project.dto.common.api.LongList;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import com.simplekitchen.project.dto.common.LongListImpl;
+import com.simplekitchen.project.dto.common.StatusImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeListRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
+import com.simplekitchen.project.dto.entity.recipe.RecipeResponseInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeListRequestInfo;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeRequestInfo;
+import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,57 +49,43 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
     /**
      * объект сервиса рецептов
      */
-    private static RecipeService recipeService;
+    private RecipeService recipeService;
+
+    private RequestValidator<RecipeRequestInfo> requestValidator;
+
+    private ObjectSaveValidator<RecipeListRequestInfo> recipeSaveValidator;
 
     /**
      * конструктор севриса контроллера рецептов
      * @param recipeServiceDao дао сервис рецептов
      */
     @Autowired
-    public RecipeControllerServiceImpl(RecipeService recipeServiceDao) {
-        recipeService = recipeServiceDao;
-    }
-
-    /**
-     * метод сохранения рецепта
-     * @param recipe объект рецепта для сохранения
-     * @return объект сохраненного рецепта
-     * @throws BaseException общий класс ошибок сервиса
-     */
-    @Override
-    public Recipe save(RecipeImpl recipe) throws BaseException {
-        try {
-            validate(recipe);
-            log.debug("Полученный рецепт для сохранения" + recipe);
-            RecipeEntity savedRecipeEntity = recipeService.save(RecipeMapper.INSTANCE.map(recipe));
-            log.debug(String.format("Сохраненный рецепт = %s", savedRecipeEntity));
-            return  RecipeMapper.INSTANCE.map(savedRecipeEntity);
-        } catch (Throwable e) {
-            log.error(String.format("Не удалось сохранить рецепт %s", recipe));
-            log.error(e.getMessage(),e.getCause());
-            return RecipeImpl.builder().build();
-        }
+    public RecipeControllerServiceImpl(RecipeService recipeServiceDao,
+                                       @Qualifier("recipeInfoRequestValidator") RequestValidator<RecipeRequestInfo> requestValidator,
+                                       @Qualifier("recipeSaveValidator") ObjectSaveValidator<RecipeListRequestInfo> recipeSaveValidator) {
+        this.recipeService = recipeServiceDao;
+        this.requestValidator = requestValidator;
+        this.recipeSaveValidator = recipeSaveValidator;
     }
 
     /**
      * метод сохранения списка рецептов
-     * @param recipeList список рецептов для сохранения
+     * @param recipeListRequestInfo список рецептов для сохранения
      * @return список сохраненных рецептов
      */
     @Override
-    public List<Recipe> saveAll(List<RecipeImpl> recipeList) {
-        try {
-            validate(recipeList);
-            log.debug(String.format("Запрошенный список рецептов = %s.", recipeList));
-            List<RecipeEntity> recipeEntities = recipeService.saveAll(
-                    recipeList.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList()));
-            log.debug(String.format("Сохраненный список рецептов = %s.",recipeEntities));
-            return recipeEntities.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
-        } catch (Throwable e) {
-            log.error(String.format("Не удалось сохранить список рецептов %s.", recipeList));
-            log.error(e.getMessage(),e.getCause());
-            return null;
-        }
+    public RecipeResponseInfo save(RecipeListRequestInfoImpl recipeListRequestInfo) throws Throwable {
+        ObjectUtils.requireNonEmpty(recipeListRequestInfo);
+        recipeSaveValidator.validate(recipeListRequestInfo);
+        log.debug(String.format("Запрошенный список рецептов = %s.", recipeListRequestInfo));
+        List<RecipeEntityImpl> recipeEntityImplList = recipeListRequestInfo.getRecipeList().stream().map(RecipeMapper.INSTANCE::map)
+                .collect(Collectors.toList());
+        List<RecipeEntity> recipeEntityList = recipeService.save(recipeEntityImplList);
+        log.debug(String.format("Сохраненный список рецептов = %s.",recipeEntityList));
+            return RecipeResponseInfoImpl.builder()
+                    .recipeList(recipeEntityList.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList()))
+                    .status(StatusImpl.builder().success(true).build())
+                    .build();
     }
 
     /**
@@ -101,13 +96,14 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      */
     @Override
     public List<Recipe> get(RecipeRequestInfoImpl recipeRequestInfo) throws BaseException {
-        ObjectUtils.requireNonEmpty(recipeRequestInfo);
+        requestValidator.validate(recipeRequestInfo);
         if (recipeRequestInfo.getId() != null) {
-            return Lists.newArrayList(getById(recipeRequestInfo.getId()));
+            Recipe foundRecipe = getById(recipeRequestInfo.getId());
+            return foundRecipe != null ? (Collections.singletonList(foundRecipe)) : Collections.emptyList();
         } else if (StringUtils.isNotBlank(recipeRequestInfo.getName())) {
             return getByName(recipeRequestInfo.getName());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -172,11 +168,11 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
      * @return список рецептов
      */
     @Override
-    public List<Recipe> getAllById(LongList longList){
+    public List<Recipe> getAllById(LongListImpl longList){
         try {
             validate(longList);
             log.debug(String.format(RECEIVED_ID_LIST,longList));
-            List<RecipeEntity> recipeList = recipeService.findAll();
+            List<RecipeEntity> recipeList = recipeService.findAllById(CommonMapper.INSTANCE.map(longList));
             log.debug(String.format("Найденные рецепты = %s", recipeList));
             return recipeList.stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
         } catch (Throwable e) {

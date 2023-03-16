@@ -3,8 +3,10 @@ package com.simplekitchen.project.dto.entity.ingredient;
 
 import com.simplekitchen.project.dto.entity.ingredient.api.Ingredient;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * класс ДТО ингредиента
@@ -13,6 +15,8 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class IngredientImpl implements Ingredient {
 
     /**
