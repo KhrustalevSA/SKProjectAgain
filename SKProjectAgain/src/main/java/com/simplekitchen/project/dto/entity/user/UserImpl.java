@@ -1,5 +1,6 @@
 package com.simplekitchen.project.dto.entity.user;
 
+import com.simplekitchen.project.dto.entity.city.CityImpl;
 import com.simplekitchen.project.dto.entity.city.api.City;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
@@ -62,5 +63,5 @@ public class UserImpl implements User {
     /**
      * город, место жительства пользователя
      */
-    private City city;
+    private CityImpl city;
 }

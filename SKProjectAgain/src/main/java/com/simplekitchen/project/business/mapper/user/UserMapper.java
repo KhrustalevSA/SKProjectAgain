@@ -42,21 +42,6 @@ public interface UserMapper {
     UserEntityImpl map(User dtoUser);
 
     /**
-     * метод преобразования списков пользователей
-     * @param userList список пользователей бизнесс слоя
-     * @return ДАО список пользователей
-     */
-    UserListImpl map(com.simplekitchen.project.dto.entity.user.api.UserList userList);
-
-    /**
-     * метод преобразования списков пользователей
-     * @param userList список пользователей ДАО слоя
-     * @return бизнесс список пользователей
-     */
-    @Mapping(target = "userList", source = "userEntityList")
-    UserListImpl map (UserList userList);
-
-    /**
      * метод преобразования класса города к интерфейсу города
      * @param daoCity ДАО сущность города
      * @return ДТО город
@@ -72,6 +57,5 @@ public interface UserMapper {
     @Mapping(target = "cityName")
     CityNameEntityImpl map(String cityName);
 
-    com.simplekitchen.project.dao.entity.user.UserImplListImpl map(UserImplListImpl userImplList);
 
 }

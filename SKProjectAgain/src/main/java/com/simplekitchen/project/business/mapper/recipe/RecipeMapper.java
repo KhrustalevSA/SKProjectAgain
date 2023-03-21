@@ -1,7 +1,10 @@
 package com.simplekitchen.project.business.mapper.recipe;
 
+import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
+import com.simplekitchen.project.dto.entity.city.CityImpl;
+import com.simplekitchen.project.dto.entity.city.api.City;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImplListImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeListImpl;
@@ -39,25 +42,25 @@ public interface RecipeMapper {
     RecipeEntityImpl map(Recipe dtoRecipe);
 
     /**
-     * метод преобразования класса списка рецептов к интерфейсу списка
+     * метод преобразования интерфейса списка рецептов к классу списка
      * @param recipeList интерфейс списка рецептов
      * @return Объект списка рецептов
      */
     RecipeListImpl map(RecipeList recipeList);
 
     /**
-     * метод преобразования ДАО списка рецептов к ДТО объекту списку рецептов
-     * @param recipeList ДАО список рецептов
-     * @return ДТО список рецептов
+     * метод прелобразования ДАО класса с именем города к ДТО классу города
+     * @param cityName класс с именем города
+     * @return ДТО класс города
      */
-    @Mapping(target = "recipeList", source = "recipeEntityList")
-    RecipeListImpl map(com.simplekitchen.project.dao.entity.recipe.api.RecipeList recipeList);
+    @Mapping(target = "cityName", source = "cityName.cityName")
+    CityImpl map(CityNameEntityImpl cityName);
 
-    /**
-     * метод преобразования ДТО списка рецептов к ДАО объекту списку рецептов
-     * @param recipeImplList ДТО объект списка рецептов
-     * @return ДАО список рецептов
-     */
-    com.simplekitchen.project.dao.entity.recipe.RecipeImplListImpl map(RecipeImplListImpl recipeImplList);
+    default String mapCityName(CityNameEntityImpl cityName) {
+        return cityName.getCityName();
+    }
 
+    default CityNameEntityImpl mapToCityName(String cityName) {
+        return CityNameEntityImpl.builder().cityName("name").build();
+    }
 }

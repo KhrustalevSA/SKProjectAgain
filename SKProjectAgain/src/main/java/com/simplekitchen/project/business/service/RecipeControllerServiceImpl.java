@@ -101,7 +101,8 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
             Recipe foundRecipe = getById(recipeRequestInfo.getId());
             return foundRecipe != null ? (Collections.singletonList(foundRecipe)) : Collections.emptyList();
         } else if (StringUtils.isNotBlank(recipeRequestInfo.getName())) {
-            return getByName(recipeRequestInfo.getName());
+            List<Recipe> recipeList = getByName(recipeRequestInfo.getName());
+            return (recipeList != null && recipeList.size() > 0) ? recipeList : Collections.emptyList();
         }
         return Collections.emptyList();
     }
@@ -154,11 +155,11 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
             List<Recipe> recipeList =
                     recipeService.findAll().stream().map(RecipeMapper.INSTANCE::map).collect(Collectors.toList());
             log.debug(String.format("Все имеющиеся рецепты = %s", recipeList));
-            return recipeList;
+            return recipeList.size() > 0 ? recipeList : Collections.emptyList();
         } catch (Throwable e) {
             log.error("Ошибка получения списка всех рецептов");
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -178,7 +179,7 @@ public class RecipeControllerServiceImpl implements RecipeControllerService {
         } catch (Throwable e) {
             log.error(String.format("ошибка получения рецептов по списку идентификаторов: %s", longList));
             log.error(e.getMessage(), e.getCause());
-            return null;
+            return Collections.emptyList();
         }
     }
 

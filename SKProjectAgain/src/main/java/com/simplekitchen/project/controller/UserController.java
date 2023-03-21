@@ -22,9 +22,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    //(done) validation refactoring, Mockito.when -> мы хотим чтобы условие всегда было верным?,
-    //(need to do) Mockito, Unit test, Jetty, Spring Hello-World на Jetty
-    //Exception вместо Throwable
+    //(done) validation refactoring, WildFly server
+    //(need to do) Unit test,
+    //Exception вместо Throwable - не получается
+
+    // RecipeMapper - маппинг сущности города к строке и наоборот (default methods)
+    // Тестирование маппера
+    // Тестирование репозитория
+
     /**
      * сервис работы с пользователями
      */

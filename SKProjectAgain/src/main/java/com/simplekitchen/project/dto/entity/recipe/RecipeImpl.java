@@ -4,6 +4,7 @@ import com.simplekitchen.project.dto.entity.image.ImageImpl;
 import com.simplekitchen.project.dto.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -73,5 +74,10 @@ public class RecipeImpl implements Recipe {
      * сложность рецепта
      */
     private String difficulty;
+
+    /**
+     * список пользователей
+     */
+    private List<UserImpl> userList;
 
 }

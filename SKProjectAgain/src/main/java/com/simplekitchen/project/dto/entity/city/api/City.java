@@ -1,5 +1,7 @@
 package com.simplekitchen.project.dto.entity.city.api;
 
+import com.simplekitchen.project.dto.entity.user.UserImpl;
+
 /**
  * интерфейс описывающий ДТО класс города
  * @author KhrustalevSA
@@ -40,4 +42,6 @@ public interface City {
      * @return номер квартиры
      * */
     Long getFlatNumber();
+
+    UserImpl getUser();
 }

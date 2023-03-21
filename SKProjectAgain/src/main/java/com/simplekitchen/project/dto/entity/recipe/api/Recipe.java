@@ -4,6 +4,8 @@ package com.simplekitchen.project.dto.entity.recipe.api;
 import com.simplekitchen.project.dto.entity.image.ImageImpl;
 import com.simplekitchen.project.dto.entity.ingredient.IngredientImpl;
 import com.simplekitchen.project.dto.entity.recipe.StepDescriptionImpl;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
+import com.simplekitchen.project.dto.entity.user.api.User;
 
 import java.util.Calendar;
 import java.util.List;
@@ -64,4 +66,8 @@ public interface Recipe {
      */
     String getDifficulty();
 
+    /**
+     * @return список пользователей
+     */
+    List<UserImpl> getUserList();
 }

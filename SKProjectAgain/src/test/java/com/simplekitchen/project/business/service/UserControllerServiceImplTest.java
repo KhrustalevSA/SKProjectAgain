@@ -119,10 +119,10 @@ public class UserControllerServiceImplTest {
         try {
             Mockito.when(serviceDao.findAll()).thenThrow(new DataBaseException(""));
             userList = userService.getAll();
-        } catch (Throwable e) {
+        } catch (Throwable throwable) {
             Assert.fail();
         }
-        Assert.assertEquals(1, userList.size());
+        Assert.assertSame(Collections.emptyList(), userList);
     }
 
     @Test

@@ -12,9 +12,11 @@ import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeResponseInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.ValidationException;
 import java.util.Collections;
 
 /**
@@ -44,7 +46,7 @@ public class RecipeController {
      * @param recipeService сервис с методами обработки рецептов
      */
     @Autowired
-    RecipeController(RecipeControllerServiceImpl recipeService) {
+    RecipeController(RecipeControllerService recipeService) {
         recipeControllerService = recipeService;
     }
 
@@ -93,11 +95,12 @@ public class RecipeController {
      * метод получения всех имеющихся рецептов
      * @return информация об успешности операции найденных рецептах
      */
-    @GetMapping("/get/all")
+    @GetMapping("/getAll")
     public RecipeResponseInfo getAll() {
         try {
             return RecipeResponseInfoImpl.builder()
                     .recipeList(recipeControllerService.getAll())
+                    .status(StatusImpl.builder().success(true).build())
                     .build();
         } catch (Throwable e) {
             log.error("Ошибка получения всех рецептов.");
@@ -133,6 +136,9 @@ public class RecipeController {
     @PostMapping("/deleteByIdList")
     public Boolean deleteByIdList(@RequestBody LongListImpl longList) {
         try {
+            if (longList == null || longList.getLongList().isEmpty()) {
+                throw new ValidationException("Передан пустой список целых чисел.");
+            }
             boolean deleteCheck = true;
             for (Long id : longList.getLongList()) {
                 deleteCheck = deleteCheck && recipeControllerService.deleteById(id);
@@ -144,6 +150,8 @@ public class RecipeController {
             return false;
         }
     }
+
+
 
     @PostMapping("/show")
     public RecipeListRequestInfoImpl show() {

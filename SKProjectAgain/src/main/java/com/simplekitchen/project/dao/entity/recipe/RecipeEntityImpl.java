@@ -59,7 +59,7 @@ public class RecipeEntityImpl implements RecipeEntity, Serializable {
      */
     @OneToMany
     @ToString.Exclude
-    private List<ImageEntityImpl> imagesList;
+    private List<ImageEntityImpl> imageList;
 
     /**
      * время готовки рецепта
@@ -84,7 +84,7 @@ public class RecipeEntityImpl implements RecipeEntity, Serializable {
      */
     @OneToMany
     @ToString.Exclude
-    private List<StepDescriptionEntityImpl> stepsDescription;
+    private List<StepDescriptionEntityImpl> stepDescriptionList;
 
     /**
      * сложность рецепта
@@ -104,11 +104,11 @@ public class RecipeEntityImpl implements RecipeEntity, Serializable {
         if (this == o) return true;
         if (!(o instanceof RecipeEntityImpl)) return false;
         RecipeEntityImpl recipe = (RecipeEntityImpl) o;
-        return Objects.equals(getId(), recipe.getId()) && Objects.equals(getName(), recipe.getName()) && Objects.equals(getIngredientsList(), recipe.getIngredientsList()) && Objects.equals(getDescription(), recipe.getDescription()) && Objects.equals(getImagesList(), recipe.getImagesList()) && Objects.equals(getCookingTime(), recipe.getCookingTime()) && Objects.equals(getAuthor(), recipe.getAuthor()) && Objects.equals(getPublishDate(), recipe.getPublishDate()) && Objects.equals(getStepsDescription(), recipe.getStepsDescription()) && Objects.equals(getDifficulty(), recipe.getDifficulty()) && Objects.equals(getUserList(), recipe.getUserList());
+        return Objects.equals(getId(), recipe.getId()) && Objects.equals(getName(), recipe.getName()) && Objects.equals(getIngredientsList(), recipe.getIngredientsList()) && Objects.equals(getDescription(), recipe.getDescription()) && Objects.equals(getImageList(), recipe.getImageList()) && Objects.equals(getCookingTime(), recipe.getCookingTime()) && Objects.equals(getAuthor(), recipe.getAuthor()) && Objects.equals(getPublishDate(), recipe.getPublishDate()) && Objects.equals(getStepDescriptionList(), recipe.getStepDescriptionList()) && Objects.equals(getDifficulty(), recipe.getDifficulty()) && Objects.equals(getUserList(), recipe.getUserList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getIngredientsList(), getDescription(), getImagesList(), getCookingTime(), getAuthor(), getPublishDate(), getStepsDescription(), getDifficulty(), getUserList());
+        return Objects.hash(getId(), getName(), getIngredientsList(), getDescription(), getImageList(), getCookingTime(), getAuthor(), getPublishDate(), getStepDescriptionList(), getDifficulty(), getUserList());
     }
 }

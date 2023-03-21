@@ -26,6 +26,7 @@ public interface CommonMapper {
      */
     LongListImpl map(com.simplekitchen.project.dao.entity.common.entity.api.LongList longList);
 
+
     /**
      * преобразование ДТО списка целых чисел к ДАО списку
      * @param longList ДТО список чисел

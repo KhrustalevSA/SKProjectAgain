@@ -47,6 +47,7 @@ public class RecipeControllerServiceImplTest {
                 .thenReturn(Collections.singletonList(RecipeEntityImpl.builder().build()));
         Mockito.when(serviceDao.findAll()).thenReturn(Collections.singletonList(RecipeEntityImpl.builder().build()));
         Mockito.when(serviceDao.deleteById(Mockito.anyLong())).thenReturn(Boolean.TRUE);
+        Mockito.when(serviceDao.deleteByName(Mockito.anyString())).thenReturn(Boolean.TRUE);
     }
 
     @After
@@ -188,7 +189,44 @@ public class RecipeControllerServiceImplTest {
         } catch (Throwable e) {
             Assert.fail();
         }
-        Assert.assertEquals(true, deleteCheck);
+        Assert.assertTrue(deleteCheck);
+    }
+
+    @Test
+    public void deleteByIdFail() {
+        boolean deleteCheck = true;
+        try {
+            Mockito.when(serviceDao.deleteById(Mockito.anyLong())).thenReturn(false);
+            deleteCheck = recipeControllerService.deleteById(1L);
+        } catch (Throwable e) {
+            Assert.assertThrows(DataBaseException.class,() -> serviceDao.deleteById(Mockito.anyLong()));
+        }
+        Assert.assertFalse(deleteCheck);
+    }
+
+    @Test
+    public void deleteByNameSuccess() {
+        RecipeRequestInfoImpl requestName = RecipeRequestInfoImpl.builder().name("Name").build();
+        Boolean deleteCheck = false;
+        try {
+            deleteCheck = recipeControllerService.deleteByName(requestName);
+        } catch (Throwable e) {
+            Assert.fail();
+        }
+        Assert.assertTrue(deleteCheck);
+    }
+
+    @Test
+    public void deleteByNameFail() {
+        RecipeRequestInfoImpl requestName = RecipeRequestInfoImpl.builder().build();
+        boolean deleteCheck = true;
+        try {
+            Mockito.when(serviceDao.deleteByName(Mockito.anyString())).thenReturn(false);
+            deleteCheck = recipeControllerService.deleteByName(requestName);
+        } catch (Throwable e) {
+            Assert.assertThrows(DataBaseException.class, () -> serviceDao.deleteByName("Name"));
+        }
+        Assert.assertFalse(deleteCheck);
     }
 
 }

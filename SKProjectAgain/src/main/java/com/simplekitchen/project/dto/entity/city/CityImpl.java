@@ -1,6 +1,7 @@
 package com.simplekitchen.project.dto.entity.city;
 
 import com.simplekitchen.project.dto.entity.city.api.City;
+import com.simplekitchen.project.dto.entity.user.UserImpl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,4 +52,6 @@ public class CityImpl implements City {
      * номер квартиры
      */
     private Long flatNumber;
+
+    private UserImpl user;
 }

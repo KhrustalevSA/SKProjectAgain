@@ -37,7 +37,7 @@ public interface RecipeEntity {
     /**
      * @return список изображений на странице рецепта
      */
-    List<ImageEntityImpl> getImagesList();
+    List<ImageEntityImpl> getImageList();
 
     /**
      * @return время готовки рецепта
@@ -57,7 +57,7 @@ public interface RecipeEntity {
     /**
      * @return список описаний правильности действий на шагах готовки
      */
-    List<StepDescriptionEntityImpl> getStepsDescription();
+    List<StepDescriptionEntityImpl> getStepDescriptionList();
 
     /**
      * @return сложность рецепта
