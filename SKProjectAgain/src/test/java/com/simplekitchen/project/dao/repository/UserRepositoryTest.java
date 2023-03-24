@@ -1,6 +1,5 @@
 package com.simplekitchen.project.dao.repository;
 
-import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import org.junit.After;
@@ -12,8 +11,6 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class UserRepositoryTest {
 
