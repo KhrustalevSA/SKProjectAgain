@@ -12,6 +12,8 @@ import lombok.*;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeRequestInfoImpl implements RecipeRequestInfo {
 
     /**

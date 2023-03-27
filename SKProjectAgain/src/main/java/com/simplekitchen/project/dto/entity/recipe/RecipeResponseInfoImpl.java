@@ -1,13 +1,12 @@
 package com.simplekitchen.project.dto.entity.recipe;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.simplekitchen.project.dto.common.StatusImpl;
 import com.simplekitchen.project.dto.entity.recipe.api.Recipe;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,10 +15,12 @@ import java.util.List;
  * @author KhrustalevSA
  * @since 03.10.2022
  */
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecipeResponseInfoImpl implements RecipeResponseInfo {
 
     /**
@@ -31,4 +32,17 @@ public class RecipeResponseInfoImpl implements RecipeResponseInfo {
      * поле сущности полученного рецепта
      */
     private List<Recipe> recipeList;
+
+    @Override
+    public StatusImpl getStatus() {
+        return status;
+    }
+
+    @Override
+    public List<Recipe> getRecipeList() {
+        if (recipeList == null) {
+            recipeList = new ArrayList<>();
+        }
+        return recipeList;
+    }
 }

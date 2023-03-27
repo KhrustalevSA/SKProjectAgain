@@ -27,7 +27,7 @@ public class RecipeSaveValidator implements ObjectSaveValidator<RecipeListReques
      */
     @Override
     public void validate(RecipeListRequestInfo savedObject) throws ValidationException {
-        boolean valid = savedObject != null && savedObject.getRecipeList() != null;
+        boolean valid = savedObject != null &&  savedObject.getRecipeList().size() > 0 && savedObject.getRecipeList() != null ;
         if (valid) {
             List<RecipeImpl> recipeList = savedObject.getRecipeList();
             for (Recipe recipe : recipeList) {

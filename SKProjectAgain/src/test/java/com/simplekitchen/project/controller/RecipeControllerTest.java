@@ -1,38 +1,32 @@
 package com.simplekitchen.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplekitchen.project.business.exception.BaseException;
-import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.service.RecipeControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
 import com.simplekitchen.project.business.utils.RecipeInfoRequestValidator;
 import com.simplekitchen.project.business.utils.RecipeSaveValidator;
-import com.simplekitchen.project.business.utils.api.ObjectSaveValidator;
-import com.simplekitchen.project.business.utils.api.RequestValidator;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.RecipeService;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.common.StatusImpl;
-import com.simplekitchen.project.dto.common.api.LongList;
 import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeListRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.recipe.RecipeResponseInfoImpl;
-import com.simplekitchen.project.dto.entity.recipe.api.RecipeListRequestInfo;
-import com.simplekitchen.project.dto.entity.recipe.api.RecipeRequestInfo;
 import com.simplekitchen.project.dto.entity.recipe.api.RecipeResponseInfo;
-import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class RecipeControllerTest {
 
@@ -44,6 +38,30 @@ public class RecipeControllerTest {
             new RecipeSaveValidator()
     );
     private final RecipeController controller = new RecipeController(controllerService);
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final File jsonFileWithRecipe = new File("src/test/resources/static/Json/recipe/Recipe.json");
+    private final File jsonFileWithRecipeRequest = new File("src/test/resources/static/Json/recipe/RecipeListRequestInfo.json");
+    private final File jsonFileWithRecipeListRequestInfoOnlyWithCookingTime =
+            new File("src/test/resources/static/Json/recipe/RecipeListRequestInfoOnlyWithCookingTime.json");
+    private final  File jsonFileWithRecipeListRequestInfoOnlyWithDifficulty =
+            new File("src/test/resources/static/Json/recipe/RecipeListRequestInfoOnlyWithDifficulty.json");
+    private final File jsonFileWithRecipeListRequestInfoOnlyWithName =
+            new File("src/test/resources/static/Json/recipe/RecipeListRequestInfoOnlyWithName.json");
+    private final File jsonFileWithRecipeRequestInfoOnlyWithName =
+            new File("src/test/resources/static/Json/recipe/RecipeRequestInfoOnlyWithName.json");
+    private final File jsonFileWithRecipeRequestInfoOnlyWithId =
+            new File("src/test/resources/static/Json/recipe/RecipeRequestInfoOnlyWithId.json");
+    private final File jsonFileWithRecipeRequestEmpty =
+            new File("src/test/resources/static/Json/recipe/RecipeRequestInfoEmpty.json");
+    private final File jsonFileWithLongList =
+            new File("src/test/resources/static/Json/common/LongList.json");
+    private final File jsonFileWithLongListWithEmptyList =
+            new File("src/test/resources/static/Json/common/LongListWithEmptyList.json");
+    private final File jsonFileWithLongListEmpty =
+            new File("src/test/resources/static/Json/common/LongListEmpty.json");
+
 
     @Before
     public void setUp() throws Throwable {
@@ -61,50 +79,49 @@ public class RecipeControllerTest {
 
     @Test
     public void saveSuccess() {
-        RecipeListRequestInfoImpl request = RecipeListRequestInfoImpl.builder()
-                .recipeList(Collections.singletonList(RecipeImpl.builder()
-                        .name("Name")
-                        .difficulty("Easy")
-                        .build()))
-                .build();
-        RecipeResponseInfo savedResponse = null;
+        RecipeListRequestInfoImpl request = null;
+        RecipeResponseInfo response = null;
         try {
-             savedResponse = controller.save(request);
-        } catch (BaseException e) {
+            request = objectMapper.readValue(jsonFileWithRecipeRequest, RecipeListRequestInfoImpl.class);
+            response = controller.save(request);
+        } catch (Throwable e) {
             Assert.fail();
         }
 
-        Assert.assertEquals(request.getRecipeList(), savedResponse.getRecipeList());
+        Assert.assertEquals(request.getRecipeList(), response.getRecipeList());
     }
 
     @Test
     public void saveFail() {
+        RecipeListRequestInfoImpl requestInfo;
+
         try {
             Mockito.when(service.save(Mockito.any())).thenThrow(new DataBaseException(""));
-            assertFalse(controller.save(
-                    RecipeListRequestInfoImpl.builder()
-                    .recipeList(Collections.singletonList(RecipeImpl.builder()
-                            .name("Name")
-                            .build()))
-                    .build()).getStatus().isSuccess());
-            assertFalse(controller.save(RecipeListRequestInfoImpl.builder()
-                    .recipeList(Collections.singletonList(RecipeImpl.builder()
-                            .difficulty("Difficulty")
-                            .build()))
-                    .build()).getStatus().isSuccess());
-            assertFalse(controller.save(RecipeListRequestInfoImpl.builder()
-                    .recipeList(Collections.singletonList(RecipeImpl.builder()
-                            .cookingTime(1L)
-                            .build()))
-                    .build()
-            ).getStatus().isSuccess());
-            assertFalse(controller.save(RecipeListRequestInfoImpl.builder()
-                    .recipeList(Collections.singletonList(RecipeImpl.builder()
-                            .name("Name")
-                            .difficulty("Difficulty")
-                            .build()))
-                    .build()
-            ).getStatus().isSuccess());
+
+            requestInfo = objectMapper.readValue(
+                    jsonFileWithRecipeListRequestInfoOnlyWithName,
+                    RecipeListRequestInfoImpl.class
+            );
+            assertFalse(controller.save(requestInfo).getStatus().isSuccess());
+
+            requestInfo = objectMapper.readValue(
+                    jsonFileWithRecipeListRequestInfoOnlyWithDifficulty,
+                    RecipeListRequestInfoImpl.class
+            );
+            assertFalse(controller.save(requestInfo).getStatus().isSuccess());
+
+            requestInfo = objectMapper.readValue(
+                    jsonFileWithRecipeListRequestInfoOnlyWithCookingTime,
+                    RecipeListRequestInfoImpl.class
+            );
+            assertFalse(controller.save(requestInfo).getStatus().isSuccess());
+
+            requestInfo = objectMapper.readValue(
+                    jsonFileWithRecipeRequest,
+                    RecipeListRequestInfoImpl.class
+            );
+            assertFalse(controller.save(requestInfo).getStatus().isSuccess());
+
         } catch (Throwable e) {
             Assert.fail();
         }
@@ -112,16 +129,18 @@ public class RecipeControllerTest {
 
     @Test
     public void getByNameSuccess() {
-        RecipeRequestInfoImpl requestInfo = RecipeRequestInfoImpl.builder().name("Name").build();
+        RecipeRequestInfoImpl requestInfo = null;
         RecipeResponseInfo responseInfo = null;
         try {
             Mockito.when(service.findByName(Mockito.any()))
                 .thenReturn(Collections.singletonList(RecipeEntityImpl.builder()
                                 .name("Name")
                                 .build()));
+
+            requestInfo = objectMapper.readValue(jsonFileWithRecipeRequestInfoOnlyWithName, RecipeRequestInfoImpl.class);
             responseInfo = controller.get(requestInfo);
 
-        } catch (BaseException | DataBaseException e) {
+        } catch (Throwable e) {
             Assert.fail();
         }
 
@@ -159,7 +178,10 @@ public class RecipeControllerTest {
                                     .build())
                             .recipeList(Collections.emptyList())
                             .build(),
-                    controller.get(RecipeRequestInfoImpl.builder().name("Name").build())
+                    controller.get(objectMapper.readValue(
+                            jsonFileWithRecipeRequestInfoOnlyWithName,
+                            RecipeRequestInfoImpl.class)
+                    )
             );
             Assert.assertEquals(
                     RecipeResponseInfoImpl.builder()
@@ -169,7 +191,10 @@ public class RecipeControllerTest {
                                     .build())
                             .recipeList(Collections.emptyList())
                             .build(),
-                    controller.get(RecipeRequestInfoImpl.builder().id(1L).build())
+                    controller.get(objectMapper.readValue(
+                            jsonFileWithRecipeRequestInfoOnlyWithId,
+                            RecipeRequestInfoImpl.class)
+                    )
             );
         } catch (Throwable e) {
             Assert.fail();
@@ -186,9 +211,9 @@ public class RecipeControllerTest {
                                     .description("Не все обязательные поля заполнены")
                                     .build())
                             .build(),
-                    controller.get(RecipeRequestInfoImpl.builder().build())
+                    controller.get(objectMapper.readValue(jsonFileWithRecipeRequestEmpty, RecipeRequestInfoImpl.class))
             );
-        } catch (BaseException e) {
+        } catch (Throwable e) {
             Assert.fail();
         }
     }
@@ -246,26 +271,33 @@ public class RecipeControllerTest {
 
     @Test
     public void deleteByIdListSuccess() {
-        Assert.assertTrue(controller.deleteByIdList(LongListImpl.builder()
-                .longList(Collections.singletonList(1L))
-                .build()));
+        LongListImpl longList = null;
+        try {
+            longList = objectMapper.readValue(jsonFileWithLongList, LongListImpl.class);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+        Assert.assertTrue(controller.deleteByIdList(longList));
     }
 
     @Test
     public void deleteByIdListFail() {
+        LongListImpl longListEmpty = null;
+        LongListImpl longListWithEmptyList = null;
         try {
+            longListEmpty = objectMapper.readValue(jsonFileWithLongListEmpty, LongListImpl.class);
+            longListWithEmptyList = objectMapper.readValue(jsonFileWithLongListWithEmptyList, LongListImpl.class);
             Mockito.when(service.deleteById(Mockito.anyLong())).thenThrow(DataBaseException.class);
         } catch (Throwable e) {
             Assert.fail();
         }
         Assert.assertEquals(
                 false,
-                controller.deleteByIdList(LongListImpl.builder().build())
+                controller.deleteByIdList(longListEmpty)
         );
         Assert.assertEquals(
                 false,
-                controller.deleteByIdList(LongListImpl.builder().longList(Collections.emptyList()).build())
+                controller.deleteByIdList(longListWithEmptyList)
         );
     }
-
 }

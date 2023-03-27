@@ -22,16 +22,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    //(done) validation refactoring, WildFly server
     //(need to do) Unit test,
-    //Exception вместо Throwable - не получается
 
-    // RecipeMapper - маппинг сущности города к строке и наоборот (default methods)
-    // Тестирование маппера
-    // Тестирование репозитория
+    //TODO(Done) убрать WAR название у проекта в вайлд флае,
+    //TODO OpenShift, переписать, убрать Impl'ы: перейти на интерфейсы (JS nodeJS Angular)
 
-    // убрать WAR название у проекта в вайлд флае, OpenShift, переписать, убрать Impl'ы: перейти на интерфейсы
-    // JS nodeJS Angular
+
+
     /**
      * сервис работы с пользователями
      */
