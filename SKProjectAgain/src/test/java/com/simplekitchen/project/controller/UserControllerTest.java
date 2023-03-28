@@ -1,25 +1,17 @@
 package com.simplekitchen.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplekitchen.project.business.exception.BaseException;
-import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.UserControllerService;
 import com.simplekitchen.project.business.utils.UserInfoRequestValidator;
 import com.simplekitchen.project.business.utils.UserSaveValidator;
-import com.simplekitchen.project.business.utils.api.RequestValidator;
-import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
-import com.simplekitchen.project.dao.entity.city.CityNameEntityImpl;
-import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
 import com.simplekitchen.project.dto.common.LongListImpl;
-import com.simplekitchen.project.dto.common.StatusImpl;
-import com.simplekitchen.project.dto.entity.city.CityImpl;
-import com.simplekitchen.project.dto.entity.recipe.RecipeImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.UserRequestInfoImpl;
-import com.simplekitchen.project.dto.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.dto.entity.user.api.UserResponseInfo;
 import org.junit.After;
 import org.junit.Assert;
@@ -27,9 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.Calendar;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
 
@@ -43,19 +35,41 @@ public class UserControllerTest {
             new UserSaveValidator()
     );
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final File jsonFileWithUser =
+            new File("src/test/resources/static/Json/user/User.json");
+    private final File jsonFileWithUserWithNameAndPatronymicOnly =
+            new File("src/test/resources/static/Json/user/UserWithNameAndPatronymic.json");
+    private final File jsonFileWithUserWithNameOnly =
+            new File("src/test/resources/static/Json/user/UserWithNameOnly.json");
+    private final File jsonFileWithUserWithNameAndSurnameAndPatronymicOnly =
+            new File("src/test/resources/static/Json/user/UserWithNameSurnameAndPatronymicOnly.json");
+    private final File jsonFileWithUserWithSurnameOnly =
+            new File("src/test/resources/static/Json/user/UserWithSurnameOnly.json");
+    private final File jsonFileWithUserRequest =
+            new File("src/test/resources/static/Json/user/UserRequestInfo.json");
+    private final File jsonFileWithUserRequestWithCookingTimeOnly =
+            new File("src/test/resources/static/Json/user/UserRequestInfoWithCookingTimeOnly.json");
+    private final File jsonFileWithUserRequestWithNameAndPatronymicOnly =
+            new File("src/test/resources/static/Json/user/UserRequestInfoWithNameAndPatronymicOnly.json");
+    private final File jsonFileWithUserRequestWithNameOnly =
+            new File("src/test/resources/static/Json/user/UserRequestInfoWithNameOnly.json");
+    private final File jsonFileWithUserRequestWithSurnameOnly =
+            new File("src/test/resources/static/Json/user/UserRequestInfoWithSurnameOnly.json");
+    private final File jsonFileWithLongList =
+            new File("src/test/resources/static/Json/common/LongList.json");
+    private final File jsonFileWithLongListWithEmptyList =
+            new File("src/test/resources/static/Json/common/LongListWithEmptyList.json");
+    private final File jsonFileWithLongListEmpty =
+            new File("src/test/resources/static/Json/common/LongListEmpty.json");
     private final UserController controller = new UserController(controllerService);
 
     @Before
     public void setUp() throws Throwable {
         Mockito.when(service.save(Mockito.any())).thenReturn(UserEntityImpl.builder()
-                .id(1L)
-                .name("N")
-                .surname("S")
-                .patronymic("P")
-                .sex("M")
-                .birthDate(new GregorianCalendar(2000, Calendar.FEBRUARY,1))
-                .city(CityEntityImpl.builder().cityName(CityNameEntityImpl.builder().cityName("N").build()).build())
-                .favoriteRecipeList(Collections.singletonList(RecipeEntityImpl.builder().name("N").build()))
+                .name("Name")
+                .surname("Surname")
                 .build());
         Mockito.when(service.findByNameAndSurnameAndPatronymic(
                         Mockito.anyString(),
@@ -78,30 +92,11 @@ public class UserControllerTest {
     @Test
     public void saveSuccess() {
         UserResponseInfo savedUser;
-        UserImpl user = UserImpl.builder()
-                .id(1L)
-                .name("N")
-                .surname("S")
-                .patronymic("P")
-                .sex("M")
-                .birthDate(new GregorianCalendar(2000, Calendar.FEBRUARY,1))
-                .city(CityImpl.builder().cityName("N").build())
-                .favoriteRecipeList(Collections.singletonList(RecipeImpl.builder().name("N").build()))
-                .build();
         try {
+            UserImpl user = objectMapper.readValue(jsonFileWithUser, UserImpl.class);
             savedUser = controller.save(user);
-            Assert.assertEquals(user.getId(), savedUser.getUserList().get(0).getId());
-            Assert.assertEquals(user.getName(), savedUser.getUserList().get(0).getName());
-            Assert.assertEquals(user.getSex(), savedUser.getUserList().get(0).getSex());
-            Assert.assertEquals(user.getPatronymic(), savedUser.getUserList().get(0).getPatronymic());
-            Assert.assertEquals(user.getSex(), savedUser.getUserList().get(0).getSex());
-            Assert.assertEquals(user.getBirthDate(), savedUser.getUserList().get(0).getBirthDate());
-            Assert.assertEquals(user.getCity().getCityName(), savedUser.getUserList().get(0).getCity().getCityName());
-            Assert.assertEquals(
-                    user.getFavoriteRecipeList().get(0).getName(),
-                    savedUser.getUserList().get(0).getFavoriteRecipeList().get(0).getName()
-            );
-        } catch (DataBaseException e) {
+            Assert.assertEquals(user, savedUser.getUserList().get(0));
+        } catch (Throwable e) {
             Assert.fail();
         }
 
@@ -111,12 +106,27 @@ public class UserControllerTest {
     public void saveFail() {
         try {
             Mockito.when(service.save(Mockito.any())).thenThrow(DataBaseException.class);
-            assertFalse(controller.save(UserImpl.builder().name("N").build()).getStatus().isSuccess());
-            assertFalse(controller.save(UserImpl.builder().surname("S").build()).getStatus().isSuccess());
-            assertFalse(controller.save(UserImpl.builder().id(1L).build()).getStatus().isSuccess());
-            assertFalse(controller.save(UserImpl.builder().name("N").patronymic("P").build()).getStatus().isSuccess());
-            assertFalse(controller.save(UserImpl.builder().name("N").patronymic("P").build()).getStatus().isSuccess());
-        } catch (DataBaseException e) {
+            assertFalse(controller.save(objectMapper.readValue(
+                    jsonFileWithUserWithNameOnly,
+                    UserImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.save(objectMapper.readValue(
+                    jsonFileWithUserWithSurnameOnly,
+                    UserImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.save(objectMapper.readValue(
+                    jsonFileWithUserWithNameAndPatronymicOnly,
+                    UserImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.save(objectMapper.readValue(
+                    jsonFileWithUserWithNameAndSurnameAndPatronymicOnly,
+                    UserImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.save(objectMapper.readValue(
+                    jsonFileWithUser,
+                    UserImpl.class)
+            ).getStatus().isSuccess());
+        } catch (Throwable e) {
             Assert.fail();
         }
     }
@@ -124,10 +134,10 @@ public class UserControllerTest {
     @Test
     public void getSuccess() {
         UserResponseInfo userResponseInfo = null;
-        UserRequestInfoImpl requestInfo = UserRequestInfoImpl.builder().name("N").surname("N").build();
 
         try {
-             userResponseInfo = controller.get(requestInfo);
+            UserRequestInfoImpl requestInfo = objectMapper.readValue(jsonFileWithUserRequest, UserRequestInfoImpl.class);
+            userResponseInfo = controller.get(requestInfo);
         } catch (Throwable e) {
             Assert.fail();
         }
@@ -141,14 +151,28 @@ public class UserControllerTest {
             Mockito.when(service.findById(Mockito.anyLong())).thenThrow(DataBaseException.class);
             Mockito.when(service.findByNameAndSurnameAndPatronymic(Mockito.any(), Mockito.any(), Mockito.any()))
                     .thenThrow(DataBaseException.class);
-            assertFalse(controller.get(UserRequestInfoImpl.builder().name("N").build()).getStatus().isSuccess());
-            assertFalse(controller.get(UserRequestInfoImpl.builder().surname("S").build()).getStatus().isSuccess());
-            assertFalse(controller.get(UserRequestInfoImpl.builder().name("N").patronymic("P").build())
-                    .getStatus().isSuccess());
-            assertFalse(controller.get(UserRequestInfoImpl.builder().id(1L).build()).getStatus().isSuccess());
-            assertFalse(controller.get(UserRequestInfoImpl.builder().name("N").surname("S").build())
-                    .getStatus().isSuccess());
-        } catch (DataBaseException e) {
+
+            assertFalse(controller.get(objectMapper.readValue(
+                    jsonFileWithUserRequestWithNameOnly,
+                    UserRequestInfoImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.get(objectMapper.readValue(
+                    jsonFileWithUserRequestWithSurnameOnly,
+                    UserRequestInfoImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.get(objectMapper.readValue(
+                    jsonFileWithUserRequestWithNameAndPatronymicOnly,
+                    UserRequestInfoImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.get(objectMapper.readValue(
+                    jsonFileWithUserRequestWithCookingTimeOnly,
+                    UserRequestInfoImpl.class)
+            ).getStatus().isSuccess());
+            assertFalse(controller.get(objectMapper.readValue(
+                    jsonFileWithUserRequest,
+                    UserRequestInfoImpl.class)
+            ).getStatus().isSuccess());
+        } catch (Throwable e) {
             Assert.fail();
         }
     }
@@ -176,9 +200,12 @@ public class UserControllerTest {
     @Test
     public void getAllByIdSuccess() {
         UserResponseInfo responseInfo;
-        com.simplekitchen.project.dto.common.LongListImpl longList = com.simplekitchen.project.dto.common.LongListImpl.builder()
-                .longList(Collections.singletonList(1L))
-                .build();
+        com.simplekitchen.project.dto.common.LongListImpl longList = null;
+        try {
+            longList = objectMapper.readValue(jsonFileWithLongList, LongListImpl.class);
+        } catch (Throwable e ) {
+            Assert.fail();
+        }
         responseInfo = controller.getAllById(longList);
 
         Assert.assertEquals(longList.getLongList().size(), responseInfo.getUserList().size());
@@ -186,7 +213,26 @@ public class UserControllerTest {
 
     @Test
     public void getAllByIdFail() {
-        Assert.assertEquals(0, controller.getAllById(LongListImpl.builder().build()).getUserList().size());
+        try {
+            Mockito.when(service.findAllById(Mockito.any())).thenThrow(DataBaseException.class);
+            Assert.assertEquals(
+                    0,
+                    controller.getAllById(objectMapper.readValue(jsonFileWithLongList, LongListImpl.class))
+                            .getUserList().size()
+            );
+            Assert.assertEquals(
+                    0,
+                    controller.getAllById(objectMapper.readValue(jsonFileWithLongListEmpty, LongListImpl.class))
+                            .getUserList().size()
+            );
+            Assert.assertEquals(
+                    0,
+                    controller.getAllById(objectMapper.readValue(jsonFileWithLongListWithEmptyList, LongListImpl.class))
+                            .getUserList().size()
+            );
+        } catch (IOException | DataBaseException e) {
+            Assert.fail();
+        }
     }
 
     @Test
@@ -214,20 +260,33 @@ public class UserControllerTest {
 
     @Test
     public void deleteByIdListSuccess() {
-        Boolean deleteCheck;
-        deleteCheck = controller.deleteByIdList(LongListImpl.builder().longList(Collections.singletonList(1L)).build());
-        Assert.assertTrue(deleteCheck);
+        LongListImpl longList = null;
+        try {
+            longList = objectMapper.readValue(jsonFileWithLongList, LongListImpl.class);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+        Assert.assertTrue(controller.deleteByIdList(longList));
     }
 
     @Test
     public void deleteByIdListFail() {
+        LongListImpl longListEmpty = null;
+        LongListImpl longListWithEmptyList = null;
         try {
+            longListEmpty = objectMapper.readValue(jsonFileWithLongListEmpty, LongListImpl.class);
+            longListWithEmptyList = objectMapper.readValue(jsonFileWithLongListWithEmptyList, LongListImpl.class);
             Mockito.when(service.deleteById(Mockito.anyLong())).thenThrow(DataBaseException.class);
-            Assert.assertFalse(
-                    controller.deleteByIdList(LongListImpl.builder().longList(Collections.singletonList(1L)).build())
-            );
         } catch (Throwable e) {
             Assert.fail();
         }
+        Assert.assertEquals(
+                false,
+                controller.deleteByIdList(longListEmpty)
+        );
+        Assert.assertEquals(
+                false,
+                controller.deleteByIdList(longListWithEmptyList)
+        );
     }
 }

@@ -41,7 +41,6 @@ public class RecipeControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final File jsonFileWithRecipe = new File("src/test/resources/static/Json/recipe/Recipe.json");
     private final File jsonFileWithRecipeRequest = new File("src/test/resources/static/Json/recipe/RecipeListRequestInfo.json");
     private final File jsonFileWithRecipeListRequestInfoOnlyWithCookingTime =
             new File("src/test/resources/static/Json/recipe/RecipeListRequestInfoOnlyWithCookingTime.json");

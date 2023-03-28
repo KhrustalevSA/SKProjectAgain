@@ -1,0 +1,9 @@
+{
+  "name": "Name",
+  "surname": null,
+  "patronymic": "Patronymic",
+  "birthDate": null,
+  "sex": null,
+  "favoriteRecipeList": null,
+  "city": null
+}

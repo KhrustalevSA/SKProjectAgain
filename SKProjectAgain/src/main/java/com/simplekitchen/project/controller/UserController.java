@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.ValidationException;
+
 /**
  * РЕСТ контроллер для работы с пользователями
  * @author KhrustalevSA
@@ -151,7 +153,10 @@ public class UserController {
     @PostMapping("/deleteByIdList")
     public Boolean deleteByIdList(@RequestBody LongListImpl longList) {
         try {
-            Boolean deleteCheck;
+            if (longList == null || longList.getLongList().isEmpty()) {
+                throw new ValidationException("Передан пустой список целых чисел.");
+            }
+            boolean deleteCheck;
             for (Long id : longList.getLongList()) {
                 deleteCheck = userControllerService.deleteById(id);
                 if (!deleteCheck) {
