@@ -3,21 +3,20 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.driver_class">org.h2.Driver</property>
-        <property name="connection.url">jdbc:h2:mem:test</property>
-        <property name="connection.username">sa</property>
-        <property name="connection.password"/>
-        <property name="connection.pool_size">20</property>                  <!--  -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/simplekitchen</property>
+        <property name="connection.username">user</property>
+        <property name="connection.password">user</property>
+        <property name="connection.pool_size">10</property>                  <!--  -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property> <!--  -->
         <property name="show_sql">true</property>
         <property name="current_session_context_class">thread</property>    <!--  -->
-        <property name="hbm2ddl.auto">create-drop</property>                <!--  -->
+        <property name="hbm2ddl.auto">create</property>                <!--  -->
         <property name="hibernate.dbcp.initialSize">5</property>            <!--  -->
         <property name="hibernate.dbcp.maxTotal">20</property>              <!--  -->
         <property name="hibernate.dbcp.maxIdle">10</property>               <!--  -->
         <property name="hibernate.dbcp.minIdle">5</property>                <!--  --> <!--    -->
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
-
 
         <mapping class="com.simplekitchen.project.dao.entity.city.api.CityEntity" />
         <mapping class="com.simplekitchen.project.dao.entity.city.CityEntityImpl" />
@@ -33,10 +32,6 @@
         <mapping class="com.simplekitchen.project.dao.entity.ingredient.IngredientEntityImpl" />
         <mapping class="com.simplekitchen.project.dao.entity.user.api.UserEntity" />
         <mapping class="com.simplekitchen.project.dao.entity.user.UserEntityImpl" />
-
-
-
-
 
 
     </session-factory>
