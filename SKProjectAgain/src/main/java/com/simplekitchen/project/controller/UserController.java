@@ -23,6 +23,7 @@ import javax.xml.bind.ValidationException;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     //(need to do) Unit test,
 
