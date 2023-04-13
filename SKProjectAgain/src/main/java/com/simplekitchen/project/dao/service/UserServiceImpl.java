@@ -1,15 +1,19 @@
 package com.simplekitchen.project.dao.service;
 
-import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
+import com.simplekitchen.project.dao.entity.common.api.LongList;
+import com.simplekitchen.project.dao.entity.role.RoleImpl;
+import com.simplekitchen.project.dao.entity.role.api.Role;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
+import com.simplekitchen.project.dao.repository.RoleRepository;
 import com.simplekitchen.project.dao.repository.UserRepository;
 import com.simplekitchen.project.dao.service.api.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,13 +57,39 @@ public class UserServiceImpl implements UserService {
      */
     private final UserRepository userRepository;
 
+    private final RoleRepository roleRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
     /**
      * конструктор сервиса с автоматическим подключением
      * @param userRepository - репозиторий пользователей
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserEntity register(UserEntityImpl user) {
+        RoleImpl roleUser = roleRepository.findByName("user");
+        List<RoleImpl> userRoles = new ArrayList<>();
+        userRoles.add(roleUser);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoleList(userRoles);
+
+        UserEntity registeredUser = userRepository.save(user);
+
+        return registeredUser;
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        UserEntity foundUser = userRepository.findByUsername(username);
+        return foundUser;
     }
 
     /**

@@ -5,6 +5,7 @@ import com.simplekitchen.project.business.mapper.user.UserMapper;
 import com.simplekitchen.project.business.service.api.UserControllerService;
 import com.simplekitchen.project.business.utils.api.ObjectSaveValidator;
 import com.simplekitchen.project.business.utils.api.RequestValidator;
+import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.UserService;
@@ -81,6 +82,14 @@ public class UserControllerServiceImpl implements UserControllerService {
                     .userList(Collections.singletonList(UserMapper.INSTANCE.map(savedUserEntity)))
                     .status(StatusImpl.builder().success(true).build())
                     .build();
+    }
+
+    public UserEntity findByUsername(String name) {
+        return userService.findByUsername(name);
+    }
+
+    public UserEntity register(UserEntityImpl user) {
+        return userService.register(user);
     }
 
     /**

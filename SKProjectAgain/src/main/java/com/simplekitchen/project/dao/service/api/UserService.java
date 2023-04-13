@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
+import com.simplekitchen.project.dao.entity.common.api.LongList;
 import com.simplekitchen.project.dao.entity.user.UserEntityImpl;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
@@ -20,6 +20,8 @@ public interface UserService {
      * @return сохраненный Optional объект пользователя
      */
     UserEntity save(UserEntityImpl user) throws DataBaseException;
+
+    UserEntity register(UserEntityImpl user);
 
     /**
      * метод получения пользователя по уникальному идентификатору
@@ -56,4 +58,5 @@ public interface UserService {
      */
     Boolean deleteById(Long id) throws DataBaseException;
 
+    UserEntity findByUsername(String name);
 }

@@ -24,7 +24,7 @@ public interface CommonMapper {
      * @param longList ДАО список чисел
      * @return ДТО список чисел
      */
-    LongListImpl map(com.simplekitchen.project.dao.entity.common.entity.api.LongList longList);
+    LongListImpl map(com.simplekitchen.project.dao.entity.common.api.LongList longList);
 
 
     /**
@@ -32,5 +32,5 @@ public interface CommonMapper {
      * @param longList ДТО список чисел
      * @return ДАО список чисел
      */
-    com.simplekitchen.project.dao.entity.common.entity.LongListImpl map(LongList longList);
+    com.simplekitchen.project.dao.entity.common.LongListImpl map(LongList longList);
 }

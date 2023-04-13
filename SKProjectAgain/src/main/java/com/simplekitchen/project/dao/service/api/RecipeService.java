@@ -1,6 +1,6 @@
 package com.simplekitchen.project.dao.service.api;
 
-import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
+import com.simplekitchen.project.dao.entity.common.LongListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.api.RecipeEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;

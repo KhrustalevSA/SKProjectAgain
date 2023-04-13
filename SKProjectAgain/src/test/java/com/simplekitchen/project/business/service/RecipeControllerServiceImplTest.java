@@ -4,7 +4,7 @@ import com.simplekitchen.project.business.exception.ValidationException;
 import com.simplekitchen.project.business.service.api.RecipeControllerService;
 import com.simplekitchen.project.business.utils.RecipeInfoRequestValidator;
 import com.simplekitchen.project.business.utils.RecipeSaveValidator;
-import com.simplekitchen.project.dao.entity.common.entity.LongListImpl;
+import com.simplekitchen.project.dao.entity.common.LongListImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dao.service.api.RecipeService;

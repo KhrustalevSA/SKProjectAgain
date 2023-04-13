@@ -1,6 +1,6 @@
-package com.simplekitchen.project.dao.entity.common.entity;
+package com.simplekitchen.project.dao.entity.common;
 
-import com.simplekitchen.project.dao.entity.common.entity.api.LongList;
+import com.simplekitchen.project.dao.entity.common.api.LongList;
 import lombok.*;
 
 import java.util.List;

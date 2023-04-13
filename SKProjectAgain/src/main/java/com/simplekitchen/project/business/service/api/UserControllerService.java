@@ -2,6 +2,7 @@ package com.simplekitchen.project.business.service.api;
 
 
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
+import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.api.User;
@@ -53,5 +54,6 @@ public interface UserControllerService {
      */
     Boolean deleteById(Long id);
 
+    UserEntity findByUsername(String name);
 
 }

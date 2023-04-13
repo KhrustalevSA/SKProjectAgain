@@ -2,6 +2,7 @@ package com.simplekitchen.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplekitchen.project.business.exception.BaseException;
+import com.simplekitchen.project.business.security.jwt.JwtTokenProvider;
 import com.simplekitchen.project.business.service.UserControllerServiceImpl;
 import com.simplekitchen.project.business.service.api.UserControllerService;
 import com.simplekitchen.project.business.utils.UserInfoRequestValidator;
@@ -18,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,10 @@ public class UserControllerTest {
             new UserInfoRequestValidator(),
             new UserSaveValidator()
     );
+
+    private final AuthenticationManager authenticationManager = Mockito.mock(AuthenticationManager.class);
+
+    private final JwtTokenProvider jwtTokenProvider = Mockito.mock(JwtTokenProvider.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -63,7 +69,7 @@ public class UserControllerTest {
             new File("src/test/resources/static/Json/common/LongListWithEmptyList.json");
     private final File jsonFileWithLongListEmpty =
             new File("src/test/resources/static/Json/common/LongListEmpty.json");
-    private final UserController controller = new UserController(controllerService);
+    private final UserController controller = new UserController(controllerService, authenticationManager, jwtTokenProvider);
 
     @Before
     public void setUp() throws Throwable {

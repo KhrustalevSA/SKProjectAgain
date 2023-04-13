@@ -5,18 +5,14 @@ import com.simplekitchen.project.dao.service.api.RecipeService;
 import com.simplekitchen.project.dao.service.api.UserService;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.common.api.LongList;
-import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class CommonMapperMethodsTest {
 
@@ -38,7 +34,7 @@ public class CommonMapperMethodsTest {
         longList.add(2L);
         longList.add(3L);
         LongList dtoLongList = LongListImpl.builder().longList(longList).build();
-        com.simplekitchen.project.dao.entity.common.entity.api.LongList daoLongList = null;
+        com.simplekitchen.project.dao.entity.common.api.LongList daoLongList = null;
 
         daoLongList = CommonMapper.INSTANCE.map(dtoLongList);
 
@@ -51,8 +47,8 @@ public class CommonMapperMethodsTest {
         longList.add(1L);
         longList.add(2L);
         longList.add(3L);
-        com.simplekitchen.project.dao.entity.common.entity.api.LongList daoLongList
-                = com.simplekitchen.project.dao.entity.common.entity.LongListImpl.builder()
+        com.simplekitchen.project.dao.entity.common.api.LongList daoLongList
+                = com.simplekitchen.project.dao.entity.common.LongListImpl.builder()
                 .longList(longList)
                 .build();
         LongList dtoLongList = null;

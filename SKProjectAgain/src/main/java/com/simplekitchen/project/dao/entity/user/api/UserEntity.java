@@ -1,7 +1,9 @@
 package com.simplekitchen.project.dao.entity.user.api;
 
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
+import com.simplekitchen.project.dao.entity.entityStatus.EntityStatus;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.role.RoleImpl;
 
 import java.util.Calendar;
 import java.util.List;
@@ -52,4 +54,17 @@ public interface UserEntity {
      * @return город, место жительства пользователя
      * */
     CityEntityImpl getCity();
+
+    String getEmail();
+
+    String getUsername();
+
+    String getPassword();
+
+    List<RoleImpl> getRoleList();
+
+    EntityStatus getEntityStatus();
+
+    Calendar getLastPasswordResetDate();
+
 }

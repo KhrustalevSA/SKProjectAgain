@@ -1,7 +1,9 @@
 package com.simplekitchen.project.controller;
 
 import com.simplekitchen.project.business.exception.BaseException;
+import com.simplekitchen.project.business.security.jwt.JwtTokenProvider;
 import com.simplekitchen.project.business.service.api.UserControllerService;
+import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import com.simplekitchen.project.dao.exception.DataBaseException;
 import com.simplekitchen.project.dto.common.LongListImpl;
 import com.simplekitchen.project.dto.common.StatusImpl;
@@ -9,11 +11,20 @@ import com.simplekitchen.project.dto.entity.user.UserImpl;
 import com.simplekitchen.project.dto.entity.user.UserRequestInfoImpl;
 import com.simplekitchen.project.dto.entity.user.UserResponseInfoImpl;
 import com.simplekitchen.project.dto.entity.user.api.UserResponseInfo;
+import com.simplekitchen.project.dto.security.AuthenticationRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.ValidationException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * РЕСТ контроллер для работы с пользователями
@@ -30,7 +41,9 @@ public class UserController {
     //TODO(Done) убрать WAR название у проекта в вайлд флае,
     //TODO OpenShift, переписать, убрать Impl'ы: перейти на интерфейсы (JS nodeJS Angular)
 
+    private final AuthenticationManager authenticationManager;
 
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * сервис работы с пользователями
@@ -42,8 +55,33 @@ public class UserController {
      * @param service сервис пользователей
      */
     @Autowired
-    public UserController(UserControllerService service) {
+    public UserController(UserControllerService service, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userControllerService = service;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+        try {
+            String username  = requestDto.getUsername();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            UserEntity user = userControllerService.findByUsername(username);
+
+            if (user ==null) {
+                throw new UsernameNotFoundException("");
+            }
+
+            String token = jwtTokenProvider.createToken(username, user.getRoleList());
+
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", username);
+            response.put("token", token);
+
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
     }
 
     /**

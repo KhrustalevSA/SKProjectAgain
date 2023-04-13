@@ -26,4 +26,6 @@ public interface UserRepository extends CrudRepository<UserEntityImpl, Long>  {
      * @return Optional объект списка найденных пользователей
      */
     Optional<List<UserEntity>> findByNameAndSurnameAndPatronymic(String name, String surname, String patronymic);
+
+    UserEntity findByUsername(String username);
 }

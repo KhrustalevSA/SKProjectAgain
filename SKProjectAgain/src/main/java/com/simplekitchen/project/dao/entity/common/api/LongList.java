@@ -1,4 +1,4 @@
-package com.simplekitchen.project.dao.entity.common.entity.api;
+package com.simplekitchen.project.dao.entity.common.api;
 
 import java.util.List;
 
