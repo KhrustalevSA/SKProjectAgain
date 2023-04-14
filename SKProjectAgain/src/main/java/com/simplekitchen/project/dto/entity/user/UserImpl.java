@@ -40,6 +40,11 @@ public class UserImpl implements User {
      */
     private String surname;
 
+    private String login;
+
+    private String password;
+
+
     /**
      * отчество пользователя
      */

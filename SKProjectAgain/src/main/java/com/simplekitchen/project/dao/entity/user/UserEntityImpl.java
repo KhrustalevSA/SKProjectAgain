@@ -1,7 +1,9 @@
 package com.simplekitchen.project.dao.entity.user;
 
+import com.simplekitchen.project.dao.entity.security.SecurityRole;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
+import com.simplekitchen.project.dao.entity.security.SecurityStatus;
 import com.simplekitchen.project.dao.entity.user.api.UserEntity;
 import lombok.*;
 
@@ -43,6 +45,20 @@ public class UserEntityImpl implements UserEntity, Serializable {
      * */
     @Column
     private String surname;
+
+    @Column
+    private String login;
+
+    @Column
+    private String password;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SecurityRole role;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SecurityStatus status;
 
     /**
      * отчество пользователя

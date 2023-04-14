@@ -1,5 +1,6 @@
 package com.simplekitchen.project.dao.entity.user.api;
 
+import com.simplekitchen.project.dao.entity.security.SecurityRole;
 import com.simplekitchen.project.dao.entity.city.CityEntityImpl;
 import com.simplekitchen.project.dao.entity.recipe.RecipeEntityImpl;
 
@@ -27,6 +28,12 @@ public interface UserEntity {
      * @return фамилия пользователя
      * */
     String getSurname();
+
+    String getLogin();
+
+    String getPassword();
+
+    SecurityRole getRole();
 
     /**
      * @return отчество пользователя
